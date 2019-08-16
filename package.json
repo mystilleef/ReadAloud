@@ -1,12 +1,20 @@
 {
-  "name": "tsdemo",
-  "version": "0.0.1",
-  "description": "",
-  "main": "index.js",
+  "name": "ReadAloud",
+  "author": "Lateef Alabi-Oki <mystilleef@gmail.com>",
+  "license": "gpl3",
+  "version": "1.0.0",
+  "description": "An extension to read aloud selected text in Google Chorme",
+  "files": ["dist"],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "prebuild": "tsc -b",
+    "build": "rollup -c",
+    "watch": "rollup -cw"
   },
   "keywords": [],
-  "author": "Lateef Alabi-Oki <mystilleef@gmail.com> (https://github.com/mystilleef)",
-  "license": "gpl3"
+  "devDependencies": {
+    "@types/chrome": "0.0.88",
+    "rollup": "^1.19.4",
+    "tslib": "^1.10.0",
+    "typescript": "^3.5.3"
+  }
 }
