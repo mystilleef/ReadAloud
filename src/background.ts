@@ -1,4 +1,4 @@
-import queryReadSelectionMessage from "./utility";
+import queryContentForSelection from "./utility";
 import read from "./reader";
 
 const COMMAND = "HWFT";
@@ -6,13 +6,13 @@ const COMMAND = "HWFT";
 chrome.commands.onCommand.addListener(handleChromeCommand);
 
 function handleChromeCommand(command: string): void {
-  if (command === COMMAND) queryReadSelectionMessage();
+  if (command === COMMAND) queryContentForSelection();
 }
 
 chrome.browserAction.onClicked.addListener(handleBrowserAction);
 
 function handleBrowserAction(_tab: chrome.tabs.Tab): void {
-  queryReadSelectionMessage();
+  queryContentForSelection();
 }
 
 chrome.runtime.onMessage.addListener(handleReadSelectionMessage);

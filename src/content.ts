@@ -6,7 +6,7 @@ document.addEventListener("dblclick", _event => readSelectionAfterTimeout());
 function readSelectionAfterTimeout(): void {
   clearTimeout(selectionTimeoutId);
   selectionTimeoutId = window.setTimeout(
-    sendReadSelectionMessage,
+    sendSelectedTextMessage,
     DOUBLE_CLICK_TIMEOUT
   );
 }
@@ -18,11 +18,11 @@ function handleReadSelectionMessage(
   _sender: chrome.runtime.MessageSender,
   _senderResponse: (response: { result: string }) => void
 ): boolean {
-  if (request.query === "GET_SELECTION") sendReadSelectionMessage();
+  if (request.query === "GET_SELECTION") sendSelectedTextMessage();
   return true;
 }
 
-function sendReadSelectionMessage(): void {
+function sendSelectedTextMessage(): void {
   chrome.runtime.sendMessage({
     message: "READ_SELECTION",
     selection: getSelectedText().trim()

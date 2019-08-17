@@ -1,4 +1,4 @@
-function queryReadSelectionMessage(): void {
+function queryContentForSelection(): void {
   chrome.tabs.query(
     { active: true, currentWindow: true },
     sendSelectionQueryMessage
@@ -15,4 +15,4 @@ function getTabId(tabs: Array<chrome.tabs.Tab>): number {
   return tabs[0].id || -1;
 }
 
-export { queryReadSelectionMessage as default };
+export { queryContentForSelection as default };

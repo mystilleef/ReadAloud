@@ -3,6 +3,13 @@
     "browser": true,
     "es6": true
   },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      }
+    }
+  },
   "extends": [
     "airbnb-base",
     "eslint:recommended",
@@ -24,7 +31,6 @@
   },
   "plugins": ["@typescript-eslint"],
   "rules": {
-    "@typescript-eslint/no-use-before-define": "off",
-    "import/no-unresolved": "off"
+    "@typescript-eslint/no-use-before-define": "off"
   }
 }
