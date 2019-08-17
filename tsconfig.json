@@ -6,8 +6,6 @@
     "rootDir": "src",
     "outDir": "build/js",
     "incremental": true,
-    "allowJs": true,
-    "checkJs": true,
     "composite": true,
     "declaration": true,
     "declarationMap": true,
@@ -27,6 +25,9 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "forceConsistentCasingInFileNames": true,
-    "noEmitOnError": true
-  }
+    "noEmitOnError": true,
+    "typeRoots": ["node_modules/@types"]
+  },
+  "includes": ["src/**/*", "**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx"],
+  "exclude": ["node_modules", "build", "dist", "public", "**/*.spec.ts"]
 }
