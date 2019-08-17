@@ -1,5 +1,5 @@
 import queryContentForSelection from "./utility";
-import read from "./reader";
+import { read, stop } from "./reader";
 
 const COMMAND = "HWFT";
 
@@ -12,13 +12,16 @@ function handleChromeCommand(command: string): void {
 chrome.browserAction.onClicked.addListener(handleBrowserAction);
 
 function handleBrowserAction(_tab: chrome.tabs.Tab): void {
-  queryContentForSelection();
+  chrome.tts.isSpeaking((speaking: boolean) => {
+    if (speaking) stop();
+    else queryContentForSelection();
+  });
 }
 
 chrome.runtime.onMessage.addListener(handleReadSelectionMessage);
 
 function handleReadSelectionMessage(
-  request: { message: string; selection: string },
+  request: { message: string; selection: string; speaking: boolean },
   _sender: chrome.runtime.MessageSender,
   _senderResponse: (response: { result: string }) => void
 ): boolean {
