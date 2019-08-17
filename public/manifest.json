@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
-  "name": "Hello World From Typescript",
-  "version": "0.7",
+  "name": "Read Aloud - (TypeScript)",
+  "version": "0.8",
   "description": "A sample extension written in typescript for testing",
   "permissions": ["activeTab", "tts", "<all_urls>"],
   "background": {

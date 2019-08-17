@@ -1,9 +1,9 @@
 const OPTIONS: chrome.tts.SpeakOptions = {
-  lang: "en-GB",
-  rate: 1.5,
-  enqueue: true,
   pitch: 0,
   volume: 1,
+  rate: 1.5,
+  lang: "en-GB",
+  enqueue: true,
   onEvent: logSpeechEvents
 };
 
