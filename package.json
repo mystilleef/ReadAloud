@@ -1,10 +1,12 @@
 {
-  "name": "ReadAloud",
+  "name": "readaloud",
   "author": "Lateef Alabi-Oki <mystilleef@gmail.com>",
   "license": "gpl3",
   "version": "1.0.0",
-  "description": "An extension to read aloud selected text in Google Chorme",
-  "files": ["dist"],
+  "description": "An extension to read aloud selected text in Google Chrome",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "prebuild": "tsc -b",
     "build": "rollup -c",
@@ -13,6 +15,14 @@
   "keywords": [],
   "devDependencies": {
     "@types/chrome": "0.0.88",
+    "@typescript-eslint/eslint-plugin": "^2.0.0",
+    "@typescript-eslint/parser": "^2.0.0",
+    "eslint": "^6.1.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-config-prettier": "^6.0.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-prettier": "^3.1.0",
+    "prettier": "^1.18.2",
     "rollup": "^1.19.4",
     "tslib": "^1.10.0",
     "typescript": "^3.5.3"

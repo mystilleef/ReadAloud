@@ -2,5 +2,4 @@ function read(selection: string): void {
   console.log(selection);
 }
 
-export { read as default }
-
+export { read as default };
