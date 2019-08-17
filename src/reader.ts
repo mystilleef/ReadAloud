@@ -11,6 +11,11 @@ const OPTIONS: chrome.tts.SpeakOptions = {
   onEvent: monitorSpeakingEvents
 };
 
+function monitorSpeakingEvents(event: chrome.tts.TtsEvent): void {
+  chrome.tts.isSpeaking((speaking: boolean) => updateBrowserIcon(speaking));
+  if (event.type === "error") console.log(`Error: ${event.errorMessage}`);
+}
+
 function read(
   utterances: string,
   options: chrome.ttsEngine.SpeakOptions = OPTIONS
@@ -21,22 +26,13 @@ function read(
   );
 }
 
-function stop(): void {
-  chrome.tts.stop();
-}
-
 function logSpeakError(): void {
   if (chrome.runtime.lastError)
     console.log(`Error: ${chrome.runtime.lastError.message}`);
 }
 
-function monitorSpeakingEvents(event: chrome.tts.TtsEvent): void {
-  chrome.tts.isSpeaking(handleSpeakingState);
-  if (event.type === "error") console.log(`Error: ${event.errorMessage}`);
-}
-
-function handleSpeakingState(isSpeaking: boolean) {
-  updateBrowserIcon(isSpeaking);
+function stop(): void {
+  chrome.tts.stop();
 }
 
 export { read, stop };

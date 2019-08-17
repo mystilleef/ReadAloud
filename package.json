@@ -10,6 +10,11 @@
   "scripts": {
     "prebuild": "tsc -b",
     "build": "rollup -c",
+    "predist": "npm run clean",
+    "dist": "npm run build",
+    "postdist": "cp -r public/* dist/",
+    "clean": "rm -rf build out dist",
+    "prewatch": "npm run clean ; npm run build",
     "watch": "tsc -w & rollup -cw"
   },
   "keywords": [],
@@ -22,6 +27,7 @@
     "eslint-config-prettier": "^6.0.0",
     "eslint-plugin-fp": "^2.3.0",
     "eslint-plugin-functional": "^1.0.0-rc.2",
+    "eslint-plugin-html": "^6.0.0",
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-prettier": "^3.1.0",
     "prettier": "^1.18.2",

@@ -1,3 +1,5 @@
+setDefaultIcon();
+
 function updateBrowserIcon(speaking: boolean): void {
   if (speaking) setStopIcon();
   else setDefaultIcon();

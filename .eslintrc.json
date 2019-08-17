@@ -34,7 +34,7 @@
     "ecmaVersion": 2018,
     "sourceType": "module"
   },
-  "plugins": ["@typescript-eslint", "import", "functional", "fp"],
+  "plugins": ["@typescript-eslint", "import", "functional", "fp", "html"],
   "rules": {
     "@typescript-eslint/no-use-before-define": "off"
   }

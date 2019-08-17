@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
-  "name": "Read Aloud - (TypeScript)",
-  "version": "0.8",
-  "description": "A sample extension written in typescript for testing",
+  "name": "Read Aloud",
+  "version": "0.9",
+  "description": "Read aloud selected text",
   "permissions": ["activeTab", "tts", "<all_urls>"],
   "background": {
     "page": "background.html",
@@ -21,7 +21,7 @@
   "commands": {
     "HWFT": {
       "description": "Read aloud selected text",
-      "suggested_key": { "default": "Alt+R" }
+      "suggested_key": { "default": "Ctrl+Space" }
     }
   }
 }
