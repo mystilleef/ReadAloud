@@ -1,10 +1,13 @@
 {
+  "compileOnSave": true,
   "compilerOptions": {
     "module": "es2015",
     "target": "es2018",
     "rootDir": "src",
     "outDir": "build/js",
     "incremental": true,
+    "allowJs": true,
+    "checkJs": true,
     "composite": true,
     "declaration": true,
     "declarationMap": true,
@@ -23,6 +26,7 @@
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
+    "forceConsistentCasingInFileNames": true,
     "noEmitOnError": true
   }
 }
