@@ -1,5 +1,5 @@
+import { read, stop }           from "./reader";
 import queryContentForSelection from "./utility";
-import { read, stop } from "./reader";
 
 const COMMAND = "HWFT";
 

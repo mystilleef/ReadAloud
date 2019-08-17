@@ -5,22 +5,22 @@ function updateBrowserIcon(speaking: boolean): void {
   else setDefaultIcon();
 }
 
-function setDefaultIcon() {
+function setDefaultIcon(): void {
   setIcon("default");
   setTooltip("Read aloud selected text");
 }
 
-function setStopIcon() {
+function setStopIcon(): void {
   setIcon("stop");
   setTooltip("Stop reading");
 }
 
-function setIcon(name: string) {
+function setIcon(name: string): void {
   const details = { path: `images/${name}.svg` };
   chrome.browserAction.setIcon(details);
 }
 
-function setTooltip(tip: string) {
+function setTooltip(tip: string): void {
   chrome.browserAction.setTitle({ title: tip });
 }
 

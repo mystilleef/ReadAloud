@@ -1,7 +1,11 @@
 const DOUBLE_CLICK_TIMEOUT = 250;
-let selectionTimeoutId = 0;
+let selectionTimeoutId     = 0;
 
-document.addEventListener("dblclick", _event => readSelectionAfterTimeout());
+document.addEventListener(
+  "dblclick",
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _event => readSelectionAfterTimeout()
+);
 
 function readSelectionAfterTimeout(): void {
   clearTimeout(selectionTimeoutId);
@@ -24,7 +28,7 @@ function handleReadSelectionMessage(
 
 function sendSelectedTextMessage(): void {
   chrome.runtime.sendMessage({
-    message: "READ_SELECTION",
+    message  : "READ_SELECTION",
     selection: getSelectedText().trim()
   });
 }
@@ -37,8 +41,7 @@ function getSelectedText(): string {
 
 function windowSelectionExists(): boolean {
   if (!window) return false;
-  if (window.getSelection()) return true;
-  return false;
+  return !!window.getSelection();
 }
 
 function getWindowSelection(): string {
@@ -49,8 +52,7 @@ function getWindowSelection(): string {
 
 function documentSelectionExists(): boolean {
   if (!document) return false;
-  if (document.getSelection()) return true;
-  return false;
+  return !!document.getSelection();
 }
 
 function getDocumentSelection(): string {
