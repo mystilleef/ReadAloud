@@ -8,13 +8,11 @@ const OPTIONS: chrome.tts.SpeakOptions = {
   rate: 1.5,
   lang: "en-GB",
   enqueue: true,
-  onEvent: monitorSpeakingEvents
+  onEvent: (event: chrome.tts.TtsEvent): void => {
+    chrome.tts.isSpeaking((speaking: boolean) => updateBrowserIcon(speaking));
+    if (event.type === "error") console.log(`Error: ${event.errorMessage}`);
+  }
 };
-
-function monitorSpeakingEvents(event: chrome.tts.TtsEvent): void {
-  chrome.tts.isSpeaking((speaking: boolean) => updateBrowserIcon(speaking));
-  if (event.type === "error") console.log(`Error: ${event.errorMessage}`);
-}
 
 function read(
   utterances: string,
@@ -22,11 +20,11 @@ function read(
 ): void {
   const phrases = utterances.split(BY_COMMON_PUNCTUATIONS);
   phrases.forEach(phrase =>
-    chrome.tts.speak(phrase.trim(), options, logSpeakError)
+    chrome.tts.speak(phrase.trim(), options, logSpeakEventErrors)
   );
 }
 
-function logSpeakError(): void {
+function logSpeakEventErrors(): void {
   if (chrome.runtime.lastError)
     console.log(`Error: ${chrome.runtime.lastError.message}`);
 }
