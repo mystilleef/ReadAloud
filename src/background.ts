@@ -1,5 +1,4 @@
-import { read, stop }           from "./reader";
-import queryContentForSelection from "./utility";
+import { read, stop } from "./reader";
 
 const COMMAND = "HWFT";
 
@@ -16,6 +15,17 @@ function handleBrowserAction(_tab: chrome.tabs.Tab): void {
     if (speaking) stop();
     else queryContentForSelection();
   });
+}
+
+function queryContentForSelection(): void {
+  chrome.tabs.query(
+    { active: true, currentWindow: true },
+    (tabs: Array<chrome.tabs.Tab>): boolean => {
+      const tabid = tabs[0].id || -1;
+      if (tabid) chrome.tabs.sendMessage(tabid, { query: "GET_SELECTION" });
+      return true;
+    }
+  );
 }
 
 chrome.runtime.onMessage.addListener(handleReadSelectionMessage);
