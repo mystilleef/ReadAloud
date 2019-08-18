@@ -1,3 +1,5 @@
+import updateBrowserIcon from "./icon";
+
 const BY_COMMON_PUNCTUATIONS = /[_.,:;!?<>/]/gm;
 
 const OPTIONS: chrome.tts.SpeakOptions = {
