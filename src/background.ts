@@ -22,9 +22,10 @@ chrome.runtime.onMessage.addListener(handleReadSelectionMessage);
 
 function handleReadSelectionMessage(
   request: { message: string; selection: string; speaking: boolean },
-  _sender: chrome.runtime.MessageSender,
+  sender: chrome.runtime.MessageSender,
   _senderResponse: (response: { result: string }) => void
 ): boolean {
+  if (sender.id !== chrome.runtime.id) return true;
   if (request.message === "READ_SELECTION") read(request.selection);
   return true;
 }

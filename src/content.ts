@@ -3,7 +3,6 @@ let selectionTimeoutId     = 0;
 
 document.addEventListener(
   "dblclick",
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _event => readSelectionAfterTimeout()
 );
 
@@ -27,10 +26,10 @@ function handleReadSelectionMessage(
 }
 
 function sendSelectedTextMessage(): void {
-  chrome.runtime.sendMessage({
-    message  : "READ_SELECTION",
-    selection: getSelectedText().trim()
-  });
+  chrome.runtime.sendMessage(
+    chrome.runtime.id,
+    { message: "READ_SELECTION", selection: getSelectedText().trim() }
+  );
 }
 
 function getSelectedText(): string {
