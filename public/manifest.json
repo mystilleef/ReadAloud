@@ -19,7 +19,7 @@
     "default_title": "Read aloud selected text"
   },
   "commands": {
-    "HWFT": {
+    "read-aloud-selected-text": {
       "description": "Read aloud selected text",
       "suggested_key": {"default": "Ctrl+Space"}
     }

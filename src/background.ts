@@ -1,6 +1,6 @@
 import { read, stop } from "./reader";
 
-const COMMAND = "HWFT";
+const COMMAND = "read-aloud-selected-text";
 
 chrome.commands.onCommand.addListener(handleChromeCommand);
 
