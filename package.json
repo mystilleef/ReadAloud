@@ -16,7 +16,6 @@
     "prewatch": "npm run clean ; npm run build",
     "watch": "rollup -cw"
   },
-  "keywords": [],
   "devDependencies": {
     "@types/chrome": "0.0.88",
     "@typescript-eslint/eslint-plugin": "^2.0.0",
