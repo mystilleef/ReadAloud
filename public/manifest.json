@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Read Aloud",
-  "version": "0.14",
+  "version": "0.15",
   "description": "Read aloud selected text",
   "permissions": ["activeTab", "tts", "<all_urls>"],
   "background": {
