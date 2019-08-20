@@ -4,18 +4,16 @@
   "license": "gpl3",
   "version": "1.0.0",
   "description": "An extension to read aloud selected text in Google Chrome",
-  "files": [
-    "dist"
-  ],
   "scripts": {
-    "prebuild": "tsc -b",
     "build": "rollup -c",
-    "predist": "npm run clean",
+    "predist": "mkdir -p dist/js",
     "dist": "npm run build",
-    "postdist": "cp -r public/* dist/",
+    "postdist": "cp -r public/* dist/; cp -r out/* dist/js",
     "clean": "rm -rf build out dist",
+    "clean:build": "rm -rf out",
+    "clean:out": "npm run clean:build",
     "prewatch": "npm run clean ; npm run build",
-    "watch": "tsc -w & rollup -cw"
+    "watch": "rollup -cw"
   },
   "keywords": [],
   "devDependencies": {
@@ -33,7 +31,12 @@
     "prettier": "^1.18.2",
     "redux-devtools": "^3.5.0",
     "rollup": "^1.19.4",
+    "rollup-plugin-commonjs": "^10.0.2",
+    "rollup-plugin-eslint": "^7.0.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-terser": "^5.1.1",
+    "rollup-plugin-tslint": "^0.2.2",
+    "rollup-plugin-typescript2": "^0.22.1",
     "stylelint": "^10.1.0",
     "stylelint-config-standard": "^18.3.0",
     "tslib": "^1.10.0",

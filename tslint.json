@@ -1,5 +1,12 @@
 {
   "defaultSeverity": "error",
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      }
+    }
+  },
   "extends": [
     "tslint:latest"
   ],
@@ -23,7 +30,8 @@
     "trailing-comma": [true, {"multiline": "never", "singleline": "never"}],
     "arrow-parens": false,
     "object-literal-sort-keys": false,
-    "no-console": false
+    "no-console": false,
+    "import-spacing": false
   },
   "rulesDirectory": []
 }

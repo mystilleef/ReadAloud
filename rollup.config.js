@@ -1,10 +1,28 @@
+import commonjs   from "rollup-plugin-commonjs";
+// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+// @ts-ignore
+import { eslint } from "rollup-plugin-eslint";
+import resolve    from "rollup-plugin-node-resolve";
 import { terser } from "rollup-plugin-terser";
+// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+// @ts-ignore
+import tslint     from "rollup-plugin-tslint";
+import typescript from "rollup-plugin-typescript2";
 
 export default {
-  input: ["build/js/background.js", "build/js/content.js"],
-  output: {
+  input  : ["src/background.ts", "src/content.ts"],
+  output : {
     format: "esm",
-    dir: "dist/js"
+    dir   : "out"
   },
-  plugins: [terser()]
+  plugins: [
+    resolve({
+      browser: true
+    }),
+    commonjs(),
+    eslint(),
+    tslint(),
+    typescript(),
+    terser()
+  ]
 };
