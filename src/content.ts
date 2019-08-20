@@ -1,4 +1,4 @@
-const DOUBLE_CLICK_TIMEOUT = 250;
+const DOUBLE_CLICK_TIMEOUT = 500;
 let selectionTimeoutId     = 0;
 
 document.addEventListener(
