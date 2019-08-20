@@ -1,5 +1,7 @@
-import badgeCounter      from "./counter";
+import BadgeCounter      from "./counter";
 import updateBrowserIcon from "./icon";
+
+const badgeCounter = new BadgeCounter();
 
 const BY_COMMON_PUNCTUATIONS = /[-_.,:;!?<>/()—[\]{}]/gm;
 

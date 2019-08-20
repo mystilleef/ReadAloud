@@ -30,6 +30,4 @@ class BadgeCounter {
   }
 }
 
-const badgeCounter = new BadgeCounter();
-
-export { badgeCounter as default };
+export { BadgeCounter as default };
