@@ -3,12 +3,12 @@ class BadgeCounter {
 
   public increment(): void {
     this.counter += 1;
-    this.check();
+    this.checkSpeakingState();
   }
 
   public decrement(): void {
     this.counter -= 1;
-    this.check();
+    this.checkSpeakingState();
   }
 
   public reset(): void {
@@ -16,7 +16,7 @@ class BadgeCounter {
     this.updateText();
   }
 
-  private check(): void {
+  private checkSpeakingState(): void {
     chrome.tts.isSpeaking((speaking: boolean) => {
       if (speaking) this.updateText();
       else this.reset();
