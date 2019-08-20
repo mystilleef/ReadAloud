@@ -1,4 +1,5 @@
-import updateBrowserIcon from "./icon";
+import { clearCounter, decrementCounter, incrementCounter } from "./counter";
+import updateBrowserIcon                                    from "./icon";
 
 const BY_COMMON_PUNCTUATIONS = /[-_.,:;!?<>/()—[\]{}]/gm;
 
@@ -10,7 +11,8 @@ const OPTIONS: chrome.tts.SpeakOptions = {
   enqueue: true,
   onEvent: (event: chrome.tts.TtsEvent): void => {
     chrome.tts.isSpeaking((speaking: boolean) => updateBrowserIcon(speaking));
-    if (event.type === "error") console.log(`Error: ${event.errorMessage}`);
+    if (event.type === "error") logError(`Error: ${event.errorMessage}`);
+    else if (event.type === "end") decrementCounter();
   }
 };
 
@@ -27,15 +29,22 @@ function read(
 
 function speak(phrase: string, options: chrome.ttsEngine.SpeakOptions): void {
   chrome.tts.speak(phrase, options, logSpeakEventErrors);
+  incrementCounter();
 }
 
 function logSpeakEventErrors(): void {
   if (chrome.runtime.lastError)
-    console.log(`Error: ${chrome.runtime.lastError.message}`);
+    logError(`Error: ${chrome.runtime.lastError.message}`);
+}
+
+function logError(message: string): void {
+  stop();
+  console.error(message);
 }
 
 function stop(): void {
   chrome.tts.stop();
+  clearCounter();
 }
 
 export { read, stop };
