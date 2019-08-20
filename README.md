@@ -28,7 +28,7 @@ npm run dist
 - The unpacked extension will be built in the **`dist`** folder
 - Open Chrome and navigate to **`chrome://extensions`**
 - Enable **`Developer mode`** on the extensions page
-- Click **`Load unpacked`** button and select **`dist`** folder
+- Click **`Load unpacked`** button and select the **`dist`** folder you just built
 - The **`Read Aloud`** extension icon should now be present on your Chrome toolbar
 
 ## Todo
