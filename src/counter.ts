@@ -1,28 +1,35 @@
-let counter = 0;
+class BadgeCounter {
+  private counter = 0;
 
-function incrementCounter(): void {
-  counter += 1;
-  setText(counter);
+  public increment(): void {
+    this.counter += 1;
+    this.check();
+  }
+
+  public decrement(): void {
+    this.counter -= 1;
+    this.check();
+  }
+
+  public reset(): void {
+    this.counter = 0;
+    this.updateText();
+  }
+
+  private check(): void {
+    chrome.tts.isSpeaking((speaking: boolean) => {
+      if (speaking) this.updateText();
+      else this.reset();
+    });
+  }
+
+  private updateText(): void {
+    chrome.browserAction.setBadgeText(
+      { text: `${this.counter === 0 ? "" : this.counter}` }
+    );
+  }
 }
 
-function decrementCounter(): void {
-  counter -= 1;
-  setText(counter);
-  clearCounter();
-}
+const badgeCounter = new BadgeCounter();
 
-function clearCounter(): void {
-  chrome.tts.isSpeaking((speaking: boolean) => {
-    if (speaking) return;
-    counter = 0;
-    setText(counter);
-  });
-}
-
-function setText(count: number): void {
-  chrome.browserAction.setBadgeText(
-    { text: `${count === 0 ? "" : count}` }
-  );
-}
-
-export { incrementCounter, decrementCounter, clearCounter };
+export { badgeCounter as default };

@@ -1,5 +1,5 @@
-import { clearCounter, decrementCounter, incrementCounter } from "./counter";
-import updateBrowserIcon                                    from "./icon";
+import badgeCounter      from "./counter";
+import updateBrowserIcon from "./icon";
 
 const BY_COMMON_PUNCTUATIONS = /[-_.,:;!?<>/()—[\]{}]/gm;
 
@@ -10,9 +10,11 @@ const OPTIONS: chrome.tts.SpeakOptions = {
   lang   : "en-GB",
   enqueue: true,
   onEvent: (event: chrome.tts.TtsEvent): void => {
-    chrome.tts.isSpeaking((speaking: boolean) => updateBrowserIcon(speaking));
+    chrome.tts.isSpeaking(
+      (speaking: boolean) => updateBrowserIcon(speaking)
+    );
     if (event.type === "error") logError(`Error: ${event.errorMessage}`);
-    else if (event.type === "end") decrementCounter();
+    else if (event.type === "end") badgeCounter.decrement();
   }
 };
 
@@ -29,7 +31,7 @@ function read(
 
 function speak(phrase: string, options: chrome.ttsEngine.SpeakOptions): void {
   chrome.tts.speak(phrase, options, logSpeakEventErrors);
-  incrementCounter();
+  badgeCounter.increment();
 }
 
 function logSpeakEventErrors(): void {
@@ -44,7 +46,7 @@ function logError(message: string): void {
 
 function stop(): void {
   chrome.tts.stop();
-  clearCounter();
+  badgeCounter.reset();
 }
 
 export { read, stop };
