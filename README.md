@@ -32,11 +32,13 @@ npm run dist
 - The **`Read Aloud`** icon should now be present on the Chrome toolbar
 
 ## Todo
+
 - [ ] Add UI to change language voice
 - [ ] Add UI to change speaking rate
 - [ ] Make extension easy to install for normal users
 - [ ] Distribute to Chrome Store
 
 ## Caveats
+
 - This extension is a work in progress
 - Non-English text, language and locales has not been tested
