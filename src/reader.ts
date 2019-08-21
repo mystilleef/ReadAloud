@@ -22,13 +22,18 @@ const OPTIONS: chrome.tts.SpeakOptions = {
 
 function read(
   utterances: string,
-  options: chrome.ttsEngine.SpeakOptions = OPTIONS
+  options: chrome.ttsEngine.SpeakOptions = getSpeakOptionsFromStorage()
 ): void {
   utterances
     .split(BY_COMMON_PUNCTUATIONS)
     .map(phrase => phrase.trim())
     .filter(phrase => phrase.length)
     .forEach(phrase => speak(phrase, options));
+}
+
+function getSpeakOptionsFromStorage(): chrome.ttsEngine.SpeakOptions {
+  // OPTIONS.rate = 1.5;
+  return OPTIONS;
 }
 
 function speak(phrase: string, options: chrome.ttsEngine.SpeakOptions): void {
