@@ -1,6 +1,6 @@
 # ReadAloud
 
-Read Aloud is a simple Google Chrome extension to read aloud selected text.
+**`Read Aloud`** is a simple Chrome extension to read aloud selected text.
 
 ## Usage
 
