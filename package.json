@@ -38,7 +38,7 @@
     "typescript": "^3.5.3"
   },
   "scripts": {
-    "prebuild": "mkdir -p public/js",
+    "prebuild": "npm run clean:build; mkdir -p public/js",
     "build": "rollup -c",
     "postbuild": "cp -r out/* public/js",
     "predist": "mkdir -p dist/js",
