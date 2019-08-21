@@ -32,13 +32,11 @@ function read(
 }
 
 function speak(phrase: string, options: chrome.ttsEngine.SpeakOptions): void {
-  chrome.tts.speak(phrase, options, logSpeakEventErrors);
+  chrome.tts.speak(phrase, options, (): void => {
+    if (chrome.runtime.lastError)
+      logError(`Error: ${chrome.runtime.lastError.message}`);
+  });
   badgeCounter.increment();
-}
-
-function logSpeakEventErrors(): void {
-  if (chrome.runtime.lastError)
-    logError(`Error: ${chrome.runtime.lastError.message}`);
 }
 
 function logError(message: string): void {
