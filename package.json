@@ -3,7 +3,7 @@
   "author": "Lateef Alabi-Oki <mystilleef@gmail.com>",
   "license": "GPL-3.0-or-later",
   "version": "1.0.0",
-  "repository": "https://github.com/mystilleef/",
+  "repository": "https://github.com/mystilleef/ReadAloud",
   "description": "An extension to read aloud selected text in Google Chrome",
   "dependencies": {
     "redux": "^4.0.4"
@@ -38,12 +38,13 @@
     "typescript": "^3.5.3"
   },
   "scripts": {
-    "prebuild": "mkdir -p dist/js",
+    "prebuild": "mkdir -p public/js",
     "build": "rollup -c",
-    "postbuild": "cp -r out/* dist/js",
-    "predist": "npm run build",
-    "dist": "cp -r public/* dist/",
-    "clean": "rm -rf build out dist",
+    "postbuild": "cp -r out/* public/js",
+    "predist": "mkdir -p dist/js",
+    "dist": "npm run build",
+    "postdist": "cp -r public/* dist/",
+    "clean": "rm -rf build out dist public/js",
     "clean:build": "rm -rf out",
     "clean:out": "npm run clean:build",
     "prewatch": "npm run clean ; npm run build",
