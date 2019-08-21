@@ -6,12 +6,12 @@ const BY_COMMON_PUNCTUATIONS = /[-_.,:;!?<>/()—[\]{}]/gm;
 const badgeCounter = new BadgeCounter();
 
 const OPTIONS: chrome.tts.SpeakOptions = {
-  pitch  : 0,
-  volume : 1,
-  rate   : 1.5,
-  lang   : "en-GB",
-  enqueue: true,
-  onEvent: (event: chrome.tts.TtsEvent): void => {
+  pitch    : 0,
+  volume   : 1,
+  rate     : 1.2,
+  voiceName: "Google UK English Female",
+  enqueue  : true,
+  onEvent  : (event: chrome.tts.TtsEvent): void => {
     chrome.tts.isSpeaking(
       (speaking: boolean) => updateBrowserIcon(speaking)
     );
@@ -21,29 +21,53 @@ const OPTIONS: chrome.tts.SpeakOptions = {
 };
 
 chrome.storage.onChanged.addListener((_changes, _namespace) => {
-  updateSpeakOptionsFromStorage();
+  resolveStorageConfigurations();
 });
 
 chrome.runtime.onStartup.addListener(() => {
-  updateSpeakOptionsFromStorage();
+  resolveStorageConfigurations();
 });
 
 chrome.runtime.onInstalled.addListener(() => {
-  chrome.storage.sync.set({ pitch: 0, rate: 1.5, lang: "en-GB" }, () => {
-    // Set default speak options.
-  });
+  resolveStorageConfigurations();
 });
+
+function resolveStorageConfigurations(): void {
+  chrome.storage.sync.get(
+    ["pitch", "rate", "voiceName"],
+    result => {
+      if (storageResultIsUndefined(result)) chrome.storage.sync.set(
+        { pitch: 0, rate: 1.2, voiceName: "Google UK English Female" },
+        () => {}
+      );
+      else updateSpeakOptionsFromStorage();
+    }
+  );
+}
+
+function storageResultIsUndefined(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  result: { [p: string]: any }
+): boolean {
+  return result.pitch === undefined
+         || result.rate === undefined
+         || result.voiceName === undefined;
+}
 
 function updateSpeakOptionsFromStorage(): void {
   chrome.storage.sync.get(
-    ["pitch", "rate", "lang"],
+    ["pitch", "rate", "voiceName"],
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (result: { [key: string]: any }) => {
-      OPTIONS.rate  = result.rate;
-      OPTIONS.pitch = result.pitch;
-      OPTIONS.lang  = result.lang;
+      OPTIONS.rate      = result.rate;
+      OPTIONS.pitch     = result.pitch;
+      OPTIONS.voiceName = result.voiceName;
       console.log(
-        `Pitch: ${result.pitch}, Rate: ${result.rate}, Lang: ${result.lang}`
+        `
+        Pitch: ${result.pitch},
+        Rate: ${result.rate},
+        VoiceName: ${result.voiceName}
+        `
       );
     }
   );
@@ -57,8 +81,8 @@ function setRate(rate: number): void {
   chrome.storage.sync.set({ rate }, () => {});
 }
 
-function setLang(lang: string): void {
-  chrome.storage.sync.set({ lang }, () => {});
+function setVoiceName(voiceName: string): void {
+  chrome.storage.sync.set({ voiceName }, () => {});
 }
 
 function read(
@@ -90,4 +114,4 @@ function stop(): void {
   badgeCounter.reset();
 }
 
-export { read, stop, setLang, setPitch, setRate };
+export { read, stop, setVoiceName, setPitch, setRate };
