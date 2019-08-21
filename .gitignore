@@ -107,3 +107,4 @@ typings/
 .rpt2_cache/
 .idea/
 ./public/js
+public/js
