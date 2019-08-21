@@ -20,20 +20,46 @@ const OPTIONS: chrome.tts.SpeakOptions = {
   }
 };
 
+chrome.storage.onChanged.addListener((_changes, _namespace) => {
+  console.log("Read Aloud: On Settings Changed");
+  updateSpeakOptionsFromStorage();
+});
+
+chrome.runtime.onStartup.addListener(() => {
+  console.log("Read Aloud: On Startup");
+  updateSpeakOptionsFromStorage();
+});
+
+chrome.runtime.onInstalled.addListener(() => {
+  chrome.storage.sync.set({ pitch: 0, rate: 1.5, lang: "en-GB" }, () => {
+    console.log("Read Aloud: On Installed");
+  });
+});
+
+function updateSpeakOptionsFromStorage(): void {
+  chrome.storage.sync.get(
+    ["pitch", "rate", "lang"],
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (result: { [key: string]: any }) => {
+      OPTIONS.rate  = result.rate;
+      OPTIONS.pitch = result.pitch;
+      OPTIONS.lang  = result.lang;
+      console.log(
+        `Pitch: ${result.pitch}, Rate: ${result.rate}, Lang: ${result.lang}`
+      );
+    }
+  );
+}
+
 function read(
   utterances: string,
-  options: chrome.ttsEngine.SpeakOptions = getSpeakOptionsFromStorage()
+  options: chrome.ttsEngine.SpeakOptions = OPTIONS
 ): void {
   utterances
     .split(BY_COMMON_PUNCTUATIONS)
     .map(phrase => phrase.trim())
     .filter(phrase => phrase.length)
     .forEach(phrase => speak(phrase, options));
-}
-
-function getSpeakOptionsFromStorage(): chrome.ttsEngine.SpeakOptions {
-  // OPTIONS.rate = 1.5;
-  return OPTIONS;
 }
 
 function speak(phrase: string, options: chrome.ttsEngine.SpeakOptions): void {
