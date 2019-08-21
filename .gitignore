@@ -106,3 +106,4 @@ typings/
 !.vscode/extensions.json
 .rpt2_cache/
 .idea/
+./public/js
