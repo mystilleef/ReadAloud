@@ -49,6 +49,18 @@ function updateSpeakOptionsFromStorage(): void {
   );
 }
 
+function setPitch(pitch: number): void {
+  chrome.storage.sync.set({ pitch }, () => {});
+}
+
+function setRate(rate: number): void {
+  chrome.storage.sync.set({ rate }, () => {});
+}
+
+function setLang(lang: string): void {
+  chrome.storage.sync.set({ lang }, () => {});
+}
+
 function read(
   utterances: string,
   options: chrome.ttsEngine.SpeakOptions = OPTIONS
@@ -78,4 +90,4 @@ function stop(): void {
   badgeCounter.reset();
 }
 
-export { read, stop };
+export { read, stop, setLang, setPitch, setRate };
