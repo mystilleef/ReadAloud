@@ -21,18 +21,16 @@ const OPTIONS: chrome.tts.SpeakOptions = {
 };
 
 chrome.storage.onChanged.addListener((_changes, _namespace) => {
-  console.log("Read Aloud: On Settings Changed");
   updateSpeakOptionsFromStorage();
 });
 
 chrome.runtime.onStartup.addListener(() => {
-  console.log("Read Aloud: On Startup");
   updateSpeakOptionsFromStorage();
 });
 
 chrome.runtime.onInstalled.addListener(() => {
   chrome.storage.sync.set({ pitch: 0, rate: 1.5, lang: "en-GB" }, () => {
-    console.log("Read Aloud: On Installed");
+    // Set default speak options.
   });
 });
 
