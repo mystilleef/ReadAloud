@@ -60,7 +60,6 @@ chrome.contextMenus.create(
 function createTopLevelMenus(
   menu: { id: string; title: string; parentId: string; contexts: string[] }
 ): void {
-  // noinspection FunctionTooLongJS
   chrome.contextMenus.create(
     menu,
     () => {
@@ -152,11 +151,11 @@ chrome.contextMenus.onClicked.addListener((info, _tab) => {
 // noinspection FunctionTooLongJS
 function handleRadioMenuItems(info: chrome.contextMenus.OnClickData): void {
   switch (info.parentMenuItemId) {
-    case SPEED_MENU_ID:
-      setRate(numberValueFrom(info.menuItemId));
-      break;
     case VOICES_MENU_ID:
       setVoiceName(stringValueFrom(info.menuItemId));
+      break;
+    case SPEED_MENU_ID:
+      setRate(numberValueFrom(info.menuItemId));
       break;
     case PITCH_MENU_ID:
       setPitch(numberValueFrom(info.menuItemId));
@@ -166,12 +165,12 @@ function handleRadioMenuItems(info: chrome.contextMenus.OnClickData): void {
   }
 }
 
-function numberValueFrom(id: string): number {
-  return Number(id.split("|").pop());
-}
-
 function stringValueFrom(id: string): string {
   return id.split("|").pop() || DEFAULT_VOICENAME;
+}
+
+function numberValueFrom(id: string): number {
+  return Number(id.split("|").pop());
 }
 
 function resetToDefault(): void {
