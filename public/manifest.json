@@ -24,5 +24,11 @@
       "description": "Read aloud selected text",
       "suggested_key": {"default": "Ctrl+Space"}
     }
+  },
+  "icons": {
+    "16": "images/default16.png",
+    "32": "images/default32.png",
+    "48": "images/default48.png",
+    "128": "images/default128.png"
   }
 }
