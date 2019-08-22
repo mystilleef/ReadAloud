@@ -5,11 +5,19 @@ const BY_COMMON_PUNCTUATIONS = /[-_.,:;!?<>/()—[\]{}]/gm;
 
 const badgeCounter = new BadgeCounter();
 
+const DEFAULT_VOICENAME = "Google UK English Female";
+const DEFAULT_RATE      = 1.2;
+const DEFAULT_PITCH     = 0;
+const DEFAULT_VOLUME    = 1;
+const PITCH             = "pitch";
+const RATE              = "rate";
+const VOICENAME         = "voiceName";
+
 const OPTIONS: chrome.tts.SpeakOptions = {
-  pitch    : 0,
-  volume   : 1,
-  rate     : 1.2,
-  voiceName: "Google UK English Female",
+  pitch    : DEFAULT_PITCH,
+  volume   : DEFAULT_VOLUME,
+  rate     : DEFAULT_RATE,
+  voiceName: DEFAULT_VOICENAME,
   enqueue  : true,
   onEvent  : (event: chrome.tts.TtsEvent): void => {
     chrome.tts.isSpeaking(
@@ -19,25 +27,26 @@ const OPTIONS: chrome.tts.SpeakOptions = {
     else if (event.type === "end") badgeCounter.decrement();
   }
 };
-
 chrome.storage.onChanged.addListener((_changes, _namespace) => {
   resolveStorageConfigurations();
 });
-
 chrome.runtime.onStartup.addListener(() => {
   resolveStorageConfigurations();
 });
-
 chrome.runtime.onInstalled.addListener(() => {
   resolveStorageConfigurations();
 });
 
 function resolveStorageConfigurations(): void {
   chrome.storage.sync.get(
-    ["pitch", "rate", "voiceName"],
+    [PITCH, RATE, VOICENAME],
     result => {
       if (storageResultIsUndefined(result)) chrome.storage.sync.set(
-        { pitch: 0, rate: 1.2, voiceName: "Google UK English Female" },
+        {
+          pitch    : DEFAULT_PITCH,
+          rate     : DEFAULT_RATE,
+          voiceName: DEFAULT_VOICENAME
+        },
         () => {}
       );
       else updateSpeakOptionsFromStorage();
@@ -56,7 +65,7 @@ function storageResultIsUndefined(
 
 function updateSpeakOptionsFromStorage(): void {
   chrome.storage.sync.get(
-    ["pitch", "rate", "voiceName"],
+    [PITCH, RATE, VOICENAME],
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (result: { [key: string]: any }) => {
       OPTIONS.rate      = result.rate;
@@ -114,4 +123,14 @@ function stop(): void {
   badgeCounter.reset();
 }
 
-export { read, stop, setVoiceName, setPitch, setRate };
+export {
+  RATE,
+  PITCH,
+  VOICENAME,
+  DEFAULT_VOICENAME,
+  read,
+  stop,
+  setRate,
+  setPitch,
+  setVoiceName
+};
