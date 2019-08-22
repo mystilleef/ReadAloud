@@ -33,8 +33,8 @@ npm run dist
 
 ## Todo
 
-- [ ] Add UI to change language voice
-- [ ] Add UI to change speaking rate
+- [x] Add UI to change language voice
+- [x] Add UI to change speaking rate
 - [ ] Make extension easy to install for normal users
 - [ ] Distribute to Chrome Store
 
