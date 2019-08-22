@@ -8,7 +8,7 @@ import {
   setRate,
   setVoiceName,
   VOICENAME
-}                                                    from "./reader";
+}                                                    from "./utils";
 
 const SPEED_MENU_ID           = "ReadAloudSpeedMenu";
 const SPEED_MENU_ID_KEY       = "ReadAloud|Speed|Menu|Option|";

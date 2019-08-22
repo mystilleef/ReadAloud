@@ -1,12 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import BadgeCounter              from "./counter";
-import { logChromeErrorMessage } from "./error";
-import updateBrowserIcon         from "./icon";
-
-const DEFAULT_VOICENAME = "Google UK English Female";
-const PITCH             = "pitch";
-const RATE              = "rate";
-const VOICENAME         = "voiceName";
+import BadgeCounter                                  from "./counter";
+import { logChromeErrorMessage }                     from "./error";
+import updateBrowserIcon                             from "./icon";
+import { DEFAULT_VOICENAME, PITCH, RATE, VOICENAME } from "./utils";
 
 const BY_COMMON_PUNCTUATIONS = /[-_.,:;!?<>/()—[\]{}]/gm;
 const DEFAULT_RATE           = 1.2;
@@ -78,18 +74,6 @@ function updateSpeakOptionsFromStorage(): void {
   );
 }
 
-const setPitch = (pitch: number): void => {
-  chrome.storage.sync.set({ pitch }, () => {});
-};
-
-const setRate = (rate: number): void => {
-  chrome.storage.sync.set({ rate }, () => {});
-};
-
-const setVoiceName = (voiceName: string): void => {
-  chrome.storage.sync.set({ voiceName }, () => {});
-};
-
 function read(
   utterances: string,
   options: chrome.ttsEngine.SpeakOptions = OPTIONS
@@ -119,13 +103,6 @@ function stop(): void {
 }
 
 export {
-  RATE,
-  PITCH,
-  VOICENAME,
-  DEFAULT_VOICENAME,
   read,
-  stop,
-  setRate,
-  setPitch,
-  setVoiceName
+  stop
 };
