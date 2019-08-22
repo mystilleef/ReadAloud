@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { chromeRuntimeError, logChromeErrorMessage } from "./error";
 import {
   DEFAULT_VOICENAME,
   PITCH,
@@ -7,7 +8,7 @@ import {
   setRate,
   setVoiceName,
   VOICENAME
-} from "./reader";
+}                                                    from "./reader";
 
 const SPEED_MENU_ID           = "ReadAloudSpeedMenu";
 const SPEED_MENU_ID_KEY       = "ReadAloud|Speed|Menu|Option|";
@@ -45,13 +46,13 @@ const TOP_LEVEL_MENU_INFO = [
   }
 ];
 
-const speedOptions = [1, 1.2, 1.4, 1.6, 1.8, 2];
-const pitchOptions = [0, 0.5, 1, 1.5, 2];
+const SPEED_OPTIONS = [1, 1.2, 1.4, 1.6, 1.8, 2];
+const PITCH_OPTIONS = [0, 0.5, 1, 1.5, 2];
 
 chrome.contextMenus.create(
   { title: "Read Aloud", id: READ_ALOUD_ROOT_MENU_ID, contexts: ["all"] },
   () => {
-    if (runtimeError()) logRuntimeError();
+    if (chromeRuntimeError()) logChromeErrorMessage();
     else TOP_LEVEL_MENU_INFO.forEach(menu => createTopLevelMenus(menu));
   }
 );
@@ -63,29 +64,36 @@ function createTopLevelMenus(
   chrome.contextMenus.create(
     menu,
     () => {
-      if (runtimeError()) logRuntimeError();
-      switch (menu.id) {
-        case SPEED_MENU_ID:
-          createSpeedSubMenus(menu);
-          break;
-        case VOICES_MENU_ID:
-          createLanguageSubMenus(menu);
-          break;
-        case PITCH_MENU_ID:
-          createPitchSubMenus(menu);
-          break;
-        default:
-          break;
-      }
+      if (chromeRuntimeError()) logChromeErrorMessage();
+      else createRadioMenuItems(menu);
     }
   );
 }
 
-function createSpeedSubMenus(
+function createRadioMenuItems(
+  menu: { id: string; title: string; parentId: string; contexts: string[] }
+): void {
+  switch (menu.id) {
+    case SPEED_MENU_ID:
+      createSpeechRateRadionMenuItems(menu);
+      break;
+    case VOICES_MENU_ID:
+      createVoicesRadioMenuItems(menu);
+      break;
+    case PITCH_MENU_ID:
+      createPitchRadioMenuItems(menu);
+      break;
+    default:
+      // console.error("ERROR: Invalid Menu ID");
+      break;
+  }
+}
+
+function createSpeechRateRadionMenuItems(
   menu: { id: string; title: string; parentId: string; contexts: string[] }
 ): void {
   chrome.storage.sync.get(RATE, items => {
-    speedOptions.forEach(speed => chrome.contextMenus.create(
+    SPEED_OPTIONS.forEach(speed => chrome.contextMenus.create(
       {
         parentId: menu.id,
         contexts: menu.contexts,
@@ -94,12 +102,12 @@ function createSpeedSubMenus(
         id      : `${SPEED_MENU_ID_KEY}${speed}`,
         checked : items.rate === Number(speed)
       },
-      () => logRuntimeError()
+      () => logChromeErrorMessage()
     ));
   });
 }
 
-function createLanguageSubMenus(
+function createVoicesRadioMenuItems(
   menu: { id: string; title: string; parentId: string; contexts: string[] }
 ): void {
   chrome.tts.getVoices((voices: chrome.tts.TtsVoice[]) => {
@@ -113,17 +121,17 @@ function createLanguageSubMenus(
           id      : `${VOICES_MENU_ID_KEY}${voice.voiceName}`,
           checked : items.voiceName === voice.voiceName
         },
-        () => logRuntimeError()
+        () => logChromeErrorMessage()
       ));
     });
   });
 }
 
-function createPitchSubMenus(
+function createPitchRadioMenuItems(
   menu: { id: string; title: string; parentId: string; contexts: string[] }
 ): void {
   chrome.storage.sync.get(PITCH, items => {
-    pitchOptions.forEach(pitch => chrome.contextMenus.create(
+    PITCH_OPTIONS.forEach(pitch => chrome.contextMenus.create(
       {
         parentId: menu.id,
         type    : "radio",
@@ -132,18 +140,9 @@ function createPitchSubMenus(
         id      : `${PITCH_MENU_ID_KEY}${pitch}`,
         checked : items.pitch === Number(pitch)
       },
-      () => logRuntimeError()
+      () => logChromeErrorMessage()
     ));
   });
-}
-
-function runtimeError(): boolean {
-  return !!chrome.runtime.lastError;
-}
-
-function logRuntimeError(): void {
-  if (chrome.runtime.lastError)
-    console.log(`Error: ${chrome.runtime.lastError.message}`);
 }
 
 chrome.contextMenus.onClicked.addListener((info, _tab) => {
@@ -152,7 +151,7 @@ chrome.contextMenus.onClicked.addListener((info, _tab) => {
 });
 
 function resetToDefault(): void {
-  chrome.storage.sync.clear(() => logRuntimeError());
+  chrome.storage.sync.clear(() => logChromeErrorMessage());
 }
 
 // noinspection FunctionTooLongJS
@@ -189,17 +188,17 @@ chrome.storage.onChanged.addListener((
     chrome.contextMenus.update(
       `${PITCH_MENU_ID_KEY}${items.pitch}`,
       { checked: true },
-      () => logRuntimeError()
+      () => logChromeErrorMessage()
     );
     chrome.contextMenus.update(
       `${VOICES_MENU_ID_KEY}${items.voiceName}`,
       { checked: true },
-      () => logRuntimeError()
+      () => logChromeErrorMessage()
     );
     chrome.contextMenus.update(
       `${SPEED_MENU_ID_KEY}${items.rate}`,
       { checked: true },
-      () => logRuntimeError()
+      () => logChromeErrorMessage()
     );
   });
 });
