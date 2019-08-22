@@ -8,14 +8,24 @@
     }
   },
   "extends": [
-    "tslint:latest"
+    "tslint:latest",
+    "tslint-clean-code",
+    "tslint-microsoft-contrib/latest",
+    "tslint-sonarts"
   ],
   "jsRules": {
     "max-line-length": {
       "options": [80]
     }
   },
+  "rulesDirectory": ["node_modules/tslint-microsoft-contrib"],
   "rules": {
+    "no-relative-imports": false,
+    "no-single-line-block-comment": false,
+    "import-name": false,
+    "member-ordering": false,
+    "export-name": false,
+    "newspaper-order": true,
     "curly": [true, "as-needed"],
     "max-line-length": {
       "options": [80]
@@ -33,6 +43,5 @@
     "no-console": false,
     "import-spacing": false,
     "no-empty": false
-  },
-  "rulesDirectory": []
+  }
 }

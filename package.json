@@ -11,6 +11,7 @@
   "devDependencies": {
     "@types/chrome": "0.0.88",
     "@typescript-eslint/eslint-plugin": "^2.0.0",
+    "@typescript-eslint/eslint-plugin-tslint": "^2.0.0",
     "@typescript-eslint/parser": "^2.0.0",
     "eslint": "^6.2.1",
     "eslint-config-airbnb-base": "^14.0.0",
@@ -35,6 +36,9 @@
     "stylelint-config-standard": "^18.3.0",
     "tslib": "^1.10.0",
     "tslint": "^5.18.0",
+    "tslint-clean-code": "^0.2.9",
+    "tslint-microsoft-contrib": "^6.2.0",
+    "tslint-sonarts": "^1.9.0",
     "typescript": "^3.5.3"
   },
   "scripts": {

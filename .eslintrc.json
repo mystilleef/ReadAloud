@@ -30,11 +30,18 @@
   },
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "project": "./tsconfig.json",
+    "project": "tsconfig.json",
     "ecmaVersion": 2018,
     "sourceType": "module"
   },
-  "plugins": ["@typescript-eslint", "import", "functional", "fp", "html"],
+  "plugins": [
+    "@typescript-eslint",
+    "@typescript-eslint/tslint",
+    "import",
+    "functional",
+    "fp",
+    "html"
+  ],
   "rules": {
     "@typescript-eslint/no-use-before-define": "off",
     "comma-dangle": ["error", "never"],

@@ -84,7 +84,6 @@ function createRadioMenuItems(
       createPitchRadioMenuItems(menu);
       break;
     default:
-      // console.error("ERROR: Invalid Menu ID");
       break;
   }
 }
@@ -150,10 +149,6 @@ chrome.contextMenus.onClicked.addListener((info, _tab) => {
   else handleRadioMenuItems(info);
 });
 
-function resetToDefault(): void {
-  chrome.storage.sync.clear(() => logChromeErrorMessage());
-}
-
 // noinspection FunctionTooLongJS
 function handleRadioMenuItems(info: chrome.contextMenus.OnClickData): void {
   switch (info.parentMenuItemId) {
@@ -171,12 +166,16 @@ function handleRadioMenuItems(info: chrome.contextMenus.OnClickData): void {
   }
 }
 
-function configurationStoreIsEmpty(
-  items: { [x: string]: any }
-): boolean {
-  return items.pitch === undefined
-         || items.voiceName === undefined
-         || items.rate === undefined;
+function numberValueFrom(id: string): number {
+  return Number(id.split("|").pop());
+}
+
+function stringValueFrom(id: string): string {
+  return id.split("|").pop() || DEFAULT_VOICENAME;
+}
+
+function resetToDefault(): void {
+  chrome.storage.sync.clear(() => logChromeErrorMessage());
 }
 
 chrome.storage.onChanged.addListener((
@@ -203,10 +202,10 @@ chrome.storage.onChanged.addListener((
   });
 });
 
-function numberValueFrom(id: string): number {
-  return Number(id.split("|").pop());
-}
-
-function stringValueFrom(id: string): string {
-  return id.split("|").pop() || DEFAULT_VOICENAME;
+function configurationStoreIsEmpty(
+  items: { [x: string]: any }
+): boolean {
+  return items.pitch === undefined
+         || items.voiceName === undefined
+         || items.rate === undefined;
 }

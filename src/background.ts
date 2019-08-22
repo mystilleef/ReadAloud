@@ -35,7 +35,7 @@ function handleReadSelectionMessage(
   sender: chrome.runtime.MessageSender,
   _senderResponse: (response: { result: string }) => void
 ): boolean {
-  if (sender.id !== chrome.runtime.id) return true;
+  if (sender.id !== chrome.runtime.id) return false;
   if (request.message === "READ_SELECTION") read(request.selection);
   return true;
 }

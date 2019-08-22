@@ -11,16 +11,16 @@ class BadgeCounter {
     this.checkSpeakingState();
   }
 
-  public reset(): void {
-    this.counter = 0;
-    this.updateText();
-  }
-
   private checkSpeakingState(): void {
     chrome.tts.isSpeaking((speaking: boolean) => {
       if (speaking) this.updateText();
       else this.reset();
     });
+  }
+
+  public reset(): void {
+    this.counter = 0;
+    this.updateText();
   }
 
   private updateText(): void {
