@@ -17,7 +17,7 @@
   ],
   "browser_action": {
     "default_title": "Read aloud selected text",
-    "default_icon": "images/default.svg"
+    "default_icon": "images/default128.png"
   },
   "commands": {
     "read-aloud-selected-text": {
