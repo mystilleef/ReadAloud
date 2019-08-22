@@ -7,6 +7,10 @@
 - Tripple click to read a paragraph
 - Press **`Ctrl+Space`** to read selected text
 - Use the toolbar icon to start or stop reading selected text
+- `Right-click` then **`Read Aloud > Voices`** to change reading voice
+- `Right-click` then **`Read Aloud > Speed`** to change reading rate
+- `Right-click` then **`Read Aloud > Pitch`** to change reading pitch
+- `Right-click` then **`Read Aloud > Reset to Default`** to set default options
 
 ## Installation
 
