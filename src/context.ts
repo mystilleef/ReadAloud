@@ -158,11 +158,11 @@ function createPitchRadioMenuItems(
 
 chrome.contextMenus.onClicked.addListener((info, _tab) => {
   if (info.menuItemId === RESET_DEFAULT_MENU_ID) resetToDefault();
-  else handleRadioMenuItems(info);
+  else onRadioMenuItemClick(info);
 });
 
 // noinspection FunctionTooLongJS
-function handleRadioMenuItems(info: chrome.contextMenus.OnClickData): void {
+function onRadioMenuItemClick(info: chrome.contextMenus.OnClickData): void {
   switch (info.parentMenuItemId) {
     case VOICES_MENU_ID:
       setVoiceName(stringValueFrom(info.menuItemId));
@@ -186,14 +186,16 @@ function numberValueFrom(id: string): number {
   return Number(id.split(SUBMENU_ID_DELIMETER).pop());
 }
 
-function resetToDefault(): void {
-  chrome.storage.sync.clear(() => logChromeErrorMessage());
-}
-
 chrome.storage.onChanged.addListener((
   _changes: chrome.storage.StorageChange,
   _areaName: string
-) => {
+) => resolveStorageConfigurations());
+
+chrome.runtime.onStartup.addListener(
+  () => setTimeout(resolveStorageConfigurations, 1000)
+);
+
+function resolveStorageConfigurations(): void {
   chrome.storage.sync.get([PITCH, VOICENAME, RATE], items => {
     if (configurationStoreIsEmpty(items)) return;
     chrome.contextMenus.update(
@@ -212,7 +214,7 @@ chrome.storage.onChanged.addListener((
       () => logChromeErrorMessage()
     );
   });
-});
+}
 
 function configurationStoreIsEmpty(
   items: { [x: string]: any }
@@ -220,4 +222,8 @@ function configurationStoreIsEmpty(
   return items.pitch === undefined
          || items.voiceName === undefined
          || items.rate === undefined;
+}
+
+function resetToDefault(): void {
+  chrome.storage.sync.clear(() => logChromeErrorMessage());
 }
