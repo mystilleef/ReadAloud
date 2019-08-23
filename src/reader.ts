@@ -4,7 +4,7 @@ import { logChromeErrorMessage }                     from "./error";
 import updateBrowserIcon                             from "./icon";
 import { DEFAULT_VOICENAME, PITCH, RATE, VOICENAME } from "./utils";
 
-const BY_COMMON_PUNCTUATIONS = /[-_.,:;!?<>/()—[\]{}]/gm;
+const BY_COMMON_PUNCTUATIONS = /[_.,:;!?<>/()—[\]{}]/gm;
 const DEFAULT_RATE           = 1.2;
 const DEFAULT_PITCH          = 0;
 const DEFAULT_VOLUME         = 1;
