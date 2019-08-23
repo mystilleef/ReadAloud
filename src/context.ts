@@ -87,7 +87,7 @@ function createRadioMenuItems(
 ): void {
   switch (menu.id) {
     case SPEED_MENU_ID:
-      createSpeechRateRadionMenuItems(menu);
+      createSpeedRadioMenuItems(menu);
       break;
     case VOICES_MENU_ID:
       createVoicesRadioMenuItems(menu);
@@ -100,7 +100,7 @@ function createRadioMenuItems(
   }
 }
 
-function createSpeechRateRadionMenuItems(
+function createSpeedRadioMenuItems(
   menu: { id: string; title: string; parentId: string; contexts: string[] }
 ): void {
   chrome.storage.sync.get(RATE, items => {
