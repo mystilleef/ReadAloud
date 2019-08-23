@@ -11,15 +11,19 @@ import {
   VOICENAME
 }                                                    from "./utils";
 
+const SUBMENU_ID_DELIMETER = "|";
+
+const keyFromId = (id: string): string => `${id}${SUBMENU_ID_DELIMETER}`;
+
 const UNIQUE_STAMP            = `${EXTENSION_ID}`;
-const SPEED_MENU_ID           = `ReadAloudSpeedMenu${UNIQUE_STAMP}`;
-const SPEED_MENU_ID_KEY       = `${SPEED_MENU_ID}|`;
-const PITCH_MENU_ID           = `ReadAloudPitchMenu${UNIQUE_STAMP}`;
-const PITCH_MENU_ID_KEY       = `${PITCH_MENU_ID}|`;
-const VOICES_MENU_ID          = `ReadAloudVoicesMenu${UNIQUE_STAMP}`;
-const VOICES_MENU_ID_KEY      = `${VOICES_MENU_ID}|`;
-const READ_ALOUD_ROOT_MENU_ID = `ReadAloudMenu${UNIQUE_STAMP}`;
-const RESET_DEFAULT_MENU_ID   = `ReadAloudResetDefaultMenu${UNIQUE_STAMP}`;
+const SPEED_MENU_ID           = `ReadAloudSpeedMenu-${UNIQUE_STAMP}`;
+const SPEED_SUBMENU_ID_KEY    = keyFromId(SPEED_MENU_ID);
+const PITCH_MENU_ID           = `ReadAloudPitchMenu-${UNIQUE_STAMP}`;
+const PITCH_SUBMENU_ID_KEY    = keyFromId(PITCH_MENU_ID);
+const VOICES_MENU_ID          = `ReadAloudVoicesMenu-${UNIQUE_STAMP}`;
+const VOICES_SUBMENU_ID_KEY   = keyFromId(VOICES_MENU_ID);
+const READ_ALOUD_ROOT_MENU_ID = `ReadAloudMenu-${UNIQUE_STAMP}`;
+const RESET_DEFAULT_MENU_ID   = `ReadAloudResetDefaultMenu-${UNIQUE_STAMP}`;
 
 const CONTEXTS            = ["all"];
 const TOP_LEVEL_MENU_INFO = [
@@ -106,7 +110,7 @@ function createSpeechRateRadionMenuItems(
         contexts: menu.contexts,
         type    : "radio",
         title   : `${speed}x`,
-        id      : `${SPEED_MENU_ID_KEY}${speed}`,
+        id      : `${SPEED_SUBMENU_ID_KEY}${speed}`,
         checked : items.rate === Number(speed)
       },
       () => logChromeErrorMessage()
@@ -125,7 +129,7 @@ function createVoicesRadioMenuItems(
           contexts: menu.contexts,
           type    : "radio",
           title   : `${voice.voiceName}`,
-          id      : `${VOICES_MENU_ID_KEY}${voice.voiceName}`,
+          id      : `${VOICES_SUBMENU_ID_KEY}${voice.voiceName}`,
           checked : items.voiceName === voice.voiceName
         },
         () => logChromeErrorMessage()
@@ -144,7 +148,7 @@ function createPitchRadioMenuItems(
         type    : "radio",
         contexts: menu.contexts,
         title   : `${pitch}`,
-        id      : `${PITCH_MENU_ID_KEY}${pitch}`,
+        id      : `${PITCH_SUBMENU_ID_KEY}${pitch}`,
         checked : items.pitch === Number(pitch)
       },
       () => logChromeErrorMessage()
@@ -175,11 +179,11 @@ function handleRadioMenuItems(info: chrome.contextMenus.OnClickData): void {
 }
 
 function stringValueFrom(id: string): string {
-  return id.split("|").pop() || DEFAULT_VOICENAME;
+  return id.split(SUBMENU_ID_DELIMETER).pop() || DEFAULT_VOICENAME;
 }
 
 function numberValueFrom(id: string): number {
-  return Number(id.split("|").pop());
+  return Number(id.split(SUBMENU_ID_DELIMETER).pop());
 }
 
 function resetToDefault(): void {
@@ -193,17 +197,17 @@ chrome.storage.onChanged.addListener((
   chrome.storage.sync.get([PITCH, VOICENAME, RATE], items => {
     if (configurationStoreIsEmpty(items)) return;
     chrome.contextMenus.update(
-      `${PITCH_MENU_ID_KEY}${items.pitch}`,
+      `${PITCH_SUBMENU_ID_KEY}${items.pitch}`,
       { checked: true },
       () => logChromeErrorMessage()
     );
     chrome.contextMenus.update(
-      `${VOICES_MENU_ID_KEY}${items.voiceName}`,
+      `${VOICES_SUBMENU_ID_KEY}${items.voiceName}`,
       { checked: true },
       () => logChromeErrorMessage()
     );
     chrome.contextMenus.update(
-      `${SPEED_MENU_ID_KEY}${items.rate}`,
+      `${SPEED_SUBMENU_ID_KEY}${items.rate}`,
       { checked: true },
       () => logChromeErrorMessage()
     );
