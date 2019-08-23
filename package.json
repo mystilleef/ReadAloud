@@ -42,14 +42,15 @@
     "typescript": "^3.5.3"
   },
   "scripts": {
-    "prebuild": "npm run clean:build; mkdir -p public/js",
+    "prebuild": "npm run clean:build; rm -rf public/js; mkdir -p public/js",
     "build": "rollup -c",
     "postbuild": "cp -r out/* public/js",
-    "predist": "mkdir -p dist/js",
+    "predist": "npm run clean:dist; mkdir -p dist/js",
     "dist": "npm run build",
     "postdist": "cp -r public/* dist/",
     "clean": "rm -rf build out dist public/js",
     "clean:build": "rm -rf out",
+    "clean:dist": "rm -rf dist",
     "clean:out": "npm run clean:build",
     "prewatch": "npm run clean ; npm run build",
     "watch": "rollup -cw"
