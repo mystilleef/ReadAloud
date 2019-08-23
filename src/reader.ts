@@ -26,11 +26,9 @@ const OPTIONS: chrome.tts.SpeakOptions = {
 
 const badgeCounter = new BadgeCounter();
 
-chrome.storage.onChanged.addListener((_changes, _namespace) => {
-  resolveStorageConfigurations();
-});
+chrome.runtime.onStartup.addListener(() => resolveStorageConfigurations());
 
-chrome.runtime.onStartup.addListener(() => {
+chrome.storage.onChanged.addListener((_changes, _namespace) => {
   resolveStorageConfigurations();
 });
 
