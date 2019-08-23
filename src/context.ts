@@ -13,11 +13,11 @@ import {
 
 const UNIQUE_STAMP            = `${EXTENSION_ID}`;
 const SPEED_MENU_ID           = `ReadAloudSpeedMenu${UNIQUE_STAMP}`;
-const SPEED_MENU_ID_KEY       = `${SPEED_MENU_ID}|${EXTENSION_ID}|`;
+const SPEED_MENU_ID_KEY       = `${SPEED_MENU_ID}|`;
 const PITCH_MENU_ID           = `ReadAloudPitchMenu${UNIQUE_STAMP}`;
-const PITCH_MENU_ID_KEY       = `${PITCH_MENU_ID}|${EXTENSION_ID}|`;
+const PITCH_MENU_ID_KEY       = `${PITCH_MENU_ID}|`;
 const VOICES_MENU_ID          = `ReadAloudVoicesMenu${UNIQUE_STAMP}`;
-const VOICES_MENU_ID_KEY      = `${VOICES_MENU_ID}|${EXTENSION_ID}|`;
+const VOICES_MENU_ID_KEY      = `${VOICES_MENU_ID}|`;
 const READ_ALOUD_ROOT_MENU_ID = `ReadAloudMenu${UNIQUE_STAMP}`;
 const RESET_DEFAULT_MENU_ID   = `ReadAloudResetDefaultMenu${UNIQUE_STAMP}`;
 
