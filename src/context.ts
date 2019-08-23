@@ -2,6 +2,7 @@
 import { chromeRuntimeError, logChromeErrorMessage } from "./error";
 import {
   DEFAULT_VOICENAME,
+  EXTENSION_ID,
   PITCH,
   RATE,
   setPitch,
@@ -10,52 +11,60 @@ import {
   VOICENAME
 }                                                    from "./utils";
 
-const SPEED_MENU_ID           = "ReadAloudSpeedMenu";
-const SPEED_MENU_ID_KEY       = "ReadAloud|Speed|Menu|Option|";
-const PITCH_MENU_ID           = "ReadAloudPitchMenu";
-const PITCH_MENU_ID_KEY       = "ReadAloud|Pitch|Menu|Option|";
-const VOICES_MENU_ID          = "ReadAloudVoicesMenu";
-const VOICES_MENU_ID_KEY      = "ReadAloud|Voices|Menu|Option|";
-const READ_ALOUD_ROOT_MENU_ID = "ReadAloudMenu";
-const RESET_DEFAULT_MENU_ID   = "ReadAloudResetDefaultMenu";
+const UNIQUE_STAMP            = `${EXTENSION_ID}`;
+const SPEED_MENU_ID           = `ReadAloudSpeedMenu${UNIQUE_STAMP}`;
+const SPEED_MENU_ID_KEY       = `${SPEED_MENU_ID}|${EXTENSION_ID}|`;
+const PITCH_MENU_ID           = `ReadAloudPitchMenu${UNIQUE_STAMP}`;
+const PITCH_MENU_ID_KEY       = `${PITCH_MENU_ID}|${EXTENSION_ID}|`;
+const VOICES_MENU_ID          = `ReadAloudVoicesMenu${UNIQUE_STAMP}`;
+const VOICES_MENU_ID_KEY      = `${VOICES_MENU_ID}|${EXTENSION_ID}|`;
+const READ_ALOUD_ROOT_MENU_ID = `ReadAloudMenu${UNIQUE_STAMP}`;
+const RESET_DEFAULT_MENU_ID   = `ReadAloudResetDefaultMenu${UNIQUE_STAMP}`;
 
+const CONTEXTS            = ["all"];
 const TOP_LEVEL_MENU_INFO = [
   {
     title   : "Speed",
     parentId: READ_ALOUD_ROOT_MENU_ID,
     id      : SPEED_MENU_ID,
-    contexts: ["all"]
+    contexts: CONTEXTS
   },
   {
     title   : "Voices",
     parentId: READ_ALOUD_ROOT_MENU_ID,
     id      : VOICES_MENU_ID,
-    contexts: ["all"]
+    contexts: CONTEXTS
   },
   {
     title   : "Pitch",
     parentId: READ_ALOUD_ROOT_MENU_ID,
     id      : PITCH_MENU_ID,
-    contexts: ["all"]
+    contexts: CONTEXTS
   },
   {
     title   : "Reset to Default",
     parentId: READ_ALOUD_ROOT_MENU_ID,
     id      : RESET_DEFAULT_MENU_ID,
-    contexts: ["all"]
+    contexts: CONTEXTS
   }
 ];
 
 const SPEED_OPTIONS = [1, 1.2, 1.4, 1.6, 1.8, 2];
 const PITCH_OPTIONS = [0, 0.5, 1, 1.5, 2];
 
-chrome.contextMenus.create(
-  { title: "Read Aloud", id: READ_ALOUD_ROOT_MENU_ID, contexts: ["all"] },
-  () => {
-    if (chromeRuntimeError()) logChromeErrorMessage();
-    else TOP_LEVEL_MENU_INFO.forEach(menu => createTopLevelMenus(menu));
-  }
-);
+chrome.runtime.onInstalled.addListener(() => {
+  chrome.contextMenus.create(
+    {
+      title   : "Read Aloud",
+      id      : READ_ALOUD_ROOT_MENU_ID,
+      contexts: CONTEXTS
+    },
+    () => {
+      if (chromeRuntimeError()) logChromeErrorMessage();
+      else TOP_LEVEL_MENU_INFO.forEach(menu => createTopLevelMenus(menu));
+    }
+  );
+});
 
 function createTopLevelMenus(
   menu: { id: string; title: string; parentId: string; contexts: string[] }
