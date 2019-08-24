@@ -1,6 +1,6 @@
 import { DEFAULT_PITCH, DEFAULT_RATE, DEFAULT_VOICENAME } from "./constants";
 import BadgeCounter                                       from "./counter";
-import { logChromeErrorMessage }                          from "./error";
+import { logChromeErrorMessage, logError }                from "./error";
 import updateBrowserIcon                                  from "./icon";
 import { getStorageOptions, storeDefaultOptions }         from "./storage";
 
@@ -17,7 +17,7 @@ const OPTIONS: chrome.tts.SpeakOptions = {
     chrome.tts.isSpeaking(
       (speaking: boolean) => updateBrowserIcon(speaking)
     );
-    if (event.type === "error") logError(`Error: ${event.errorMessage}`);
+    if (event.type === "error") error(`Error: ${event.errorMessage}`);
     else if (event.type === "end") badgeCounter.decrement();
   }
 };
@@ -42,9 +42,9 @@ function speak(phrase: string, options: chrome.ttsEngine.SpeakOptions): void {
   badgeCounter.increment();
 }
 
-function logError(message: string): void {
+function error(message: string): void {
   stop();
-  console.error(message);
+  logError(message);
 }
 
 function stop(): void {

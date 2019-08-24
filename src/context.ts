@@ -1,12 +1,11 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { DEFAULT_VOICENAME, EXTENSION_ID, PITCH, RATE } from "./constants";
-import { chromeRuntimeError, logChromeErrorMessage }    from "./error";
+import { chromeRuntimeError, logChromeErrorMessage, logError } from "./error";
 import {
   getStorageOptions,
   storePitch,
   storeRate,
   storeVoice
-}                                                       from "./storage";
+} from "./storage";
 
 const SUBMENU_ID_DELIMETER = "|";
 
@@ -163,18 +162,18 @@ function onRadioMenuItemClick(info: chrome.contextMenus.OnClickData): void {
   switch (info.parentMenuItemId) {
     case VOICES_MENU_ID:
       storeVoice(stringValueFrom(info.menuItemId))
-        .catch(error => console.error(error.message));
+        .catch(error => logError(error.message));
       break;
     case SPEED_MENU_ID:
       storeRate(numberValueFrom(info.menuItemId))
-        .catch(error => console.error(error.message));
+        .catch(error => logError(error.message));
       break;
     case PITCH_MENU_ID:
       storePitch(numberValueFrom(info.menuItemId))
-        .catch(error => console.error(error.message));
+        .catch(error => logError(error.message));
       break;
     default:
-      console.error("ERROR: Invalid menu item parameter");
+      logError("ERROR: Invalid menu item parameter");
   }
 }
 
