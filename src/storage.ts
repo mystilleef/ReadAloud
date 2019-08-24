@@ -44,6 +44,16 @@ function valueDoesNotExist(value: string): boolean {
   return value === undefined || value === null;
 }
 
+async function store(
+  voiceName: string,
+  rate: number,
+  pitch: number
+): Promise<void> {
+  await storeVoice(voiceName);
+  await storeRate(rate);
+  await storePitch(pitch);
+}
+
 async function storeVoice(
   voiceName: string
 ): Promise<{ rate?: number; pitch?: number; voiceName?: string }> {
@@ -81,4 +91,12 @@ function chromeErrorMessage(
   reject(new Error(`Error: Failed to set ${info}`));
 }
 
-export { getVoiceName, getRate, getPitch, storeVoice, storePitch, storeRate };
+export {
+  getVoiceName,
+  getRate,
+  getPitch,
+  storeVoice,
+  storePitch,
+  storeRate,
+  store
+};
