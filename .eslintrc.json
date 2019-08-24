@@ -45,6 +45,7 @@
   "rules": {
     "@typescript-eslint/ban-ts-ignore": "off",
     "import/no-extraneous-dependencies": "off",
+    "implicit-arrow-linebreak": "off",
     "@typescript-eslint/no-use-before-define": "off",
     "comma-dangle": ["error", "never"],
     "arrow-parens": ["error", "as-needed"],

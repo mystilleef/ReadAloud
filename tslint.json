@@ -21,6 +21,7 @@
   "rulesDirectory": ["node_modules/tslint-microsoft-contrib"],
   "rules": {
     "no-relative-imports": false,
+    "prefer-type-cast": false,
     "no-single-line-block-comment": false,
     "import-name": false,
     "member-ordering": false,
