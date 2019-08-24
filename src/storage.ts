@@ -1,4 +1,11 @@
-import { PITCH, RATE, VOICENAME }                    from "./constants";
+import {
+  DEFAULT_PITCH,
+  DEFAULT_RATE,
+  DEFAULT_VOICENAME,
+  PITCH,
+  RATE,
+  VOICENAME
+}                                                    from "./constants";
 import { chromeRuntimeError, logChromeErrorMessage } from "./error";
 
 const storageKeys = [PITCH, VOICENAME, RATE];
@@ -55,6 +62,10 @@ function valueDoesNotExist(value: string): boolean {
   return value === undefined || value === null;
 }
 
+async function storeDefaultOptions(): Promise<void> {
+  await store(DEFAULT_VOICENAME, DEFAULT_RATE, DEFAULT_PITCH);
+}
+
 async function store(
   voiceName: string,
   rate: number,
@@ -108,5 +119,6 @@ export {
   storeVoice,
   storePitch,
   storeRate,
-  store
+  store,
+  storeDefaultOptions
 };

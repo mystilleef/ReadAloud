@@ -1,13 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { DEFAULT_VOICENAME }        from "./constants";
-import BadgeCounter                 from "./counter";
-import { logChromeErrorMessage }    from "./error";
-import updateBrowserIcon            from "./icon";
-import { getStorageOptions, store } from "./storage";
+import { DEFAULT_PITCH, DEFAULT_RATE, DEFAULT_VOICENAME } from "./constants";
+import BadgeCounter                                       from "./counter";
+import { logChromeErrorMessage }                          from "./error";
+import updateBrowserIcon                                  from "./icon";
+import { getStorageOptions, storeDefaultOptions }         from "./storage";
 
 const BY_COMMON_PUNCTUATIONS = /[_.,:;!?<>/()—[\]{}]/gm;
-const DEFAULT_RATE           = 1.2;
-const DEFAULT_PITCH          = 0;
 const DEFAULT_VOLUME         = 1;
 
 const OPTIONS: chrome.tts.SpeakOptions = {
@@ -67,15 +65,11 @@ chrome.runtime.onInstalled.addListener(() => {
 
 function resolveStorageConfigurations(): void {
   getStorageOptions()
-    .then(result => updateSpeakOptionsFromStorage(result))
-    .catch(_error => store(
-      DEFAULT_VOICENAME,
-      DEFAULT_RATE,
-      DEFAULT_PITCH
-    ));
+    .then(result => updateOptions(result))
+    .catch(_error => storeDefaultOptions());
 }
 
-function updateSpeakOptionsFromStorage(
+function updateOptions(
   result: {
     rate: number | string;
     pitch: number | string;
