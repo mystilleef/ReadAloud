@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import BadgeCounter                                  from "./counter";
-import { logChromeErrorMessage }                     from "./error";
-import updateBrowserIcon                             from "./icon";
-import { DEFAULT_VOICENAME, PITCH, RATE, VOICENAME } from "./utils";
+import { DEFAULT_VOICENAME }        from "./constants";
+import BadgeCounter                 from "./counter";
+import { logChromeErrorMessage }    from "./error";
+import updateBrowserIcon            from "./icon";
+import { getStorageOptions, store } from "./storage";
 
 const BY_COMMON_PUNCTUATIONS = /[_.,:;!?<>/()—[\]{}]/gm;
 const DEFAULT_RATE           = 1.2;
@@ -25,52 +26,6 @@ const OPTIONS: chrome.tts.SpeakOptions = {
 };
 
 const badgeCounter = new BadgeCounter();
-
-chrome.runtime.onStartup.addListener(() => resolveStorageConfigurations());
-
-chrome.storage.onChanged.addListener((_changes, _namespace) => {
-  resolveStorageConfigurations();
-});
-
-chrome.runtime.onInstalled.addListener(() => {
-  resolveStorageConfigurations();
-});
-
-function resolveStorageConfigurations(): void {
-  chrome.storage.sync.get(
-    [PITCH, RATE, VOICENAME],
-    result => {
-      if (storageResultIsUndefined(result)) chrome.storage.sync.set(
-        {
-          pitch    : DEFAULT_PITCH,
-          rate     : DEFAULT_RATE,
-          voiceName: DEFAULT_VOICENAME
-        },
-        () => logChromeErrorMessage()
-      );
-      else updateSpeakOptionsFromStorage();
-    }
-  );
-}
-
-function storageResultIsUndefined(
-  result: { [p: string]: any }
-): boolean {
-  return result.pitch === undefined
-         || result.rate === undefined
-         || result.voiceName === undefined;
-}
-
-function updateSpeakOptionsFromStorage(): void {
-  chrome.storage.sync.get(
-    [PITCH, RATE, VOICENAME],
-    (result: { [key: string]: any }) => {
-      OPTIONS.rate      = result.rate;
-      OPTIONS.pitch     = result.pitch;
-      OPTIONS.voiceName = result.voiceName;
-    }
-  );
-}
 
 function read(
   utterances: string,
@@ -98,6 +53,39 @@ function logError(message: string): void {
 function stop(): void {
   chrome.tts.stop();
   badgeCounter.reset();
+}
+
+chrome.runtime.onStartup.addListener(() => resolveStorageConfigurations());
+
+chrome.storage.onChanged.addListener((_changes, _namespace) => {
+  resolveStorageConfigurations();
+});
+
+chrome.runtime.onInstalled.addListener(() => {
+  resolveStorageConfigurations();
+});
+
+function resolveStorageConfigurations(): void {
+  getStorageOptions()
+    .then(result => updateSpeakOptionsFromStorage(result))
+    .catch(_error => store(
+      DEFAULT_VOICENAME,
+      DEFAULT_RATE,
+      DEFAULT_PITCH
+    ));
+}
+
+function updateSpeakOptionsFromStorage(
+  result: {
+    rate: number | string;
+    pitch: number | string;
+    voiceName: string | number;
+  }
+): void {
+  OPTIONS.rate      = result.rate as number;
+  OPTIONS.pitch     = result.pitch as number;
+  OPTIONS.voiceName = result.voiceName as string;
+  console.log(`${OPTIONS.voiceName}:${OPTIONS.rate}:${OPTIONS.pitch}`);
 }
 
 export {

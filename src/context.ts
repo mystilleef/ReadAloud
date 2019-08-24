@@ -1,15 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { chromeRuntimeError, logChromeErrorMessage } from "./error";
+import { DEFAULT_VOICENAME, EXTENSION_ID, PITCH, RATE } from "./constants";
+import { chromeRuntimeError, logChromeErrorMessage }    from "./error";
 import {
-  DEFAULT_VOICENAME,
-  EXTENSION_ID,
-  PITCH,
-  RATE,
-  setPitch,
-  setRate,
-  setVoiceName,
-  VOICENAME
-}                                                    from "./utils";
+  getStorageOptions,
+  storePitch,
+  storeRate,
+  storeVoice
+}                                                       from "./storage";
 
 const SUBMENU_ID_DELIMETER = "|";
 
@@ -165,13 +162,16 @@ chrome.contextMenus.onClicked.addListener((info, _tab) => {
 function onRadioMenuItemClick(info: chrome.contextMenus.OnClickData): void {
   switch (info.parentMenuItemId) {
     case VOICES_MENU_ID:
-      setVoiceName(stringValueFrom(info.menuItemId));
+      storeVoice(stringValueFrom(info.menuItemId))
+        .catch(error => console.error(error.message));
       break;
     case SPEED_MENU_ID:
-      setRate(numberValueFrom(info.menuItemId));
+      storeRate(numberValueFrom(info.menuItemId))
+        .catch(error => console.error(error.message));
       break;
     case PITCH_MENU_ID:
-      setPitch(numberValueFrom(info.menuItemId));
+      storePitch(numberValueFrom(info.menuItemId))
+        .catch(error => console.error(error.message));
       break;
     default:
       console.error("ERROR: Invalid menu item parameter");
@@ -191,37 +191,29 @@ chrome.storage.onChanged.addListener((
   _areaName: string
 ) => resolveStorageConfigurations());
 
-chrome.runtime.onStartup.addListener(
-  () => setTimeout(resolveStorageConfigurations, 1000)
-);
-
 function resolveStorageConfigurations(): void {
-  chrome.storage.sync.get([PITCH, VOICENAME, RATE], items => {
-    if (configurationStoreIsEmpty(items)) return;
-    chrome.contextMenus.update(
-      `${PITCH_SUBMENU_ID_KEY}${items.pitch}`,
-      { checked: true },
-      () => logChromeErrorMessage()
-    );
-    chrome.contextMenus.update(
-      `${VOICES_SUBMENU_ID_KEY}${items.voiceName}`,
-      { checked: true },
-      () => logChromeErrorMessage()
-    );
-    chrome.contextMenus.update(
-      `${SPEED_SUBMENU_ID_KEY}${items.rate}`,
-      { checked: true },
-      () => logChromeErrorMessage()
-    );
-  });
+  getStorageOptions()
+    .then(result => updateSubMenus(result))
+    .catch(_e => "");
 }
 
-function configurationStoreIsEmpty(
-  items: { [x: string]: any }
-): boolean {
-  return items.pitch === undefined
-         || items.voiceName === undefined
-         || items.rate === undefined;
+function updateSubMenus(
+  result: {
+    rate: number | string;
+    pitch: number | string;
+    voiceName: string | number;
+  }
+): void {
+  const MENU_IDS = [
+    `${PITCH_SUBMENU_ID_KEY}${result.pitch}`,
+    `${VOICES_SUBMENU_ID_KEY}${result.voiceName}`,
+    `${SPEED_SUBMENU_ID_KEY}${result.rate}`
+  ];
+  MENU_IDS.forEach(id => chrome.contextMenus.update(
+    id,
+    { checked: true },
+    () => logChromeErrorMessage()
+  ));
 }
 
 function resetToDefault(): void {

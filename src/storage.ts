@@ -1,7 +1,18 @@
+import { PITCH, RATE, VOICENAME }                    from "./constants";
 import { chromeRuntimeError, logChromeErrorMessage } from "./error";
-import { PITCH, RATE, VOICENAME }                    from "./utils";
 
 const storageKeys = [PITCH, VOICENAME, RATE];
+
+async function getStorageOptions(): Promise<{
+  rate: number | string;
+  pitch: number | string;
+  voiceName: string | number;
+}> {
+  const rate      = await getRate();
+  const pitch     = await getPitch();
+  const voiceName = await getVoiceName();
+  return { rate, pitch, voiceName };
+}
 
 async function getVoiceName(): Promise<string | number> {
   return getValueFromStorage(VOICENAME);
@@ -49,9 +60,7 @@ async function store(
   rate: number,
   pitch: number
 ): Promise<void> {
-  await storeVoice(voiceName);
-  await storeRate(rate);
-  await storePitch(pitch);
+  await storeValue({ rate, pitch, voiceName });
 }
 
 async function storeVoice(
@@ -95,6 +104,7 @@ export {
   getVoiceName,
   getRate,
   getPitch,
+  getStorageOptions,
   storeVoice,
   storePitch,
   storeRate,
