@@ -85,10 +85,6 @@ function updateSpeakOptionsFromStorage(
   OPTIONS.rate      = result.rate as number;
   OPTIONS.pitch     = result.pitch as number;
   OPTIONS.voiceName = result.voiceName as string;
-  console.log(`${OPTIONS.voiceName}:${OPTIONS.rate}:${OPTIONS.pitch}`);
 }
 
-export {
-  read,
-  stop
-};
+export { read, stop };
