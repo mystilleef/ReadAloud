@@ -8,7 +8,11 @@ import tslint     from "rollup-plugin-tslint";
 import typescript from "rollup-plugin-typescript2";
 
 export default {
-  input  : ["src/background.ts", "src/content.ts", "src/context.ts"],
+  input  : [
+    "src/background.ts",
+    "src/content.ts",
+    "src/context.ts"
+  ],
   output : {
     format: "esm",
     dir   : "out"
