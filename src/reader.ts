@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { DEFAULT_PITCH, DEFAULT_RATE, DEFAULT_VOICENAME } from "./constants";
 import BadgeCounter                                       from "./counter";
 import { logChromeErrorMessage }                          from "./error";
