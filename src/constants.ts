@@ -6,6 +6,12 @@ const DEFAULT_RATE      = 1.2;
 const DEFAULT_PITCH     = 0;
 const DEFAULT_VOICENAME = "Google UK English Female";
 
+interface VoiceStorageOptions {
+  rate?: number;
+  pitch?: number;
+  voiceName?: string;
+}
+
 export {
   RATE,
   PITCH,
@@ -13,5 +19,6 @@ export {
   DEFAULT_VOICENAME,
   DEFAULT_RATE,
   DEFAULT_PITCH,
-  EXTENSION_ID
+  EXTENSION_ID,
+  VoiceStorageOptions
 };

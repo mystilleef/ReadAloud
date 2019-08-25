@@ -1,8 +1,13 @@
-import { DEFAULT_PITCH, DEFAULT_RATE, DEFAULT_VOICENAME } from "./constants";
-import BadgeCounter                                       from "./counter";
-import { logChromeErrorMessage, logError }                from "./error";
-import updateBrowserIcon                                  from "./icon";
-import { getStorageOptions, storeDefaultOptions }         from "./storage";
+import {
+  DEFAULT_PITCH,
+  DEFAULT_RATE,
+  DEFAULT_VOICENAME,
+  VoiceStorageOptions
+} from "./constants";
+import BadgeCounter from "./counter";
+import { logChromeErrorMessage, logError } from "./error";
+import updateBrowserIcon from "./icon";
+import { getStorageOptions, storeDefaultOptions } from "./storage";
 
 const BY_COMMON_PUNCTUATIONS = /[_.,:;!?<>/()—[\]{}]/gm;
 const DEFAULT_VOLUME         = 1;
@@ -68,13 +73,7 @@ function resolveStorageConfigurations(): void {
     .catch(_error => storeDefaultOptions());
 }
 
-function updateOptions(
-  result: {
-    rate: number | string;
-    pitch: number | string;
-    voiceName: string | number;
-  }
-): void {
+function updateOptions(result: VoiceStorageOptions): void {
   OPTIONS.rate      = result.rate as number;
   OPTIONS.pitch     = result.pitch as number;
   OPTIONS.voiceName = result.voiceName as string;

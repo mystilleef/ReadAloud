@@ -4,20 +4,17 @@ import {
   DEFAULT_VOICENAME,
   PITCH,
   RATE,
-  VOICENAME
-}                                                    from "./constants";
+  VOICENAME,
+  VoiceStorageOptions
+} from "./constants";
 import { chromeRuntimeError, logChromeErrorMessage } from "./error";
 
 const storageKeys = [PITCH, VOICENAME, RATE];
 
-async function getStorageOptions(): Promise<{
-  rate: number | string;
-  pitch: number | string;
-  voiceName: string | number;
-}> {
-  const rate      = await getRate();
-  const pitch     = await getPitch();
-  const voiceName = await getVoiceName();
+async function getStorageOptions(): Promise<VoiceStorageOptions> {
+  const rate      = await getRate() as number;
+  const pitch     = await getPitch() as number;
+  const voiceName = await getVoiceName() as string;
   return { rate, pitch, voiceName };
 }
 
@@ -45,7 +42,7 @@ async function getValueFromStorage(key: string): Promise<string | number> {
 function valueFromChromeStorage(
   key: string,
   resolve: {
-    (value?: string | number | PromiseLike<string | number>): void;
+    (value: string | number): void;
     (arg0: string | number): void;
   },
   reject: { (reason?: string): void; (arg0: Error): void }
@@ -76,25 +73,25 @@ async function store(
 
 async function storeVoice(
   voiceName: string
-): Promise<{ rate?: number; pitch?: number; voiceName?: string }> {
+): Promise<VoiceStorageOptions> {
   return storeValue({ voiceName });
 }
 
 async function storeRate(
   rate: number
-): Promise<{ rate?: number; pitch?: number; voiceName?: string }> {
+): Promise<VoiceStorageOptions> {
   return storeValue({ rate });
 }
 
 async function storePitch(
   pitch: number
-): Promise<{ rate?: number; pitch?: number; voiceName?: string }> {
+): Promise<VoiceStorageOptions> {
   return storeValue({ pitch });
 }
 
 async function storeValue(
-  info: { rate?: number; pitch?: number; voiceName?: string }
-): Promise<{ rate?: number; pitch?: number; voiceName?: string }> {
+  info: VoiceStorageOptions
+): Promise<VoiceStorageOptions> {
   return new Promise((resolve, reject): void => {
     chrome.storage.sync.set(info, () => {
       if (chromeRuntimeError()) chromeErrorMessage(reject, info);
@@ -105,7 +102,7 @@ async function storeValue(
 
 function chromeErrorMessage(
   reject: { (reason?: string): void; (arg0: Error): void },
-  info: { rate?: number; pitch?: number; voiceName?: string }
+  info: VoiceStorageOptions
 ): void {
   logChromeErrorMessage();
   reject(new Error(`Error: Failed to set ${info}`));

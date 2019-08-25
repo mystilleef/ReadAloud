@@ -1,4 +1,8 @@
-import { DEFAULT_VOICENAME, EXTENSION_ID } from "./constants";
+import {
+  DEFAULT_VOICENAME,
+  EXTENSION_ID,
+  VoiceStorageOptions
+} from "./constants";
 import { chromeRuntimeError, logChromeErrorMessage, logError } from "./error";
 import {
   getPitch,
@@ -196,13 +200,7 @@ function resolveStorageConfigurations(): void {
     .catch(_e => "");
 }
 
-function updateSubMenus(
-  result: {
-    rate: number | string;
-    pitch: number | string;
-    voiceName: string | number;
-  }
-): void {
+function updateSubMenus(result: VoiceStorageOptions): void {
   const MENU_IDS = [
     `${PITCH_SUBMENU_ID_KEY}${result.pitch}`,
     `${VOICES_SUBMENU_ID_KEY}${result.voiceName}`,
