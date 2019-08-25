@@ -1,4 +1,9 @@
-import { DEFAULT_OPTIONS, VoiceStorageOptions } from "./constants";
+import {
+  DEFAULT_PITCH,
+  DEFAULT_RATE,
+  DEFAULT_VOICENAME,
+  VoiceStorageOptions
+} from "./constants";
 import BadgeCounter from "./counter";
 import { logChromeErrorMessage, logError } from "./error";
 import updateBrowserIcon from "./icon";
@@ -6,18 +11,24 @@ import { getStorageOptions, storeDefaultOptions } from "./storage";
 
 const BY_COMMON_PUNCTUATIONS = /[_.,:;!?<>/()—[\]{}]/gm;
 
+const badgeCounter = new BadgeCounter();
+
+const DEFAULT_OPTIONS = {
+  pitch    : DEFAULT_PITCH,
+  rate     : DEFAULT_RATE,
+  voiceName: DEFAULT_VOICENAME,
+  volume   : 1,
+  enqueue  : true
+};
+
 const OPTIONS: chrome.tts.SpeakOptions = {
   ...DEFAULT_OPTIONS,
   onEvent: (event: chrome.tts.TtsEvent): void => {
-    chrome.tts.isSpeaking(
-      (speaking: boolean) => updateBrowserIcon(speaking)
-    );
+    isSpeaking().then(speaking => updateBrowserIcon(speaking));
     if (event.type === "error") error(`Error: ${event.errorMessage}`);
     else if (event.type === "end") badgeCounter.decrement();
   }
 };
-
-const badgeCounter = new BadgeCounter();
 
 function read(
   utterances: string,
@@ -67,6 +78,14 @@ function updateOptions(result: VoiceStorageOptions): void {
   OPTIONS.rate      = result.rate as number;
   OPTIONS.pitch     = result.pitch as number;
   OPTIONS.voiceName = result.voiceName as string;
+}
+
+async function isSpeaking(): Promise<boolean> {
+  return new Promise((
+    (resolve): void => {
+      chrome.tts.isSpeaking(speaking => resolve(speaking));
+    }
+  ));
 }
 
 export { read, stop };
