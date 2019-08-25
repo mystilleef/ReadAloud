@@ -1,5 +1,5 @@
 {
-  "defaultSeverity": "error",
+  "defaultSeverity": "warn",
   "settings": {
     "import/resolver": {
       "node": {
