@@ -1,11 +1,15 @@
-import { DEFAULT_VOICENAME, EXTENSION_ID, PITCH, RATE } from "./constants";
+import { DEFAULT_VOICENAME, EXTENSION_ID } from "./constants";
 import { chromeRuntimeError, logChromeErrorMessage, logError } from "./error";
 import {
+  getPitch,
+  getRate,
   getStorageOptions,
+  getVoiceName,
   storePitch,
   storeRate,
   storeVoice
 } from "./storage";
+import getTtsVoices from "./utils";
 
 const SUBMENU_ID_DELIMETER = "|";
 
@@ -83,73 +87,69 @@ function createRadioMenuItems(
 ): void {
   switch (menu.id) {
     case SPEED_MENU_ID:
-      createSpeedRadioMenuItems(menu);
+      createSpeedRadioMenuItems(menu).catch(e => logError(e.message));
       break;
     case VOICES_MENU_ID:
-      createVoicesRadioMenuItems(menu);
+      createVoicesRadioMenuItems(menu).catch(e => logError(e.message));
       break;
     case PITCH_MENU_ID:
-      createPitchRadioMenuItems(menu);
+      createPitchRadioMenuItems(menu).catch(e => logError(e.message));
       break;
     default:
       break;
   }
 }
 
-function createSpeedRadioMenuItems(
+async function createSpeedRadioMenuItems(
   menu: { id: string; title: string; parentId: string; contexts: string[] }
-): void {
-  chrome.storage.sync.get(RATE, items => {
-    SPEED_OPTIONS.forEach(speed => chrome.contextMenus.create(
-      {
-        parentId: menu.id,
-        contexts: menu.contexts,
-        type    : "radio",
-        title   : `${speed}x`,
-        id      : `${SPEED_SUBMENU_ID_KEY}${speed}`,
-        checked : items.rate === Number(speed)
-      },
-      () => logChromeErrorMessage()
-    ));
-  });
+): Promise<void> {
+  const rate = await getRate();
+  SPEED_OPTIONS.forEach(speed => chrome.contextMenus.create(
+    {
+      parentId: menu.id,
+      contexts: menu.contexts,
+      type    : "radio",
+      title   : `${speed}x`,
+      id      : `${SPEED_SUBMENU_ID_KEY}${speed}`,
+      checked : rate === Number(speed)
+    },
+    () => logChromeErrorMessage()
+  ));
 }
 
-function createVoicesRadioMenuItems(
+async function createVoicesRadioMenuItems(
   menu: { id: string; title: string; parentId: string; contexts: string[] }
-): void {
-  chrome.tts.getVoices((voices: chrome.tts.TtsVoice[]) => {
-    chrome.storage.sync.get("voiceName", items => {
-      voices.forEach(voice => chrome.contextMenus.create(
-        {
-          parentId: menu.id,
-          contexts: menu.contexts,
-          type    : "radio",
-          title   : `${voice.voiceName}`,
-          id      : `${VOICES_SUBMENU_ID_KEY}${voice.voiceName}`,
-          checked : items.voiceName === voice.voiceName
-        },
-        () => logChromeErrorMessage()
-      ));
-    });
-  });
+): Promise<void> {
+  const voices    = await getTtsVoices();
+  const voiceName = await getVoiceName();
+  voices.forEach(voice => chrome.contextMenus.create(
+    {
+      parentId: menu.id,
+      contexts: menu.contexts,
+      type    : "radio",
+      title   : `${voice.voiceName}`,
+      id      : `${VOICES_SUBMENU_ID_KEY}${voice.voiceName}`,
+      checked : voiceName === voice.voiceName
+    },
+    () => logChromeErrorMessage()
+  ));
 }
 
-function createPitchRadioMenuItems(
+async function createPitchRadioMenuItems(
   menu: { id: string; title: string; parentId: string; contexts: string[] }
-): void {
-  chrome.storage.sync.get(PITCH, items => {
-    PITCH_OPTIONS.forEach(pitch => chrome.contextMenus.create(
-      {
-        parentId: menu.id,
-        type    : "radio",
-        contexts: menu.contexts,
-        title   : `${pitch}`,
-        id      : `${PITCH_SUBMENU_ID_KEY}${pitch}`,
-        checked : items.pitch === Number(pitch)
-      },
-      () => logChromeErrorMessage()
-    ));
-  });
+): Promise<void> {
+  const pitchFromStore = await getPitch();
+  PITCH_OPTIONS.forEach(pitch => chrome.contextMenus.create(
+    {
+      parentId: menu.id,
+      type    : "radio",
+      contexts: menu.contexts,
+      title   : `${pitch}`,
+      id      : `${PITCH_SUBMENU_ID_KEY}${pitch}`,
+      checked : pitchFromStore === Number(pitch)
+    },
+    () => logChromeErrorMessage()
+  ));
 }
 
 chrome.contextMenus.onClicked.addListener((info, _tab) => {
