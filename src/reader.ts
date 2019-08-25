@@ -10,15 +10,16 @@ import updateBrowserIcon from "./icon";
 import { getStorageOptions, storeDefaultOptions } from "./storage";
 
 const BY_COMMON_PUNCTUATIONS = /[_.,:;!?<>/()—[\]{}]/gm;
-
-const badgeCounter = new BadgeCounter();
+const badgeCounter           = new BadgeCounter();
+const DEFAULT_VOLUME         = 1;
+const DEFAULT_QUEUE          = true;
 
 const DEFAULT_OPTIONS = {
   pitch    : DEFAULT_PITCH,
   rate     : DEFAULT_RATE,
   voiceName: DEFAULT_VOICENAME,
-  volume   : 1,
-  enqueue  : true
+  volume   : DEFAULT_VOLUME,
+  enqueue  : DEFAULT_QUEUE
 };
 
 const OPTIONS: chrome.tts.SpeakOptions = {
