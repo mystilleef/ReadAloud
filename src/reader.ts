@@ -1,24 +1,14 @@
-import {
-  DEFAULT_PITCH,
-  DEFAULT_RATE,
-  DEFAULT_VOICENAME,
-  VoiceStorageOptions
-} from "./constants";
+import { DEFAULT_OPTIONS, VoiceStorageOptions } from "./constants";
 import BadgeCounter from "./counter";
 import { logChromeErrorMessage, logError } from "./error";
 import updateBrowserIcon from "./icon";
 import { getStorageOptions, storeDefaultOptions } from "./storage";
 
 const BY_COMMON_PUNCTUATIONS = /[_.,:;!?<>/()—[\]{}]/gm;
-const DEFAULT_VOLUME         = 1;
 
 const OPTIONS: chrome.tts.SpeakOptions = {
-  pitch    : DEFAULT_PITCH,
-  volume   : DEFAULT_VOLUME,
-  rate     : DEFAULT_RATE,
-  voiceName: DEFAULT_VOICENAME,
-  enqueue  : true,
-  onEvent  : (event: chrome.tts.TtsEvent): void => {
+  ...DEFAULT_OPTIONS,
+  onEvent: (event: chrome.tts.TtsEvent): void => {
     chrome.tts.isSpeaking(
       (speaking: boolean) => updateBrowserIcon(speaking)
     );
