@@ -10,9 +10,9 @@ import updateBrowserIcon from "./icon";
 import { getStorageOptions, storeDefaultOptions } from "./storage";
 
 const BY_COMMON_PUNCTUATIONS = /[_.,:;!?<>/()—[\]{}]/gm;
-const badgeCounter           = new BadgeCounter();
 const DEFAULT_VOLUME         = 1;
 const DEFAULT_QUEUE          = true;
+const badgeCounter           = new BadgeCounter();
 
 const DEFAULT_OPTIONS = {
   pitch    : DEFAULT_PITCH,
@@ -24,27 +24,21 @@ const DEFAULT_OPTIONS = {
 
 const OPTIONS: chrome.tts.SpeakOptions = {
   ...DEFAULT_OPTIONS,
-  onEvent: (event: chrome.tts.TtsEvent): void => {
-    isSpeaking().then(speaking => updateBrowserIcon(speaking));
-    if (event.type === "error") error(`Error: ${event.errorMessage}`);
-    else if (event.type === "end") badgeCounter.decrement();
-  }
+  onEvent: onTtsEvent
 };
 
-async function read(utterances: string): Promise<void> {
-  await resolveStorageConfigurations();
-  utterances
-    .split(BY_COMMON_PUNCTUATIONS)
-    .map(phrase => phrase.trim())
-    .filter(phrase => phrase.length)
-    .forEach(phrase => speak(phrase, OPTIONS));
+function onTtsEvent(event: chrome.tts.TtsEvent): void {
+  isSpeaking().then(speaking => updateBrowserIcon(speaking));
+  if (event.type === "error") error(`Error: ${event.errorMessage}`);
+  else if (event.type === "end") badgeCounter.decrement();
 }
 
-function speak(phrase: string, options: chrome.ttsEngine.SpeakOptions): void {
-  chrome.tts.speak(phrase, options, (): void => {
-    logChromeErrorMessage();
-  });
-  badgeCounter.increment();
+async function isSpeaking(): Promise<boolean> {
+  return new Promise((
+    (resolve): void => {
+      chrome.tts.isSpeaking(speaking => resolve(speaking));
+    }
+  ));
 }
 
 function error(message: string): void {
@@ -52,12 +46,16 @@ function error(message: string): void {
   logError(message);
 }
 
-function stop(): void {
-  chrome.tts.stop();
-  badgeCounter.reset();
+async function read(utterances: string): Promise<void> {
+  await resolveStorageOptions();
+  utterances
+    .split(BY_COMMON_PUNCTUATIONS)
+    .map(phrase => phrase.trim())
+    .filter(phrase => phrase.length)
+    .forEach(phrase => speak(phrase, OPTIONS));
 }
 
-async function resolveStorageConfigurations(): Promise<void> {
+async function resolveStorageOptions(): Promise<void> {
   try {
     updateOptions(await getStorageOptions());
   } catch (e) {
@@ -71,12 +69,16 @@ function updateOptions(result: VoiceStorageOptions): void {
   OPTIONS.voiceName = result.voiceName as string;
 }
 
-async function isSpeaking(): Promise<boolean> {
-  return new Promise((
-    (resolve): void => {
-      chrome.tts.isSpeaking(speaking => resolve(speaking));
-    }
-  ));
+function speak(phrase: string, options: chrome.ttsEngine.SpeakOptions): void {
+  chrome.tts.speak(phrase, options, (): void => {
+    logChromeErrorMessage();
+  });
+  badgeCounter.increment();
+}
+
+function stop(): void {
+  chrome.tts.stop();
+  badgeCounter.reset();
 }
 
 export { read, stop };
