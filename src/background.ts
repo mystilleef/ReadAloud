@@ -25,7 +25,10 @@ function queryContentForSelection(): void {
     { active: true, currentWindow: true },
     (tabs: chrome.tabs.Tab[]): boolean => {
       const tabid = tabs[0].id || -1;
-      if (tabid) chrome.tabs.sendMessage(tabid, { query: "GET_SELECTION" });
+      if (tabid) chrome.tabs.sendMessage(
+        tabid,
+        { query: "GET_SELECTION" }
+      );
       return true;
     }
   );
