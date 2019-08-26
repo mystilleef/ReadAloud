@@ -1,5 +1,6 @@
 import { logError } from "./error";
 import { read, stop } from "./reader";
+import { isSpeaking } from "./utils";
 
 const COMMAND = "read-aloud-selected-text";
 
@@ -12,10 +13,11 @@ function handleChromeCommand(command: string): void {
 chrome.browserAction.onClicked.addListener(handleBrowserAction);
 
 function handleBrowserAction(_tab: chrome.tabs.Tab): void {
-  chrome.tts.isSpeaking((speaking: boolean) => {
-    if (speaking) stop();
-    else queryContentForSelection();
-  });
+  isSpeaking()
+    .then(speaking => (
+      speaking ? stop() : queryContentForSelection()
+    ))
+    .catch(e => logError(e.message));
 }
 
 function queryContentForSelection(): void {

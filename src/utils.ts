@@ -6,4 +6,12 @@ async function getTtsVoices(): Promise<chrome.tts.TtsVoice[]> {
   });
 }
 
-export { getTtsVoices as default };
+async function isSpeaking(): Promise<boolean> {
+  return new Promise((
+    (resolve): void => {
+      chrome.tts.isSpeaking(speaking => resolve(speaking));
+    }
+  ));
+}
+
+export { getTtsVoices, isSpeaking };

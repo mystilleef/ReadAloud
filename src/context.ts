@@ -13,7 +13,7 @@ import {
   storeRate,
   storeVoice
 } from "./storage";
-import getTtsVoices from "./utils";
+import { getTtsVoices } from "./utils";
 
 const SUBMENU_ID_DELIMETER = "|";
 

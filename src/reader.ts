@@ -8,6 +8,7 @@ import BadgeCounter from "./counter";
 import { logChromeErrorMessage, logError } from "./error";
 import updateBrowserIcon from "./icon";
 import { getStorageOptions, storeDefaultOptions } from "./storage";
+import { isSpeaking } from "./utils";
 
 const BY_COMMON_PUNCTUATIONS = /[_.,:;!?<>/()—[\]{}]/gm;
 const DEFAULT_VOLUME         = 1;
@@ -31,14 +32,6 @@ function onTtsEvent(event: chrome.tts.TtsEvent): void {
   isSpeaking().then(speaking => updateBrowserIcon(speaking));
   if (event.type === "error") error(`Error: ${event.errorMessage}`);
   else if (event.type === "end") badgeCounter.decrement();
-}
-
-async function isSpeaking(): Promise<boolean> {
-  return new Promise((
-    (resolve): void => {
-      chrome.tts.isSpeaking(speaking => resolve(speaking));
-    }
-  ));
 }
 
 function error(message: string): void {
