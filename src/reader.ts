@@ -30,6 +30,10 @@ const OPTIONS: chrome.tts.SpeakOptions = {
 
 function onTtsEvent(event: chrome.tts.TtsEvent): void {
   isSpeaking().then(speaking => updateBrowserIcon(speaking));
+  handleTtsEvent(event);
+}
+
+function handleTtsEvent(event: chrome.tts.TtsEvent): void {
   if (event.type === "error") error(`Error: ${event.errorMessage}`);
   else if (event.type === "end") badgeCounter.decrement();
 }
