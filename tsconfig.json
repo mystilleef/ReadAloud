@@ -35,11 +35,7 @@
     //    "declarationDir": "out"
   },
   "includes": [
-    "src",
-    "**/*.ts",
-    "**/*.tsx",
-    "**/*.js",
-    "**/*.jsx"
+    "src"
   ],
   "exclude": [
     "node_modules",

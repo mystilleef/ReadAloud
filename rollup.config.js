@@ -1,12 +1,13 @@
-import commonjs   from "rollup-plugin-commonjs";
+import ts         from "@wessberg/rollup-plugin-ts";
+import copy       from "rollup-plugin-copy";
+import del        from "rollup-plugin-delete";
 // @ts-ignore
 import { eslint } from "rollup-plugin-eslint";
-import resolve    from "rollup-plugin-node-resolve";
 import { terser } from "rollup-plugin-terser";
 // @ts-ignore
 import tslint     from "rollup-plugin-tslint";
-import typescript from "rollup-plugin-typescript2";
 
+// noinspection JSUnusedGlobalSymbols
 export default {
   input  : [
     "src/background.ts",
@@ -18,13 +19,24 @@ export default {
     dir   : "out"
   },
   plugins: [
-    resolve({
-      browser: true
-    }),
-    commonjs(),
+    del({ targets: ["dist", "out", "public/js"] }),
     eslint(),
     tslint(),
-    typescript(),
+    ts(),
+    copy({
+      targets : [
+        {
+          src : "public/*",
+          dest: "dist"
+        },
+        {
+          src : "out/*",
+          dest: ["public/js", "dist/js"]
+        }
+      ],
+      hook    : "writeBundle",
+      copyOnce: true
+    }),
     terser()
   ]
 };
