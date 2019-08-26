@@ -31,15 +31,13 @@ const OPTIONS: chrome.tts.SpeakOptions = {
   }
 };
 
-function read(
-  utterances: string,
-  options: chrome.ttsEngine.SpeakOptions = OPTIONS
-): void {
+async function read(utterances: string): Promise<void> {
+  await resolveStorageConfigurations();
   utterances
     .split(BY_COMMON_PUNCTUATIONS)
     .map(phrase => phrase.trim())
     .filter(phrase => phrase.length)
-    .forEach(phrase => speak(phrase, options));
+    .forEach(phrase => speak(phrase, OPTIONS));
 }
 
 function speak(phrase: string, options: chrome.ttsEngine.SpeakOptions): void {
@@ -59,20 +57,12 @@ function stop(): void {
   badgeCounter.reset();
 }
 
-chrome.runtime.onStartup.addListener(() => resolveStorageConfigurations());
-
-chrome.storage.onChanged.addListener((_changes, _namespace) => {
-  resolveStorageConfigurations();
-});
-
-chrome.runtime.onInstalled.addListener(() => {
-  resolveStorageConfigurations();
-});
-
-function resolveStorageConfigurations(): void {
-  getStorageOptions()
-    .then(result => updateOptions(result))
-    .catch(_error => storeDefaultOptions());
+async function resolveStorageConfigurations(): Promise<void> {
+  try {
+    updateOptions(await getStorageOptions());
+  } catch (e) {
+    await storeDefaultOptions();
+  }
 }
 
 function updateOptions(result: VoiceStorageOptions): void {

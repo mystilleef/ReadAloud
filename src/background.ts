@@ -1,3 +1,4 @@
+import { logError } from "./error";
 import { read, stop } from "./reader";
 
 const COMMAND = "read-aloud-selected-text";
@@ -37,6 +38,7 @@ function handleReadSelectionMessage(
   _senderResponse: (response: { result: string }) => void
 ): boolean {
   if (sender.id !== chrome.runtime.id) return true;
-  if (request.message === "READ_SELECTION") read(request.selection);
+  if (request.message === "READ_SELECTION")
+    read(request.selection).catch(e => logError(e.message));
   return true;
 }
