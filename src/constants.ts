@@ -6,7 +6,7 @@ const DEFAULT_RATE      = 1.2;
 const DEFAULT_PITCH     = 0;
 const DEFAULT_VOICENAME = "Google UK English Female";
 
-interface VoiceStorageOptions {
+export interface VoiceStorageOptions {
   readonly [index: string]: number | string | undefined;
 
   readonly rate?: number;
@@ -21,6 +21,5 @@ export {
   DEFAULT_VOICENAME,
   DEFAULT_RATE,
   DEFAULT_PITCH,
-  EXTENSION_ID,
-  VoiceStorageOptions
+  EXTENSION_ID
 };
