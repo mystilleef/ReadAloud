@@ -1,10 +1,8 @@
 import ts         from "@wessberg/rollup-plugin-ts";
 import copy       from "rollup-plugin-copy";
 import del        from "rollup-plugin-delete";
-// @ts-ignore
 import { eslint } from "rollup-plugin-eslint";
 import { terser } from "rollup-plugin-terser";
-// @ts-ignore
 import tslint     from "rollup-plugin-tslint";
 
 // noinspection JSUnusedGlobalSymbols
@@ -19,10 +17,9 @@ export default {
     dir   : "out"
   },
   plugins: [
-    del({ targets: ["dist", "out", "public/js"] }),
-    eslint(),
     tslint(),
-    ts(),
+    eslint(),
+    del({ targets: ["dist", "out", "public/js"] }),
     copy({
       targets : [
         {
@@ -30,13 +27,14 @@ export default {
           dest: "dist"
         },
         {
-          src : "out/*",
+          src : "out/*.js",
           dest: ["public/js", "dist/js"]
         }
       ],
       hook    : "writeBundle",
       copyOnce: true
     }),
+    ts(),
     terser()
   ]
 };
