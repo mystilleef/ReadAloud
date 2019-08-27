@@ -42,6 +42,7 @@
     "typescript": "^3.5.3"
   },
   "scripts": {
+    "check": "tsc",
     "build": "rollup -c",
     "dist": "npm run build",
     "watch": "rollup -cw"
