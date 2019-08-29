@@ -1,21 +1,21 @@
+import { logError }   from "./error";
+import { isSpeaking } from "./utils";
+
 class BadgeCounter {
   private counter = 0;
 
   public increment(): void {
     this.counter += 1;
-    this.checkSpeakingState();
+    this.checkSpeakingState().catch(e => logError(e.message));
   }
 
   public decrement(): void {
     this.counter -= 1;
-    this.checkSpeakingState();
+    this.checkSpeakingState().catch(e => logError(e.message));
   }
 
-  private checkSpeakingState(): void {
-    chrome.tts.isSpeaking((speaking: boolean) => {
-      if (speaking) this.updateText();
-      else this.reset();
-    });
+  private async checkSpeakingState(): Promise<void> {
+    isSpeaking().then(speaking => speaking ? this.updateText() : this.reset());
   }
 
   public reset(): void {
