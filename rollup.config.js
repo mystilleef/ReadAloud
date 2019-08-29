@@ -1,6 +1,7 @@
 import ts from "@wessberg/rollup-plugin-ts";
 import copy from "rollup-plugin-copy";
 import del from "rollup-plugin-delete";
+// noinspection ES6CheckImport
 import { eslint } from "rollup-plugin-eslint";
 import { terser } from "rollup-plugin-terser";
 import tslint from "rollup-plugin-tslint";
