@@ -30,6 +30,8 @@
   },
   "plugins": ["@typescript-eslint"],
   "rules": {
+    "object-curly-newline": "off",
+    "indent": "off",
     "quotes": ["error", "double"],
     "import/no-extraneous-dependencies": "off",
     "@typescript-eslint/no-use-before-define": "off",
