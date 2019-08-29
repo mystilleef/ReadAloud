@@ -52,6 +52,18 @@ async function read(utterances: string): Promise<void> {
     .forEach(phrase => speak(phrase, OPTIONS));
 }
 
+chrome.runtime.onInstalled.addListener(
+  _details => { resolveStorageOptions().catch(logError); }
+);
+
+chrome.runtime.onStartup.addListener(
+  () => { resolveStorageOptions().catch(logError); }
+);
+
+chrome.storage.onChanged.addListener(
+  (_changes, _areaName) => { resolveStorageOptions().catch(logError); }
+);
+
 async function resolveStorageOptions(): Promise<void> {
   try {
     updateOptions(await getStorageOptions());
