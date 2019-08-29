@@ -1,7 +1,7 @@
 {
   "defaultSeverity": "error",
   "extends": [
-    "tslint:latest"
+    "tslint:all"
   ],
   "jsRules": {},
   "rules": {
@@ -20,7 +20,22 @@
         "allow-leading-underscore",
         "allow-pascal-case"
       ]
-    }
+    },
+    "typedef": [false, "arrow-call-signature"],
+    "completed-docs": false,
+    "newline-before-return": false,
+    "only-arrow-functions": false,
+    "newline-per-chained-call": false,
+    "no-magic-numbers": false,
+    "invalid-void": false,
+    "comment-format": false,
+    "no-default-import": false,
+    "no-void-expression": false,
+    "no-unsafe-any": false,
+    "strict-boolean-expressions": false,
+    "strict-type-predicates": false,
+    "strict-string-expressions": false,
+    "no-use-before-declare": false
   },
   "rulesDirectory": []
 }

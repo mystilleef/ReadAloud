@@ -29,7 +29,7 @@ const OPTIONS: chrome.tts.SpeakOptions = {
 };
 
 function onTtsEvent(event: chrome.tts.TtsEvent): void {
-  isSpeaking().then(speaking => updateBrowserIcon(speaking));
+  isSpeaking().then(updateBrowserIcon).catch(logError);
   handleTtsEvent(event);
 }
 

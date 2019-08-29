@@ -69,7 +69,7 @@ chrome.runtime.onInstalled.addListener(() => {
     },
     () => {
       if (chromeRuntimeError()) logChromeErrorMessage();
-      else TOP_LEVEL_MENU_INFO.forEach(menu => createTopLevelMenus(menu));
+      else TOP_LEVEL_MENU_INFO.forEach(createTopLevelMenus);
     }
   );
 });
@@ -100,7 +100,6 @@ function createRadioMenuItems(
       createPitchRadioMenuItems(menu).catch(e => logError(e.message));
       break;
     default:
-      break;
   }
 }
 
@@ -117,7 +116,7 @@ async function createSpeedRadioMenuItems(
       id      : `${SPEED_SUBMENU_ID_KEY}${speed}`,
       checked : rate === Number(speed)
     },
-    () => logChromeErrorMessage()
+    logChromeErrorMessage
   ));
 }
 
@@ -135,7 +134,7 @@ async function createVoicesRadioMenuItems(
       id      : `${VOICES_SUBMENU_ID_KEY}${voice.voiceName}`,
       checked : voiceName === voice.voiceName
     },
-    () => logChromeErrorMessage()
+    logChromeErrorMessage
   ));
 }
 
@@ -152,7 +151,7 @@ async function createPitchRadioMenuItems(
       id      : `${PITCH_SUBMENU_ID_KEY}${pitch}`,
       checked : pitchFromStore === Number(pitch)
     },
-    () => logChromeErrorMessage()
+    logChromeErrorMessage
   ));
 }
 
@@ -196,7 +195,7 @@ chrome.storage.onChanged.addListener((
 
 function resolveStorageConfigurations(): void {
   getStorageOptions()
-    .then(result => updateSubMenus(result))
+    .then(updateSubMenus)
     .catch(_e => "");
 }
 
@@ -209,10 +208,10 @@ function updateSubMenus(result: VoiceStorageOptions): void {
   MENU_IDS.forEach(id => chrome.contextMenus.update(
     id,
     { checked: true },
-    () => logChromeErrorMessage()
+    logChromeErrorMessage
   ));
 }
 
 function resetToDefault(): void {
-  chrome.storage.sync.clear(() => logChromeErrorMessage());
+  chrome.storage.sync.clear(logChromeErrorMessage);
 }

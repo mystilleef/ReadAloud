@@ -1,4 +1,4 @@
-import { logError }   from "./error";
+import { logError } from "./error";
 import { isSpeaking } from "./utils";
 
 class BadgeCounter {
@@ -15,7 +15,7 @@ class BadgeCounter {
   }
 
   private async checkSpeakingState(): Promise<void> {
-    isSpeaking().then(speaking => speaking ? this.updateText() : this.reset());
+    await isSpeaking() ? this.updateText() : this.reset();
   }
 
   public reset(): void {
