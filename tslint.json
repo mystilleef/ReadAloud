@@ -1,10 +1,14 @@
 {
   "defaultSeverity": "error",
   "extends": [
-    "tslint:all"
+    "tslint:all",
+    "tslint-microsoft-contrib/latest",
+    "tslint-sonarts",
+    "tslint-clean-code"
   ],
   "jsRules": {},
   "rules": {
+    "newspaper-order": true,
     "curly": false,
     "interface-name": false,
     "object-literal-sort-keys": false,
@@ -35,7 +39,11 @@
     "strict-boolean-expressions": false,
     "strict-type-predicates": false,
     "strict-string-expressions": false,
-    "no-use-before-declare": false
+    "no-use-before-declare": false,
+    "no-relative-imports": false,
+    "export-name": false,
+    "import-name": false,
+    "prefer-type-cast": false
   },
-  "rulesDirectory": []
+  "rulesDirectory": ["node_modules/tslint-microsoft-contrib"]
 }

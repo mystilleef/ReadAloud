@@ -15,6 +15,9 @@
     "rollup-plugin-terser": "^5.1.1",
     "rollup-plugin-tslint": "^0.2.2",
     "tslint": "^5.19.0",
+    "tslint-clean-code": "^0.2.9",
+    "tslint-microsoft-contrib": "^6.2.0",
+    "tslint-sonarts": "^1.9.0",
     "typescript": "^3.5.3"
   },
   "scripts": {
