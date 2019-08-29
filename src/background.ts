@@ -13,37 +13,35 @@ function handleChromeCommand(command: string): void {
 chrome.browserAction.onClicked.addListener(handleBrowserAction);
 
 function handleBrowserAction(_tab: chrome.tabs.Tab): void {
-  isSpeaking()
-    .then(speaking => (
-      speaking ? stop() : queryContentForSelection()
-    ))
-    .catch(e => logError(e.message));
+  const stopOrQuery = (speaking: boolean): void => (
+    speaking
+    ? stop()
+    : queryContentForSelection()
+  );
+  isSpeaking().then(stopOrQuery).catch(logError);
 }
 
 function queryContentForSelection(): void {
   chrome.tabs.query(
     { active: true, currentWindow: true },
-    (tabs: chrome.tabs.Tab[]): boolean => {
+    (tabs: chrome.tabs.Tab[]): void => {
       const tabid = tabs[0].id || -1;
       if (tabid) chrome.tabs.sendMessage(
         tabid,
         { query: "GET_SELECTION" }
       );
-      return true;
     }
   );
 }
 
 chrome.runtime.onMessage.addListener(handleReadSelectionMessage);
 
-// tslint:disable-next-line:no-invariant-return
 function handleReadSelectionMessage(
   request: { message: string; selection: string; speaking: boolean },
   sender: chrome.runtime.MessageSender,
   _senderResponse: (response: { result: string }) => void
-): boolean {
-  if (sender.id !== chrome.runtime.id) return true;
+): void {
+  if (sender.id !== chrome.runtime.id) return;
   if (request.message === "READ_SELECTION")
-    read(request.selection).catch(e => logError(e.message));
-  return true;
+    read(request.selection).catch(logError);
 }
