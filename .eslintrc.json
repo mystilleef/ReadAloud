@@ -3,17 +3,45 @@
     "browser": true,
     "es6": true
   },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "paths": ["src"],
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      }
+    }
+  },
   "extends": [
-    "airbnb-base"
+    "eslint:all",
+    "airbnb-base",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking"
   ],
   "globals": {
     "Atomics": "readonly",
     "SharedArrayBuffer": "readonly"
   },
+  "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaVersion": 2018,
-    "sourceType": "module"
+    "sourceType": "module",
+    "project": "tsconfig.json"
   },
+  "plugins": ["@typescript-eslint"],
   "rules": {
+    "quotes": ["error", "double"],
+    "import/no-extraneous-dependencies": "off",
+    "@typescript-eslint/no-use-before-define": "off",
+    "@typescript-eslint/no-unused-vars": "off",
+    "curly": ["error", "multi"],
+    "comma-dangle": ["error", "never"],
+    "nonblock-statement-body-position": "off",
+    "arrow-parens": ["error", "as-needed"],
+    "no-multi-spaces": "off",
+    "key-spacing": "off",
+    "no-unused-expressions": "off",
+    "no-console": "off",
+    "function-call-argument-newline": "off"
   }
 }

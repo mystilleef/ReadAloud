@@ -1,11 +1,13 @@
-const getTtsVoices = async (): Promise<chrome.tts.TtsVoice[]> =>
-  new Promise((resolve): void => chrome.tts.getVoices(resolve));
-
-const isSpeaking = async (): Promise<boolean> =>
-  new Promise(
-    (
-      (resolve): void => chrome.tts.isSpeaking(resolve)
-    )
+async function getTtsVoices(): Promise<chrome.tts.TtsVoice[]> {
+  return new Promise(
+    (resolve): void => chrome.tts.getVoices(resolve)
   );
+}
+
+async function isSpeaking(): Promise<boolean> {
+  return new Promise(
+    (resolve): void => chrome.tts.isSpeaking(resolve)
+  );
+}
 
 export { getTtsVoices, isSpeaking };
