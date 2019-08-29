@@ -27,6 +27,7 @@
     "typescript": "^3.5.3"
   },
   "scripts": {
+    "clean": "rm -rf dist out public/js",
     "check": "tsc",
     "build": "rollup -c",
     "dist": "npm run build",
