@@ -5,9 +5,9 @@ import {
 } from "./constants";
 import {
   chromeRuntimeError,
+  doNothing,
   logChromeErrorMessage,
-  logError,
-  logNothing
+  logError
 } from "./error";
 import {
   getPitch,
@@ -201,7 +201,7 @@ chrome.storage.onChanged.addListener((
 function resolveStorageConfigurations(): void {
   getStorageOptions()
     .then(updateSubMenus)
-    .catch(logNothing);
+    .catch(doNothing);
 }
 
 function updateSubMenus(result: VoiceStorageOptions): void {
