@@ -4,6 +4,23 @@
     "tslint:latest"
   ],
   "jsRules": {},
-  "rules": {},
+  "rules": {
+    "curly": false,
+    "interface-name": false,
+    "object-literal-sort-keys": false,
+    "import-spacing": false,
+    "member-ordering": false,
+    "no-console": false,
+    "arrow-parens": [true, "ban-single-arg-parens"],
+    "trailing-comma": [true, {"multiline": "never", "singleline": "never"}],
+    "variable-name": {
+      "options": [
+        "ban-keywords",
+        "check-format",
+        "allow-leading-underscore",
+        "allow-pascal-case"
+      ]
+    }
+  },
   "rulesDirectory": []
 }
