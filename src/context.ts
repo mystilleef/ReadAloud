@@ -3,7 +3,12 @@ import {
   EXTENSION_ID,
   VoiceStorageOptions
 } from "./constants";
-import { chromeRuntimeError, logChromeErrorMessage, logError } from "./error";
+import {
+  chromeRuntimeError,
+  logChromeErrorMessage,
+  logError,
+  logNothing
+} from "./error";
 import {
   getPitch,
   getRate,
@@ -91,13 +96,13 @@ function createRadioMenuItems(
 ): void {
   switch (menu.id) {
     case SPEED_MENU_ID:
-      createSpeedRadioMenuItems(menu).catch(e => logError(e.message));
+      createSpeedRadioMenuItems(menu).catch(logError);
       break;
     case VOICES_MENU_ID:
-      createVoicesRadioMenuItems(menu).catch(e => logError(e.message));
+      createVoicesRadioMenuItems(menu).catch(logError);
       break;
     case PITCH_MENU_ID:
-      createPitchRadioMenuItems(menu).catch(e => logError(e.message));
+      createPitchRadioMenuItems(menu).catch(logError);
       break;
     default:
   }
@@ -165,15 +170,15 @@ function onRadioMenuItemClick(info: chrome.contextMenus.OnClickData): void {
   switch (info.parentMenuItemId) {
     case VOICES_MENU_ID:
       storeVoice(stringValueFrom(info.menuItemId))
-        .catch(error => logError(error.message));
+        .catch(logError);
       break;
     case SPEED_MENU_ID:
       storeRate(numberValueFrom(info.menuItemId))
-        .catch(error => logError(error.message));
+        .catch(logError);
       break;
     case PITCH_MENU_ID:
       storePitch(numberValueFrom(info.menuItemId))
-        .catch(error => logError(error.message));
+        .catch(logError);
       break;
     default:
       logError("ERROR: Invalid menu item parameter");
@@ -196,7 +201,7 @@ chrome.storage.onChanged.addListener((
 function resolveStorageConfigurations(): void {
   getStorageOptions()
     .then(updateSubMenus)
-    .catch(_e => "");
+    .catch(logNothing);
 }
 
 function updateSubMenus(result: VoiceStorageOptions): void {
