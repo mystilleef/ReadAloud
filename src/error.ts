@@ -7,4 +7,6 @@ const chromeRuntimeError = (): boolean => !!chrome.runtime.lastError;
 
 const logError = (message: string): void => console.error(message);
 
-export { logChromeErrorMessage, chromeRuntimeError, logError };
+const logNothing = (_any: string): void => undefined;
+
+export { logChromeErrorMessage, chromeRuntimeError, logError, logNothing };
