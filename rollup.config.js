@@ -2,6 +2,7 @@ import ts         from "@wessberg/rollup-plugin-ts";
 import copy       from "rollup-plugin-copy";
 import del        from "rollup-plugin-delete";
 import { terser } from "rollup-plugin-terser";
+import tslint     from "rollup-plugin-tslint";
 
 // noinspection JSUnusedGlobalSymbols
 export default {
@@ -15,6 +16,7 @@ export default {
     dir   : "out"
   },
   plugins: [
+    tslint(),
     del({ targets: ["dist", "out", "public/js"] }),
     copy({
       targets : [
