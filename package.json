@@ -30,6 +30,7 @@
     "clean": "rm -rf dist out public/js",
     "check": "tsc",
     "build": "rollup -c",
+    "predist": "npm run clean",
     "dist": "npm run build",
     "watch": "rollup -cw"
   }
