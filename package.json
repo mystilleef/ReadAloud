@@ -14,6 +14,7 @@
     "eslint": "^6.2.2",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-plugin-import": "^2.18.2",
+    "rimraf": "^3.0.0",
     "rollup": "^1.19.4",
     "rollup-plugin-copy": "^3.1.0",
     "rollup-plugin-delete": "^1.1.0",
@@ -27,7 +28,7 @@
     "typescript": "^3.5.3"
   },
   "scripts": {
-    "clean": "rm -rf dist out public/js",
+    "clean": "rimraf dist out public/js",
     "check": "tsc",
     "build": "rollup -c",
     "predist": "npm run clean",
