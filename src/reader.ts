@@ -34,22 +34,13 @@ function onTtsEvent(event: chrome.tts.TtsEvent): void {
 }
 
 function handleTtsEvent(event: chrome.tts.TtsEvent): void {
-  if (event.type === "error") error(`Error: ${event.errorMessage}`);
+  if (event.type === "error") handleError(`Error: ${event.errorMessage}`);
   else if (event.type === "end") badgeCounter.decrement();
 }
 
-function error(message: string): void {
+function handleError(message: string): void {
   stop();
   logError(message);
-}
-
-async function read(utterances: string): Promise<void> {
-  await resolveStorageOptions();
-  utterances
-    .split(BY_COMMON_PUNCTUATIONS)
-    .map(phrase => phrase.trim())
-    .filter(phrase => phrase.length)
-    .forEach(phrase => speak(phrase, OPTIONS));
 }
 
 chrome.runtime.onInstalled.addListener(
@@ -63,6 +54,15 @@ chrome.runtime.onStartup.addListener(
 chrome.storage.onChanged.addListener(
   (_changes, _areaName) => { resolveStorageOptions().catch(logError); }
 );
+
+async function read(utterances: string): Promise<void> {
+  await resolveStorageOptions();
+  utterances
+    .split(BY_COMMON_PUNCTUATIONS)
+    .map(phrase => phrase.trim())
+    .filter(phrase => phrase.length)
+    .forEach(phrase => speak(phrase, OPTIONS));
+}
 
 async function resolveStorageOptions(): Promise<void> {
   try {
@@ -79,9 +79,7 @@ function updateOptions(result: VoiceStorageOptions): void {
 }
 
 function speak(phrase: string, options: chrome.ttsEngine.SpeakOptions): void {
-  chrome.tts.speak(phrase, options, (): void => {
-    logChromeErrorMessage();
-  });
+  chrome.tts.speak(phrase, options, logChromeErrorMessage);
   badgeCounter.increment();
 }
 
