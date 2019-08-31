@@ -26,7 +26,7 @@
   },
   "scripts": {
     "clean": "rimraf build dist out public/js",
-    "check": "tslint -p tsconfig.json",
+    "check": "eslint src/** & tslint -p tsconfig.json",
     "build": "tsc -b ; rollup -c",
     "predist": "npm run clean",
     "dist": "npm run build",
