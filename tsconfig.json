@@ -23,6 +23,7 @@
     "noEmitHelpers": true,
     "noEmitOnError": true,
     "newLine": "LF",
+    "rootDir": "src",
     "outDir": "build",
     "lib": [
       "esnext",

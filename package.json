@@ -27,9 +27,10 @@
     "typescript": "^3.6.2"
   },
   "scripts": {
-    "clean": "rimraf build dist out public/js",
+    "clean": "rimraf build dist out public/js tsconfig.tsbuildinfo",
     "check": "eslint src/** & tslint -p tsconfig.json",
-    "build": "tsc -b ; rollup -c",
+    "prebuild": "tsc -b",
+    "build": "rollup -c",
     "predist": "npm run clean",
     "dist": "npm run build",
     "prewatch": "npm run dist",

@@ -4,11 +4,7 @@ import resolve from "rollup-plugin-node-resolve";
 import { terser } from "rollup-plugin-terser";
 
 export default {
-  input  : [
-    "build/src/background.js",
-    "build/src/content.js",
-    "build/src/context.js"
-  ],
+  input  : ["build/background.js", "build/content.js", "build/context.js"],
   output : { format: "esm", dir: "out" },
   plugins: [
     resolve(),
