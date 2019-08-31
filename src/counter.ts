@@ -6,12 +6,12 @@ class BadgeCounter {
 
   public increment(): void {
     this.counter += 1;
-    this.checkSpeakingState().catch(e => logError(e.message));
+    this.checkSpeakingState().catch(logError);
   }
 
   public decrement(): void {
     this.counter -= 1;
-    this.checkSpeakingState().catch(e => logError(e.message));
+    this.checkSpeakingState().catch(logError);
   }
 
   private async checkSpeakingState(): Promise<void> {
