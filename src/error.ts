@@ -1,6 +1,6 @@
 const logChromeErrorMessage = (): void => {
   const error = chrome.runtime.lastError || undefined;
-  if (error) console.error(error.message);
+  if (error) logError(error.message as string);
 };
 
 const chromeRuntimeError = (): boolean => !!chrome.runtime.lastError;
