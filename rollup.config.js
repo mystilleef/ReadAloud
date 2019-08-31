@@ -1,4 +1,6 @@
+import commonjs from "rollup-plugin-commonjs";
 import copy from "rollup-plugin-copy";
+import resolve from "rollup-plugin-node-resolve";
 import { terser } from "rollup-plugin-terser";
 
 export default {
@@ -9,6 +11,8 @@ export default {
   ],
   output : { format: "esm", dir: "out" },
   plugins: [
+    resolve(),
+    commonjs(),
     copy({
       targets : [
         { src: "public/*", dest: "dist" },

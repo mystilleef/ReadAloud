@@ -18,6 +18,8 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
     "noEmitHelpers": true,
     "noEmitOnError": true,
     "newLine": "LF",
