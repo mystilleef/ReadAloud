@@ -8,31 +8,29 @@
   "dependencies": {},
   "devDependencies": {
     "@types/chrome": "0.0.88",
+    "@types/node": "^12.7.3",
     "@typescript-eslint/eslint-plugin": "^2.0.0",
     "@typescript-eslint/parser": "^2.0.0",
-    "@wessberg/rollup-plugin-ts": "^1.1.63",
     "eslint": "^6.2.2",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-plugin-import": "^2.18.2",
     "rimraf": "^3.0.0",
     "rollup": "^1.19.4",
     "rollup-plugin-copy": "^3.1.0",
-    "rollup-plugin-delete": "^1.1.0",
-    "rollup-plugin-eslint": "^7.0.0",
     "rollup-plugin-terser": "^5.1.1",
-    "rollup-plugin-tslint": "^0.2.2",
     "tslint": "^5.19.0",
     "tslint-clean-code": "^0.2.9",
     "tslint-microsoft-contrib": "^6.2.0",
     "tslint-sonarts": "^1.9.0",
-    "typescript": "^3.5.3"
+    "typescript": "^3.6.2"
   },
   "scripts": {
-    "clean": "rimraf dist out public/js",
-    "check": "tsc",
-    "build": "rollup -c",
+    "clean": "rimraf build dist out public/js",
+    "check": "tslint -p tsconfig.json",
+    "build": "tsc -b ; rollup -c",
     "predist": "npm run clean",
     "dist": "npm run build",
-    "watch": "rollup -cw"
+    "prewatch": "npm run clean ; npm run build",
+    "watch": "tsc -w & rollup -cw"
   }
 }

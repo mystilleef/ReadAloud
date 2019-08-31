@@ -1,15 +1,14 @@
-import ts from "@wessberg/rollup-plugin-ts";
 import copy from "rollup-plugin-copy";
-import { eslint } from "rollup-plugin-eslint";
 import { terser } from "rollup-plugin-terser";
-import tslint from "rollup-plugin-tslint";
 
 export default {
-  input  : ["src/background.ts", "src/content.ts", "src/context.ts"],
+  input  : [
+    "build/src/background.js",
+    "build/src/content.js",
+    "build/src/context.js"
+  ],
   output : { format: "esm", dir: "out" },
   plugins: [
-    tslint(),
-    eslint(),
     copy({
       targets : [
         { src: "public/*", dest: "dist" },
@@ -18,7 +17,6 @@ export default {
       hook    : "writeBundle",
       copyOnce: true
     }),
-    ts(),
     terser()
   ]
 };
