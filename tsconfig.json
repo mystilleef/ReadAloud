@@ -18,6 +18,12 @@
     "newLine": "LF",
     "rootDir": "src",
     "outDir": "build",
+    "importHelpers": true,
+    "esModuleInterop": true,
+    "declarationMap": true,
+    "declaration": true,
+    "inlineSources": true,
+    "inlineSourceMap": true,
     "lib": [
       "esnext",
       "esnext.intl",
