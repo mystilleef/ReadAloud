@@ -3,20 +3,33 @@ import copy from "rollup-plugin-copy";
 import resolve from "rollup-plugin-node-resolve";
 import { terser } from "rollup-plugin-terser";
 
+const INPUT_OPTIONS = {
+  cache                     : true,
+  experimentalOptimizeChunks: true,
+  experimentalTopLevelAwait : true
+};
+
+const OUTPUT_OPTIONS = {
+  dir        : "out",
+  compact    : true,
+  noConflict : true,
+  preferConst: true
+};
+
+const STANDARD_PLUGINS = [resolve(), commonjs(), terser()];
+
+const COPY_PLUGIN = copy({
+  targets : [
+    { src: "public/*", dest: "dist" },
+    { src: "out/*.js", dest: ["public/js", "dist/js"] }
+  ],
+  hook    : "writeBundle",
+  copyOnce: true
+});
+
 export default {
-  input  : ["build/background.js", "build/content.js", "build/context.js"],
-  output : { format: "esm", dir: "out" },
-  plugins: [
-    resolve(),
-    commonjs(),
-    copy({
-      targets : [
-        { src: "public/*", dest: "dist" },
-        { src: "out/*.js", dest: ["public/js", "dist/js"] }
-      ],
-      hook    : "writeBundle",
-      copyOnce: true
-    }),
-    terser()
-  ]
+  input  : ["build/background.js", "build/context.js", "build/content.js"],
+  output : { format: "esm", ...OUTPUT_OPTIONS },
+  plugins: [...STANDARD_PLUGINS, COPY_PLUGIN],
+  ...INPUT_OPTIONS
 };
