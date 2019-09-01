@@ -1,18 +1,12 @@
-const DOUBLE_CLICK_TIMEOUT = 500;
-let selectionTimeoutId     = 0;
+const DOUBLE_CLICK_TIMEOUT = 1000;
 
 document.addEventListener(
   "dblclick",
-  _event => readSelectionAfterTimeout()
-);
-
-function readSelectionAfterTimeout(): void {
-  clearTimeout(selectionTimeoutId);
-  selectionTimeoutId = window.setTimeout(
+  _e => window.setTimeout(
     sendSelectedTextMessage,
     DOUBLE_CLICK_TIMEOUT
-  );
-}
+  )
+);
 
 chrome.runtime.onMessage.addListener(handleReadSelectionMessage);
 
