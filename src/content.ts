@@ -27,29 +27,18 @@ function sendSelectedTextMessage(): void {
 }
 
 function getSelectedText(): string {
-  if (windowSelectionExists()) return getWindowSelection();
-  if (documentSelectionExists()) return getDocumentSelection();
+  if (selectionExistsIn(window)) return getSelectionFrom(window);
+  if (selectionExistsIn(document)) return getSelectionFrom(document);
   return "";
 }
 
-function windowSelectionExists(): boolean {
-  if (!window) return false;
-  return !!window.getSelection();
+function selectionExistsIn(root: Window | Document): boolean {
+  if (!root) return false;
+  return !!root.getSelection();
 }
 
-function getWindowSelection(): string {
-  const selection = window.getSelection();
-  if (selection) return selection.toString();
-  return "";
-}
-
-function documentSelectionExists(): boolean {
-  if (!document) return false;
-  return !!document.getSelection();
-}
-
-function getDocumentSelection(): string {
-  const selection = document.getSelection();
+function getSelectionFrom(root: Window | Document): string {
+  const selection = root.getSelection();
   if (selection) return selection.toString();
   return "";
 }
