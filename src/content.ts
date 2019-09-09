@@ -1,4 +1,4 @@
-const DOUBLE_CLICK_TIMEOUT = 1000;
+const DOUBLE_CLICK_TIMEOUT = 750;
 
 document.addEventListener(
   "dblclick",
@@ -8,9 +8,9 @@ document.addEventListener(
   )
 );
 
-chrome.runtime.onMessage.addListener(handleReadSelectionMessage);
+chrome.runtime.onMessage.addListener(handleSelectionMessage);
 
-function handleReadSelectionMessage(
+function handleSelectionMessage(
   request: { query: string },
   _sender: chrome.runtime.MessageSender,
   _senderResponse: (response: { result: string }) => void
@@ -22,23 +22,21 @@ function handleReadSelectionMessage(
 function sendSelectedTextMessage(): void {
   chrome.runtime.sendMessage(
     chrome.runtime.id,
-    { message: "READ_SELECTION", selection: getSelectedText().trim() }
+    { message: "READ_SELECTION", selection: selectedText().trim() }
   );
 }
 
-function getSelectedText(): string {
-  if (selectionExistsIn(window)) return getSelectionFrom(window);
-  if (selectionExistsIn(document)) return getSelectionFrom(document);
+function selectedText(): string {
+  if (selectionExistsIn(window)) return selectionFrom(window);
+  if (selectionExistsIn(document)) return selectionFrom(document);
   return "";
 }
 
 function selectionExistsIn(root: Window | Document): boolean {
-  if (!root) return false;
-  return !!root.getSelection();
+  return root ? !!root.getSelection() : false;
 }
 
-function getSelectionFrom(root: Window | Document): string {
+function selectionFrom(root: Window | Document): string {
   const selection = root.getSelection();
-  if (selection) return selection.toString();
-  return "";
+  return selection ? selection.toString() : "";
 }
