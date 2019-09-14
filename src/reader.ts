@@ -1,7 +1,7 @@
 import BadgeCounter from "./counter";
 import { logChromeErrorMessage, logError } from "./error";
 import updateBrowserIcon from "./icon";
-import { getPitch, getRate, getVoiceName } from "./storage";
+import { getStorageOptions } from "./storage";
 import { isSpeaking } from "./utils";
 
 const BY_COMMON_PUNCTUATIONS = /[_.,:;!?<>/()—[\]{}]/gm;
@@ -19,10 +19,11 @@ async function read(utterances: string): Promise<void> {
 }
 
 async function getSpeakOptions(): Promise<chrome.tts.SpeakOptions> {
+  const { rate, pitch, voiceName } = await getStorageOptions();
   return {
-    pitch    : await getPitch() as number,
-    rate     : await getRate() as number,
-    voiceName: await getVoiceName() as string,
+    pitch    : pitch as number,
+    rate     : rate as number,
+    voiceName: voiceName as string,
     volume   : DEFAULT_VOLUME,
     enqueue  : DEFAULT_QUEUE,
     onEvent  : onTtsEvent
