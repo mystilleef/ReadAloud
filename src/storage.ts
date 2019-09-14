@@ -1,15 +1,19 @@
-import {
-  DEFAULT_PITCH,
-  DEFAULT_RATE,
-  DEFAULT_VOICENAME,
-  PITCH,
-  RATE,
-  VOICENAME,
-  VoiceStorageOptions
-} from "./constants";
+import { PITCH, RATE, VOICENAME } from "./constants";
 import { chromeRuntimeError, logChromeErrorMessage } from "./error";
 
+const DEFAULT_RATE      = 1.2;
+const DEFAULT_PITCH     = 0;
+const DEFAULT_VOICENAME = "Google UK English Female";
+
 const storageKeys = [PITCH, VOICENAME, RATE];
+
+export interface VoiceStorageOptions {
+  readonly [index: string]: number | string | undefined;
+
+  readonly rate?: number;
+  readonly pitch?: number;
+  readonly voiceName?: string;
+}
 
 async function getStorageOptions(): Promise<VoiceStorageOptions> {
   const rate      = await getRate() as number;
@@ -33,7 +37,7 @@ async function getRate(): Promise<string | number> {
 async function getValueFromStorage(key: string): Promise<string | number> {
   return new Promise((resolve, reject): void => {
     if (storageKeys.includes(key))
-      valueFromChromeStorage(key, resolve, reject);
+      valueFromChromeStorage(key, resolve);
     else
       reject(new Error(`${key} is not a valid keystore`));
   });
@@ -44,15 +48,33 @@ function valueFromChromeStorage(
   resolve: {
     (value: string | number): void;
     (arg0: string | number): void;
-  },
-  reject: { (reason?: string): void; (arg0: Error): void }
+  }
 ): void {
   chrome.storage.sync.get(key, item => {
     if (valueDoesNotExist(item[key]))
-      reject(new Error(`${item[key]} does not exist`));
+      resolveDefaultValue(key, resolve);
     else
       resolve(item[key]);
   });
+}
+
+function resolveDefaultValue(
+  key: string,
+  resolve: {
+    (value: string | number): void;
+    (arg0: string | number): void;
+  }
+): void {
+  switch (key) {
+    case PITCH:
+      resolve(DEFAULT_PITCH);
+      break;
+    case VOICENAME:
+      resolve(DEFAULT_VOICENAME);
+      break;
+    default:
+      resolve(DEFAULT_RATE);
+  }
 }
 
 function valueDoesNotExist(value: string): boolean {

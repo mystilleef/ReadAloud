@@ -1,13 +1,7 @@
-import {
-  DEFAULT_PITCH,
-  DEFAULT_RATE,
-  DEFAULT_VOICENAME,
-  VoiceStorageOptions
-} from "./constants";
 import BadgeCounter from "./counter";
 import { logChromeErrorMessage, logError } from "./error";
 import updateBrowserIcon from "./icon";
-import { getStorageOptions, storeDefaultOptions } from "./storage";
+import { getPitch, getRate, getVoiceName } from "./storage";
 import { isSpeaking } from "./utils";
 
 const BY_COMMON_PUNCTUATIONS = /[_.,:;!?<>/()—[\]{}]/gm;
@@ -15,18 +9,25 @@ const DEFAULT_VOLUME         = 1;
 const DEFAULT_QUEUE          = true;
 const badgeCounter           = new BadgeCounter();
 
-const DEFAULT_OPTIONS = {
-  pitch    : DEFAULT_PITCH,
-  rate     : DEFAULT_RATE,
-  voiceName: DEFAULT_VOICENAME,
-  volume   : DEFAULT_VOLUME,
-  enqueue  : DEFAULT_QUEUE
-};
+async function read(utterances: string): Promise<void> {
+  const speakOptions = await getSpeakOptions();
+  utterances
+    .split(BY_COMMON_PUNCTUATIONS)
+    .map(phrase => phrase.trim())
+    .filter(phrase => phrase.length)
+    .forEach(phrase => speak(phrase, speakOptions));
+}
 
-const OPTIONS: chrome.tts.SpeakOptions = {
-  ...DEFAULT_OPTIONS,
-  onEvent: onTtsEvent
-};
+async function getSpeakOptions(): Promise<chrome.tts.SpeakOptions> {
+  return {
+    pitch    : await getPitch() as number,
+    rate     : await getRate() as number,
+    voiceName: await getVoiceName() as string,
+    volume   : DEFAULT_VOLUME,
+    enqueue  : DEFAULT_QUEUE,
+    onEvent  : onTtsEvent
+  };
+}
 
 function onTtsEvent(event: chrome.tts.TtsEvent): void {
   isSpeaking().then(updateBrowserIcon).catch(logError);
@@ -43,49 +44,14 @@ function handleError(message: string): void {
   logError(message);
 }
 
-chrome.runtime.onInstalled.addListener(
-  _details => { resolveStorageOptions().catch(logError); }
-);
-
-chrome.runtime.onStartup.addListener(
-  () => { resolveStorageOptions().catch(logError); }
-);
-
-chrome.storage.onChanged.addListener(
-  (_changes, _areaName) => { resolveStorageOptions().catch(logError); }
-);
-
-async function read(utterances: string): Promise<void> {
-  await resolveStorageOptions();
-  utterances
-    .split(BY_COMMON_PUNCTUATIONS)
-    .map(phrase => phrase.trim())
-    .filter(phrase => phrase.length)
-    .forEach(phrase => speak(phrase, OPTIONS));
-}
-
-async function resolveStorageOptions(): Promise<void> {
-  try {
-    updateOptions(await getStorageOptions());
-  } catch (e) {
-    await storeDefaultOptions();
-  }
-}
-
-function updateOptions(result: VoiceStorageOptions): void {
-  OPTIONS.rate      = result.rate as number;
-  OPTIONS.pitch     = result.pitch as number;
-  OPTIONS.voiceName = result.voiceName as string;
+function stop(): void {
+  chrome.tts.stop();
+  badgeCounter.reset();
 }
 
 function speak(phrase: string, options: chrome.ttsEngine.SpeakOptions): void {
   chrome.tts.speak(phrase, options, logChromeErrorMessage);
   badgeCounter.increment();
-}
-
-function stop(): void {
-  chrome.tts.stop();
-  badgeCounter.reset();
 }
 
 export { read, stop };

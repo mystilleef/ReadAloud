@@ -1,8 +1,4 @@
-import {
-  DEFAULT_VOICENAME,
-  EXTENSION_ID,
-  VoiceStorageOptions
-} from "./constants";
+import { EXTENSION_ID } from "./constants";
 import {
   chromeRuntimeError,
   doNothing,
@@ -16,7 +12,8 @@ import {
   getVoiceName,
   storePitch,
   storeRate,
-  storeVoice
+  storeVoice,
+  VoiceStorageOptions
 } from "./storage";
 import { getTtsVoices } from "./utils";
 
@@ -186,7 +183,7 @@ function onRadioMenuItemClick(info: chrome.contextMenus.OnClickData): void {
 }
 
 function stringValueFrom(id: string): string {
-  return id.split(SUBMENU_ID_DELIMETER).pop() || DEFAULT_VOICENAME;
+  return id.split(SUBMENU_ID_DELIMETER).pop() as string;
 }
 
 function numberValueFrom(id: string): number {
