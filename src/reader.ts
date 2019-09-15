@@ -5,8 +5,6 @@ import { getStorageOptions } from "./storage";
 import { isSpeaking } from "./utils";
 
 const BY_COMMON_PUNCTUATIONS = /[_.,:;!?<>/()—[\]{}]/gm;
-const DEFAULT_VOLUME         = 1;
-const DEFAULT_QUEUE          = true;
 const badgeCounter           = new BadgeCounter();
 
 async function read(utterances: string): Promise<void> {
@@ -24,8 +22,8 @@ async function getSpeakOptions(): Promise<chrome.tts.SpeakOptions> {
     pitch    : pitch as number,
     rate     : rate as number,
     voiceName: voiceName as string,
-    volume   : DEFAULT_VOLUME,
-    enqueue  : DEFAULT_QUEUE,
+    volume   : 1,
+    enqueue  : true,
     onEvent  : onTtsEvent
   };
 }
