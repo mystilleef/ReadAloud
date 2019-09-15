@@ -4,8 +4,7 @@ import { chromeRuntimeError, logChromeErrorMessage } from "./error";
 const DEFAULT_RATE      = 1.2;
 const DEFAULT_PITCH     = 0;
 const DEFAULT_VOICENAME = "Google UK English Female";
-
-const storageKeys = [PITCH, VOICENAME, RATE];
+const STORAGE_KEYS      = [PITCH, VOICENAME, RATE];
 
 export interface VoiceStorageOptions {
   readonly [index: string]: number | string | undefined;
@@ -36,7 +35,7 @@ async function getRate(): Promise<string | number> {
 
 async function getValueFromStorage(key: string): Promise<string | number> {
   return new Promise((resolve, reject): void => {
-    if (storageKeys.includes(key))
+    if (STORAGE_KEYS.includes(key))
       valueFromChromeStorage(key, resolve);
     else
       reject(new Error(`${key} is not a valid keystore`));
