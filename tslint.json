@@ -2,8 +2,6 @@
   "defaultSeverity": "error",
   "extends": [
     "tslint:all",
-    "tslint-microsoft-contrib/latest",
-    "tslint-sonarts",
     "tslint-clean-code"
   ],
   "jsRules": {},
@@ -44,6 +42,5 @@
     "export-name": false,
     "import-name": false,
     "prefer-type-cast": false
-  },
-  "rulesDirectory": ["node_modules/tslint-microsoft-contrib"]
+  }
 }
