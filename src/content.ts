@@ -33,7 +33,7 @@ function selectedText(): string {
 }
 
 function selectionExistsIn(root: Window | Document): boolean {
-  return root ? !!root.getSelection() : false;
+  return root ? Boolean(root.getSelection()) : false;
 }
 
 function selectionFrom(root: Window | Document): string {

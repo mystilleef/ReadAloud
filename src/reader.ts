@@ -1,11 +1,9 @@
-import BadgeCounter from "./counter";
-import { logChromeErrorMessage, logError } from "./error";
-import updateBrowserIcon from "./icon";
+import badgeCounter from "./counter";
+import { logChromeErrorMessage } from "./error";
 import { getStorageOptions } from "./storage";
-import { isSpeaking } from "./utils";
+import { onTtsEvent, stop } from "./ttshandler";
 
-const BY_COMMON_PUNCTUATIONS = /[_.,:;!?<>/()—[\]{}]/gm;
-const badgeCounter           = new BadgeCounter();
+const BY_COMMON_PUNCTUATIONS = /[_.,:;!?<>/()—[\]{}]/gmu;
 
 async function read(utterances: string): Promise<void> {
   const speakOptions = await getSpeakOptions();
@@ -26,26 +24,6 @@ async function getSpeakOptions(): Promise<chrome.tts.SpeakOptions> {
     enqueue  : true,
     onEvent  : onTtsEvent
   };
-}
-
-function onTtsEvent(event: chrome.tts.TtsEvent): void {
-  isSpeaking().then(updateBrowserIcon).catch(logError);
-  handleTtsEvent(event);
-}
-
-function handleTtsEvent(event: chrome.tts.TtsEvent): void {
-  if (event.type === "error") handleError(`Error: ${event.errorMessage}`);
-  else if (event.type === "end") badgeCounter.decrement();
-}
-
-function handleError(message: string): void {
-  stop();
-  logError(message);
-}
-
-function stop(): void {
-  chrome.tts.stop();
-  badgeCounter.reset();
 }
 
 function speak(phrase: string, options: chrome.ttsEngine.SpeakOptions): void {
