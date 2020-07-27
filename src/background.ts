@@ -13,11 +13,9 @@ function handleChromeCommand(command: string): void {
 chrome.browserAction.onClicked.addListener(handleBrowserAction);
 
 function handleBrowserAction(_tab: chrome.tabs.Tab): void {
-  const stopOrQuery = (speaking: boolean): void => (
-    speaking
-    ? stop()
-    : queryContentForSelection()
-  );
+  const stopOrQuery = (speaking: boolean): void => speaking
+                                                   ? stop()
+                                                   : queryContentForSelection();
   isSpeaking().then(stopOrQuery).catch(logError);
 }
 
@@ -25,6 +23,7 @@ function queryContentForSelection(): void {
   chrome.tabs.query(
     { active: true, currentWindow: true },
     (tabs: chrome.tabs.Tab[]): void => {
+      // eslint-disable-next-line no-magic-numbers
       const tabid = tabs[0].id || -1;
       if (tabid) chrome.tabs.sendMessage(
         tabid,
