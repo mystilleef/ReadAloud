@@ -3,7 +3,7 @@ import { logChromeErrorMessage } from "./error";
 import { getStorageOptions } from "./storage";
 import { onTtsEvent, stop } from "./ttshandler";
 
-const BY_COMMON_PUNCTUATIONS = /[_.,:;!?<>/()—[\]{}]/gm;
+const BY_COMMON_PUNCTUATIONS = /[_.,:;!?<>/()—[\]{}]/gmu;
 
 async function read(utterances: string): Promise<void> {
   const speakOptions = await getSpeakOptions();
