@@ -3,9 +3,9 @@ const logChromeErrorMessage = (): void => {
   if (error) logError(error.message as string);
 };
 
-const chromeRuntimeError = (): boolean => Boolean(chrome.runtime.lastError);
-
 const logError = (message: string): void => console.error(message);
+
+const chromeRuntimeError = (): boolean => Boolean(chrome.runtime.lastError);
 
 const doNothing = (_any?: unknown | undefined): void => undefined;
 
