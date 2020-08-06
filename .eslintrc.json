@@ -6,8 +6,15 @@
   "settings": {
     "import/resolver": {
       "node": {
-        "paths": ["src"],
-        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+        "paths": [
+          "src"
+        ],
+        "extensions": [
+          ".js",
+          ".jsx",
+          ".ts",
+          ".tsx"
+        ]
       }
     }
   },
@@ -27,7 +34,9 @@
     "sourceType": "module",
     "project": "tsconfig.json"
   },
-  "plugins": ["@typescript-eslint"],
+  "plugins": [
+    "@typescript-eslint"
+  ],
   "rules": {
     "object-curly-newline": "off",
     "sort-imports": "off",
@@ -50,30 +59,32 @@
     "newline-per-chained-call": "off",
     "no-confusing-arrow": "off",
     "indent": "off",
-    "quotes": ["error", "double"],
+    "quotes": [
+      "error",
+      "double"
+    ],
     "import/no-extraneous-dependencies": "off",
     "@typescript-eslint/no-use-before-define": "off",
     "@typescript-eslint/no-unused-vars": "off",
     "@typescript-eslint/restrict-template-expressions": "off",
     "no-undefined": "off",
-    "curly": ["error", "multi"],
-    "comma-dangle": ["error", "never"],
+    "curly": [
+      "error",
+      "multi"
+    ],
+    "comma-dangle": [
+      "error",
+      "never"
+    ],
     "nonblock-statement-body-position": "off",
-    "arrow-parens": ["error", "as-needed"],
+    "arrow-parens": [
+      "error",
+      "as-needed"
+    ],
     "no-multi-spaces": "off",
     "key-spacing": "off",
     "no-unused-expressions": "off",
     "no-console": "off",
     "function-call-argument-newline": "off"
-//    "import/extensions": [
-//      "error",
-//      "always",
-//      {
-//        "ts": "never",
-//        "tsx": "never",
-//        "js": "never",
-//        "jsx": "never"
-//      }
-//    ]
   }
 }
