@@ -81,10 +81,7 @@ typings/
 .dropbox.attr
 .dropbox.cache
 .vscode/
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
 .rpt2_cache/
 .idea/
 public/js/
+build/
