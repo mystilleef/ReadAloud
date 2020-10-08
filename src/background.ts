@@ -14,8 +14,8 @@ chrome.browserAction.onClicked.addListener(handleBrowserAction);
 
 function handleBrowserAction(_tab: chrome.tabs.Tab): void {
   const stopOrQuery = (speaking: boolean): void => speaking
-                                                   ? stop()
-                                                   : queryContentForSelection();
+    ? stop()
+    : queryContentForSelection();
   isSpeaking().then(stopOrQuery).catch(logError);
 }
 
@@ -36,9 +36,9 @@ function queryContentForSelection(): void {
 chrome.runtime.onMessage.addListener(handleReadSelectionMessage);
 
 function handleReadSelectionMessage(
-  request: { message: string; selection: string; speaking: boolean },
+  request: { message: string; selection: string; speaking: boolean; },
   sender: chrome.runtime.MessageSender,
-  _senderResponse: (response: { result: string }) => void
+  _senderResponse: (response: { result: string; }) => void
 ): void {
   if (sender.id !== chrome.runtime.id) return;
   if (request.message === "READ_SELECTION")
