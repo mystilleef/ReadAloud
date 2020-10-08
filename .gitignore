@@ -85,3 +85,4 @@ typings/
 .idea/
 public/js/
 build/
+dist/
