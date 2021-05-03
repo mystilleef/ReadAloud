@@ -14,17 +14,17 @@
 
 ## Installation
 
-- Make sure you have Git, Node.js, and Npm installed on your computer 
-- Clone this repository on your computer and navigate to it 
+- Make sure you have Git, Node.js, and Npm installed on your computer
+- Clone this repository on your computer and navigate to it
 
-```
+```bash
 git clone https://github.com/mystilleef/ReadAloud/
 cd ReadAloud
 ```
 
 - Build the extension
 
-```
+```bash
 npm i
 npm run dist
 ```
