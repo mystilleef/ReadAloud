@@ -6,6 +6,7 @@ import { isSpeaking } from "./utils";
 let TIMEOUT_RESUME_SPEAKING = 0;
 
 export function onTtsEvent(event: chrome.tts.TtsEvent): void {
+  resetTts();
   isSpeaking().then(updateBrowserIcon).catch(logError);
   handleTtsEvent(event);
 }
@@ -22,7 +23,9 @@ function handleError(message: string): void {
 }
 
 function handleStart() {
+  resetTts();
   resumeSpeaking();
+  resetTts();
 }
 
 function handleEnd() {
@@ -31,16 +34,23 @@ function handleEnd() {
 }
 
 function resumeSpeaking() {
-  chrome.tts.pause();
-  chrome.tts.resume();
-  TIMEOUT_RESUME_SPEAKING = window.setTimeout(resumeSpeaking, 10000);
+  resetTts();
+  TIMEOUT_RESUME_SPEAKING = window.setTimeout(resumeSpeaking, 5000);
 }
 
 function stopSpeaking() {
+  resetTts();
   clearTimeout(TIMEOUT_RESUME_SPEAKING);
+
+}
+
+export function resetTts(): void {
+  chrome.tts.pause();
+  chrome.tts.resume();
 }
 
 export function stop(): void {
+  chrome.tts.pause();
   chrome.tts.stop();
   badgeCounter.reset();
 }
