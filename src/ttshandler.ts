@@ -6,7 +6,6 @@ import { isSpeaking } from "./utils";
 let TIMEOUT_RESUME_SPEAKING = 0;
 
 export function onTtsEvent(event: chrome.tts.TtsEvent): void {
-  resetTts();
   isSpeaking().then(updateBrowserIcon).catch(logError);
   handleTtsEvent(event);
 }
@@ -14,6 +13,7 @@ export function onTtsEvent(event: chrome.tts.TtsEvent): void {
 function handleTtsEvent(event: chrome.tts.TtsEvent): void {
   if (event.type === "error") handleError(`Error: ${event.errorMessage}`);
   else if (event.type === "start") handleStart();
+  else if (event.type === "interrupted") handleInterrupted();
   else if (event.type === "end") handleEnd();
 }
 
@@ -23,34 +23,42 @@ function handleError(message: string): void {
 }
 
 function handleStart() {
-  resetTts();
-  resumeSpeaking();
-  resetTts();
+  stopTtsTimer();
+  resumeTtsTimer();
+  refreshTts();
 }
 
 function handleEnd() {
-  stopSpeaking();
+  stopTtsTimer();
   badgeCounter.decrement();
+  refreshTts();
 }
 
-function resumeSpeaking() {
-  resetTts();
-  TIMEOUT_RESUME_SPEAKING = window.setTimeout(resumeSpeaking, 5000);
+function resumeTtsTimer() {
+  TIMEOUT_RESUME_SPEAKING = window.setInterval(resetTts, 10000);
 }
 
-function stopSpeaking() {
-  resetTts();
+function stopTtsTimer() {
   clearTimeout(TIMEOUT_RESUME_SPEAKING);
-
 }
 
-export function resetTts(): void {
+function resetTts(): void {
+  isSpeaking().then(refreshTts).catch(logError);
+}
+
+function refreshTts(_speaking = false): void {
   chrome.tts.pause();
   chrome.tts.resume();
 }
 
 export function stop(): void {
-  chrome.tts.pause();
+  stopTtsTimer();
   chrome.tts.stop();
   badgeCounter.reset();
+}
+
+function handleInterrupted() {
+  console.log("chrome tts interrupted");
+  refreshTts();
+  resumeTtsTimer();
 }
