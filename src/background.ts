@@ -41,6 +41,6 @@ function handleReadSelectionMessage(
   _senderResponse: (response: { result: string; }) => void
 ): void {
   if (sender.id !== chrome.runtime.id) return;
-  if (request.message === "READ_SELECTION")
+  if (request.message === "READ_SELECTION" && request.selection !== "")
     read(request.selection).catch(logError);
 }
