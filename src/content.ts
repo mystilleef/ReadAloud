@@ -1,4 +1,4 @@
-const DOUBLE_CLICK_TIMEOUT = 750;
+const DOUBLE_CLICK_TIMEOUT = 500;
 
 document.addEventListener(
   "dblclick",

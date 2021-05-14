@@ -3,6 +3,7 @@
   "author": "Lateef Alabi-Oki <mystilleef@gmail.com>",
   "license": "GPL-3.0-or-later",
   "version": "0.21.0",
+  "type": "module",
   "repository": "https://github.com/mystilleef/ReadAloud",
   "description": "An extension to read aloud selected text in Google Chrome",
   "devDependencies": {
