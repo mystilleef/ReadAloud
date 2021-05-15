@@ -27,6 +27,8 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "lib": [
+      "DOM",
+      "DOM.Iterable",
       "ESNext",
       "ESNext.Array",
       "ESNext.AsyncIterable",
@@ -35,9 +37,7 @@
       "ESNext.Promise",
       "ESNext.String",
       "ESNext.Symbol",
-      "ScriptHost",
-      "DOM",
-      "DOM.Iterable"
+      "ScriptHost"
     ]
   },
   "exclude": [
