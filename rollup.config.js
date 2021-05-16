@@ -1,6 +1,7 @@
-import commonjs from "rollup-plugin-commonjs";
+import commonjs from "@rollup/plugin-commonjs";
 import copy from "rollup-plugin-copy";
-import resolve from "rollup-plugin-node-resolve";
+import resolve from "@rollup/plugin-node-resolve";
+import summary from "rollup-plugin-summary";
 import { terser } from "rollup-plugin-terser";
 
 const INPUT_OPTIONS = { cache: true };
@@ -12,7 +13,7 @@ const OUTPUT_OPTIONS = {
   preferConst: true
 };
 
-const STANDARD_PLUGINS = [resolve(), commonjs(), terser()];
+const STANDARD_PLUGINS = [resolve(), commonjs(), terser(), summary()];
 
 const COPY_PLUGIN = copy({
   targets : [
