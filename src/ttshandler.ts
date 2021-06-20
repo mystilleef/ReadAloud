@@ -35,7 +35,7 @@ function handleEnd() {
 }
 
 function resumeTtsTimer() {
-  TIMEOUT_RESUME_SPEAKING = window.setInterval(resetTts, 10000);
+  TIMEOUT_RESUME_SPEAKING = window.setInterval(resetTts, 5000);
 }
 
 function stopTtsTimer() {
