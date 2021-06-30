@@ -1,35 +1,38 @@
-import { logError } from "./error";
-import { isSpeaking } from "./utils";
+import {isSpeaking} from "./utils";
 
 class BadgeCounter {
   private counter = 0;
 
-  public increment(): void {
+  public async increment(): Promise<void> {
     this.counter += 1;
-    this.checkSpeakingState().catch(logError);
+    await this.checkSpeakingState();
   }
 
-  public decrement(): void {
+  public async decrement(): Promise<void> {
     this.counter -= 1;
-    this.checkSpeakingState().catch(logError);
+    await this.checkSpeakingState();
   }
 
   private async checkSpeakingState(): Promise<void> {
-    await isSpeaking() ? this.updateText() : this.reset();
+    await isSpeaking() ? await this.updateText() : await this.reset();
   }
 
-  public reset(): void {
+  public async reset(): Promise<void> {
     this.counter = 0;
-    this.updateText();
+    await this.updateText();
   }
 
-  private updateText(): void {
-    chrome.browserAction.setBadgeText(
-      { text: `${this.counter === 0 ? "" : this.counter}` }
-    );
+  private async updateText(): Promise<void> {
+    return new Promise<void>(resolve => {
+      resolve(
+        chrome.browserAction.setBadgeText(
+          {text: `${this.counter === 0 ? "" : this.counter}`}
+        )
+      );
+    });
   }
 }
 
 const badgeCounter = new BadgeCounter();
 
-export { badgeCounter as default };
+export {badgeCounter as default};

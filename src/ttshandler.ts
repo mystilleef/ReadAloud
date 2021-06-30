@@ -30,7 +30,7 @@ function handleStart() {
 
 function handleEnd() {
   stopTtsTimer();
-  badgeCounter.decrement();
+  badgeCounter.decrement().catch(logError);
   refreshTts();
 }
 
@@ -54,7 +54,7 @@ function refreshTts(_speaking = false): void {
 export function stop(): void {
   stopTtsTimer();
   chrome.tts.stop();
-  badgeCounter.reset();
+  badgeCounter.reset().catch(logError);
 }
 
 function handleInterrupted() {

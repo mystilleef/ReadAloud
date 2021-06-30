@@ -1,5 +1,5 @@
 import badgeCounter from "./counter";
-import { logChromeErrorMessage } from "./error";
+import { logChromeErrorMessage, logError } from "./error";
 import { getStorageOptions } from "./storage";
 import { onTtsEvent, stop } from "./ttshandler";
 
@@ -11,9 +11,9 @@ async function speak(
   phrase: string,
   options: chrome.ttsEngine.SpeakOptions
 ): Promise<void> {
-  return new Promise<void>((_resolve, _reject) => {
+  await new Promise<void>((_resolve, _reject) => {
     chrome.tts.speak(phrase, options, logChromeErrorMessage);
-    badgeCounter.increment();
+    badgeCounter.increment().catch(logError);
   });
 }
 
