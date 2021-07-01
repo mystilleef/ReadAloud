@@ -4,6 +4,7 @@ import updateBrowserIcon from "./icon";
 import { isSpeaking } from "./utils";
 
 let TIMEOUT_RESUME_SPEAKING = 0;
+const RESET_INTERVAL = 5000;
 
 export function onTtsEvent(event: chrome.tts.TtsEvent): void {
   isSpeaking().then(updateBrowserIcon).catch(logError);
@@ -35,7 +36,7 @@ function handleEnd() {
 }
 
 function resumeTtsTimer() {
-  TIMEOUT_RESUME_SPEAKING = window.setInterval(resetTts, 5000);
+  TIMEOUT_RESUME_SPEAKING = window.setInterval(resetTts, RESET_INTERVAL);
 }
 
 function stopTtsTimer() {
