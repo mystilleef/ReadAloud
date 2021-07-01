@@ -1,25 +1,29 @@
-function updateBrowserIcon(speaking: boolean): void {
-  if (speaking) setStopIcon();
-  else setDefaultIcon();
+async function updateBrowserIcon(speaking: boolean): Promise<void> {
+    if (speaking) await setStopIcon();
+    else await setDefaultIcon();
 }
 
-function setDefaultIcon(): void {
-  setIcon("default");
-  setTooltip("Read aloud selected text");
+async function setDefaultIcon(): Promise<void> {
+  await setIcon("default");
+  await setTooltip("Read aloud selected text");
 }
 
-function setStopIcon(): void {
-  setIcon("stop");
-  setTooltip("Stop reading");
+async function setStopIcon(): Promise<void> {
+  await setIcon("stop");
+  await setTooltip("Stop reading");
 }
 
-function setIcon(name: string): void {
-  const details = { path: `images/${name}.svg` };
-  chrome.browserAction.setIcon(details);
+async function setIcon(name: string): Promise<void> {
+  const details = {path: `images/${name}.svg`};
+  return new Promise<void>(resolve => {
+    resolve(chrome.browserAction.setIcon(details));
+  });
 }
 
-function setTooltip(tip: string): void {
-  chrome.browserAction.setTitle({ title: tip });
+async function setTooltip(tip: string): Promise<void> {
+  return new Promise<void>(resolve => {
+    resolve(chrome.browserAction.setTitle({title: tip}));
+  });
 }
 
-export { updateBrowserIcon as default };
+export {updateBrowserIcon as default};
