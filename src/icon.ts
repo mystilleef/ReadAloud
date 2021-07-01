@@ -1,6 +1,6 @@
 async function updateBrowserIcon(speaking: boolean): Promise<void> {
-    if (speaking) await setStopIcon();
-    else await setDefaultIcon();
+  if (speaking) await setStopIcon();
+  else await setDefaultIcon();
 }
 
 async function setDefaultIcon(): Promise<void> {
@@ -14,8 +14,8 @@ async function setStopIcon(): Promise<void> {
 }
 
 async function setIcon(name: string): Promise<void> {
-  const details = {path: `images/${name}.svg`};
   return new Promise<void>(resolve => {
+    const details = {path: `images/${name}.svg`};
     resolve(chrome.browserAction.setIcon(details));
   });
 }
