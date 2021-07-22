@@ -14,7 +14,7 @@ class BadgeCounter {
   }
 
   private async checkSpeakingState(): Promise<void> {
-    await isSpeaking() ? await this.updateText() : await this.reset();
+    (await isSpeaking()) ? await this.updateText() : await this.reset();
   }
 
   public async reset(): Promise<void> {
@@ -25,9 +25,9 @@ class BadgeCounter {
   private async updateText(): Promise<void> {
     return new Promise<void>(resolve => {
       resolve(
-        chrome.browserAction.setBadgeText(
-          {text: `${this.counter === 0 ? "" : this.counter}`}
-        )
+        chrome.browserAction.setBadgeText({
+          text: `${this.counter === 0 ? "" : this.counter}`
+        })
       );
     });
   }
