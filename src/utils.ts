@@ -10,4 +10,4 @@ async function isSpeaking(): Promise<boolean> {
   });
 }
 
-export { getTtsVoices, isSpeaking };
+export {getTtsVoices, isSpeaking};
