@@ -1,4 +1,4 @@
-import {EXTENSION_ID} from "./constants";
+import { EXTENSION_ID } from "./constants";
 import {
   chromeRuntimeError,
   doNothing,
@@ -15,7 +15,7 @@ import {
   storeVoice,
   VoiceStorageOptions
 } from "./storage";
-import {getTtsVoices} from "./utils";
+import { getTtsVoices } from "./utils";
 
 const SUBMENU_ID_DELIMETER = "|";
 
@@ -115,7 +115,7 @@ async function createSpeedRadioMenuItems(menu: {
   contexts: string[];
 }): Promise<void> {
   const rate = await getRate();
-  SPEED_OPTIONS.forEach(speed =>
+  SPEED_OPTIONS.forEach(speed => {
     chrome.contextMenus.create(
       {
         parentId: menu.id,
@@ -126,7 +126,8 @@ async function createSpeedRadioMenuItems(menu: {
         checked: rate === Number(speed)
       },
       logChromeErrorMessage
-    )
+    );
+  }
   );
 }
 
@@ -138,7 +139,7 @@ async function createVoicesRadioMenuItems(menu: {
 }): Promise<void> {
   const voices = await getTtsVoices();
   const voiceName = await getVoiceName();
-  voices.forEach(voice =>
+  voices.forEach(voice => {
     chrome.contextMenus.create(
       {
         parentId: menu.id,
@@ -149,7 +150,8 @@ async function createVoicesRadioMenuItems(menu: {
         checked: voiceName === voice.voiceName
       },
       logChromeErrorMessage
-    )
+    );
+  }
   );
 }
 
@@ -160,7 +162,7 @@ async function createPitchRadioMenuItems(menu: {
   contexts: string[];
 }): Promise<void> {
   const pitchFromStore = await getPitch();
-  PITCH_OPTIONS.forEach(pitch =>
+  PITCH_OPTIONS.forEach(pitch => {
     chrome.contextMenus.create(
       {
         parentId: menu.id,
@@ -171,7 +173,8 @@ async function createPitchRadioMenuItems(menu: {
         checked: pitchFromStore === Number(pitch)
       },
       logChromeErrorMessage
-    )
+    );
+  }
   );
 }
 
@@ -197,17 +200,20 @@ function onRadioMenuItemClick(info: chrome.contextMenus.OnClickData): void {
   }
 }
 
-function stringValueFrom(id: string): string {
+function stringValueFrom(id: string | number): string {
+  if (typeof id === "number") return String(id);
   return id.split(SUBMENU_ID_DELIMETER).pop() as string;
 }
 
-function numberValueFrom(id: string): number {
+function numberValueFrom(id: string | number): number {
+  if (typeof id === "number") return id;
   return Number(id.split(SUBMENU_ID_DELIMETER).pop());
 }
 
 chrome.storage.onChanged.addListener(
-  (_changes: chrome.storage.StorageChange, _areaName: string) =>
-    resolveStorageConfigurations()
+  (_changes: chrome.storage.StorageChange, _areaName: string) => {
+    resolveStorageConfigurations();
+  }
 );
 
 function resolveStorageConfigurations(): void {
@@ -220,8 +226,9 @@ function updateSubMenus(result: VoiceStorageOptions): void {
     `${VOICES_SUBMENU_ID_KEY}${result.voiceName}`,
     `${SPEED_SUBMENU_ID_KEY}${result.rate}`
   ];
-  MENU_IDS.forEach(id =>
-    chrome.contextMenus.update(id, {checked: true}, logChromeErrorMessage)
+  MENU_IDS.forEach(id => {
+    chrome.contextMenus.update(id, { checked: true }, logChromeErrorMessage);
+  }
   );
 }
 
