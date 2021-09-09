@@ -1,4 +1,4 @@
-import {isSpeaking} from "./utils";
+import { isSpeaking } from "./utils";
 
 class BadgeCounter {
   private counter = 0;
@@ -14,7 +14,7 @@ class BadgeCounter {
   }
 
   private async checkSpeakingState(): Promise<void> {
-    (await isSpeaking()) ? await this.updateText() : await this.reset();
+    await isSpeaking() ? await this.updateText() : await this.reset();
   }
 
   public async reset(): Promise<void> {
@@ -35,4 +35,4 @@ class BadgeCounter {
 
 const badgeCounter = new BadgeCounter();
 
-export {badgeCounter as default};
+export { badgeCounter as default };
