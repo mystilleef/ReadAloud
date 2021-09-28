@@ -8,19 +8,19 @@
   "description": "An extension to read aloud selected text in Google Chrome",
   "devDependencies": {
     "@rollup/plugin-commonjs": "^20.0.0",
-    "@rollup/plugin-node-resolve": "^13.0.4",
-    "@types/chrome": "0.0.157",
-    "@types/node": "^16.9.0",
-    "@typescript-eslint/eslint-plugin": "^4.31.0",
-    "@typescript-eslint/parser": "^4.31.0",
+    "@rollup/plugin-node-resolve": "^13.0.5",
+    "@types/chrome": "0.0.158",
+    "@types/node": "^16.10.1",
+    "@typescript-eslint/eslint-plugin": "^4.32.0",
+    "@typescript-eslint/parser": "^4.32.0",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
     "rimraf": "^3.0.2",
-    "rollup": "^2.56.3",
+    "rollup": "^2.57.0",
     "rollup-plugin-copy": "^3.4.0",
     "rollup-plugin-summary": "^1.3.0",
     "rollup-plugin-terser": "^7.0.2",
-    "typescript": "^4.4.2"
+    "typescript": "^4.4.3"
   },
   "scripts": {
     "clean": "rimraf build dist out public/js tsconfig.tsbuildinfo",
