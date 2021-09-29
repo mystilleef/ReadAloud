@@ -1,15 +1,15 @@
 const DOUBLE_CLICK_TIMEOUT = 750;
 
-document.addEventListener("dblclick", _e =>
-  window.setTimeout(sendSelectedTextMessage, DOUBLE_CLICK_TIMEOUT)
-);
+document.addEventListener("dblclick", _e => {
+  window.setTimeout(sendSelectedTextMessage, DOUBLE_CLICK_TIMEOUT);
+});
 
 chrome.runtime.onMessage.addListener(handleSelectionMessage);
 
 function handleSelectionMessage(
-  request: {query: string},
+  request: { query: string },
   _sender: chrome.runtime.MessageSender,
-  _senderResponse: (response: {result: string}) => void
+  _senderResponse: (response: { result: string }) => void
 ): boolean {
   if (request.query === "GET_SELECTION") sendSelectedTextMessage();
   return true;
