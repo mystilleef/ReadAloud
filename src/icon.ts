@@ -15,15 +15,15 @@ async function setStopIcon(): Promise<void> {
 
 async function setIcon(name: string): Promise<void> {
   return new Promise<void>(resolve => {
-    const details = {path: `images/${name}.svg`};
+    const details = { path: `images/${name}.svg` };
     resolve(chrome.browserAction.setIcon(details));
   });
 }
 
 async function setTooltip(tip: string): Promise<void> {
   return new Promise<void>(resolve => {
-    resolve(chrome.browserAction.setTitle({title: tip}));
+    resolve(chrome.browserAction.setTitle({ title: tip }));
   });
 }
 
-export {updateBrowserIcon as default};
+export { updateBrowserIcon as default };
