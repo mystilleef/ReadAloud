@@ -23,7 +23,6 @@ function queryContentForSelection(): void {
   chrome.tabs.query(
     { active: true, currentWindow: true },
     (tabs: chrome.tabs.Tab[]): void => {
-      // eslint-disable-next-line no-magic-numbers
       const tabid = tabs[0].id || -1;
       if (tabid) chrome.tabs.sendMessage(tabid, { query: "GET_SELECTION" });
     }
