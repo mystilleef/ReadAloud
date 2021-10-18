@@ -13,8 +13,9 @@ function handleChromeCommand(command: string): void {
 chrome.browserAction.onClicked.addListener(handleBrowserAction);
 
 function handleBrowserAction(_tab: chrome.tabs.Tab): void {
-  const stopOrQuery = (speaking: boolean): void =>
+  const stopOrQuery = (speaking: boolean): void => {
     speaking ? stop() : queryContentForSelection();
+  };
   isSpeaking().then(stopOrQuery).catch(logError);
 }
 
