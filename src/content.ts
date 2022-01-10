@@ -1,11 +1,12 @@
 const DOUBLE_CLICK_TIMEOUT = 500;
+const MOUSE_UP_TIMEOUT = 1000;
 
 document.addEventListener("dblclick", _e => {
   window.setTimeout(sendSelectedTextMessage, DOUBLE_CLICK_TIMEOUT);
 });
 
 document.addEventListener("mouseup", _e => {
-  window.setTimeout(sendSelectedTextMessage, DOUBLE_CLICK_TIMEOUT);
+  window.setTimeout(sendSelectedTextMessage, MOUSE_UP_TIMEOUT);
 });
 
 chrome.runtime.onMessage.addListener(handleSelectionMessage);
