@@ -4,6 +4,10 @@ document.addEventListener("dblclick", _e => {
   window.setTimeout(sendSelectedTextMessage, DOUBLE_CLICK_TIMEOUT);
 });
 
+document.addEventListener("mouseup", _e => {
+  window.setTimeout(sendSelectedTextMessage, DOUBLE_CLICK_TIMEOUT);
+});
+
 chrome.runtime.onMessage.addListener(handleSelectionMessage);
 
 function handleSelectionMessage(
