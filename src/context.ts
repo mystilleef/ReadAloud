@@ -31,8 +31,9 @@ const VOICES_SUBMENU_ID_KEY = keyFromId(VOICES_MENU_ID);
 const READ_ALOUD_ROOT_MENU_ID = `ReadAloudMenu-${UNIQUE_STAMP}`;
 const RESET_DEFAULT_MENU_ID = `ReadAloudResetDefaultMenu-${UNIQUE_STAMP}`;
 
+type ContextType = string;
 
-const CONTEXTS = ["all"] as chrome.contextMenus.ContextType[];
+const CONTEXTS = ["all"] as ContextType[];
 const TOP_LEVEL_MENU_INFO = [
   {
     title: "Speed",
@@ -81,7 +82,7 @@ function createTopLevelMenus(menu: {
   id: string;
   title: string;
   parentId: string;
-  contexts: chrome.contextMenus.ContextType[];
+  contexts: ContextType[];
 }): void {
   chrome.contextMenus.create(menu, () => {
     if (chromeRuntimeError()) logChromeErrorMessage();
@@ -93,7 +94,7 @@ function createRadioMenuItems(menu: {
   id: string;
   title: string;
   parentId: string;
-  contexts: chrome.contextMenus.ContextType[];
+  contexts: ContextType[];
 }): void {
   switch (menu.id) {
     case SPEED_MENU_ID:
@@ -113,7 +114,7 @@ async function createSpeedRadioMenuItems(menu: {
   id: string;
   title: string;
   parentId: string;
-  contexts: chrome.contextMenus.ContextType[];
+  contexts: ContextType[];
 }): Promise<void> {
   const rate = await getRate();
   SPEED_OPTIONS.forEach(speed => {
@@ -136,7 +137,7 @@ async function createVoicesRadioMenuItems(menu: {
   id: string;
   title: string;
   parentId: string;
-  contexts: chrome.contextMenus.ContextType[];
+  contexts: ContextType[];
 }): Promise<void> {
   const voices = await getTtsVoices();
   const voiceName = await getVoiceName();
@@ -160,7 +161,7 @@ async function createPitchRadioMenuItems(menu: {
   id: string;
   title: string;
   parentId: string;
-  contexts: chrome.contextMenus.ContextType[];
+  contexts: ContextType[];
 }): Promise<void> {
   const pitchFromStore = await getPitch();
   PITCH_OPTIONS.forEach(pitch => {

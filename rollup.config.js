@@ -1,37 +1,29 @@
-import commonjs from "@rollup/plugin-commonjs";
-import copy from "rollup-plugin-copy";
-import resolve from "@rollup/plugin-node-resolve";
 import summary from "rollup-plugin-summary";
-import { terser } from "rollup-plugin-terser";
-
-const INPUT_OPTIONS = { cache: true };
+import typescript from 'rollup-plugin-typescript2';
+import { chromeExtension, simpleReloader } from 'rollup-plugin-chrome-extension'
+import { emptyDir } from 'rollup-plugin-empty-dir'
+import zip from 'rollup-plugin-zip'
 
 const OUTPUT_OPTIONS = {
-  dir: "out",
+  format: "esm",
+  dir: "dist",
   compact: true,
   noConflict: true,
   preferConst: true
 };
 
-const STANDARD_PLUGINS = [
-  resolve(),
-  commonjs(),
-  terser({ mangle: false }),
-  summary()
+const PLUGINS = [
+  chromeExtension(),
+  simpleReloader(),
+  typescript(),
+  emptyDir(),
+  summary(),
+  zip({ dir: 'releases' }),
 ];
 
-const COPY_PLUGIN = copy({
-  targets: [
-    { src: "public/*", dest: "dist" },
-    { src: "out/*.js", dest: ["public/js", "dist/js"] }
-  ],
-  hook: "writeBundle",
-  copyOnce: true
-});
-
 export default {
-  input: ["build/background.js", "build/context.js", "build/content.js"],
-  output: { format: "esm", ...OUTPUT_OPTIONS },
-  plugins: [...STANDARD_PLUGINS, COPY_PLUGIN],
-  ...INPUT_OPTIONS
+  cache: true,
+  input: "src/manifest.json",
+  output: OUTPUT_OPTIONS,
+  plugins: PLUGINS,
 };
