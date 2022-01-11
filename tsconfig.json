@@ -1,7 +1,5 @@
 {
   "compilerOptions": {
-    // "target": "ESNext",
-    // "module": "ESNext",
     "newLine": "LF",
     "rootDir": "src",
     "moduleResolution": "Node",
