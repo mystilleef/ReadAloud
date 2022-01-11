@@ -30,6 +30,7 @@
     "predist": "npm run clean",
     "dist": "npm run build",
     "prewatch": "npm run dist",
+    "zip": "zip -r zip/readaloud.zip dist",
     "watch": "tsc -b -w & rollup -cw"
   },
   "dependencies": {
