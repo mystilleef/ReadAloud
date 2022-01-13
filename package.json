@@ -25,13 +25,11 @@
     "typescript": "^4.5.4"
   },
   "scripts": {
-    "clean": "rimraf build dist out releases public/js tsconfig.tsbuildinfo",
+    "clean": "rimraf build dist out public/js tsconfig.tsbuildinfo",
     "check": "eslint src/**",
     "build": "rollup -c",
     "predist": "npm run clean",
     "dist": "npm run build",
-    "prezip": "npm run dist",
-    "zip": "mkdir zip & zip -r zip/readaloud.zip dist",
     "watch": "rollup -cw"
   },
   "dependencies": {
