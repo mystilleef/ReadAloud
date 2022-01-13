@@ -64,19 +64,17 @@ const TOP_LEVEL_MENU_INFO = [
 const SPEED_OPTIONS = [1, 1.2, 1.4, 1.6, 1.8, 2];
 const PITCH_OPTIONS = [0, 0.5, 1, 1.5, 2];
 
-chrome.runtime.onInstalled.addListener(() => {
-  chrome.contextMenus.create(
-    {
-      title: "Read Aloud",
-      id: READ_ALOUD_ROOT_MENU_ID,
-      contexts: CONTEXTS
-    },
+export function createContextMenu() {
+  chrome.contextMenus.create({
+    title: "Read Aloud",
+    id: READ_ALOUD_ROOT_MENU_ID,
+    contexts: CONTEXTS
+  },
     () => {
       if (chromeRuntimeError()) logChromeErrorMessage();
       else TOP_LEVEL_MENU_INFO.forEach(createTopLevelMenus);
-    }
-  );
-});
+    });
+}
 
 function createTopLevelMenus(menu: {
   id: string;
@@ -180,12 +178,14 @@ async function createPitchRadioMenuItems(menu: {
   );
 }
 
-chrome.contextMenus.onClicked.addListener((info, _tab) => {
+export function addListenersToContextMenus(
+  info: chrome.contextMenus.OnClickData
+) {
   if (info.menuItemId === RESET_DEFAULT_MENU_ID) resetToDefault();
   else onRadioMenuItemClick(info);
-});
 
-// noinspection FunctionTooLongJS
+}
+
 function onRadioMenuItemClick(info: chrome.contextMenus.OnClickData): void {
   switch (info.parentMenuItemId) {
     case VOICES_MENU_ID:
@@ -212,13 +212,7 @@ function numberValueFrom(id: string | number): number {
   return Number(id.split(SUBMENU_ID_DELIMETER).pop());
 }
 
-chrome.storage.onChanged.addListener(
-  (_changes: chrome.storage.StorageChange, _areaName: string) => {
-    resolveStorageConfigurations();
-  }
-);
-
-function resolveStorageConfigurations(): void {
+export function resolveStorageConfigurations(): void {
   getStorageOptions().then(updateSubMenus).catch(doNothing);
 }
 
