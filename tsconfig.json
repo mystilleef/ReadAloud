@@ -18,6 +18,7 @@
     "allowUnusedLabels": false,
     "checkJs": true,
     "composite": true,
+    "declarationDir": "./types",
     "disableSizeLimit": true,
     "downlevelIteration": true,
     "esModuleInterop": true,
