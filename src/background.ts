@@ -4,7 +4,7 @@ import {
   resolveStorageConfigurations
 } from "./context";
 
-import { logError } from "./error";
+import { logChromeErrorMessage, logError } from "./error";
 import { read, stop } from "./reader";
 import { isSpeaking } from "./utils";
 
@@ -14,7 +14,7 @@ chrome.runtime.onInstalled.addListener(createContextMenu);
 
 
 chrome.contextMenus.onClicked.addListener((info, _tab) => {
-  addListenersToContextMenus(info);
+  addListenersToContextMenus(info).then().catch(logChromeErrorMessage);
 });
 
 

@@ -10,10 +10,10 @@ import {
   getRate,
   getStorageOptions,
   getVoiceName,
+  storeDefaultOptions,
   storePitch,
   storeRate,
-  storeVoice,
-  VoiceStorageOptions
+  storeVoice
 } from "./storage";
 import { getTtsVoices } from "./utils";
 
@@ -177,10 +177,10 @@ async function createPitchRadioMenuItems(menu: {
   );
 }
 
-export function addListenersToContextMenus(
+export async function addListenersToContextMenus(
   info: chrome.contextMenus.OnClickData
 ) {
-  if (info.menuItemId === RESET_DEFAULT_MENU_ID) resetToDefault();
+  if (info.menuItemId === RESET_DEFAULT_MENU_ID) await resetToDefault();
   else onRadioMenuItemClick(info);
 
 }
@@ -215,7 +215,9 @@ export function resolveStorageConfigurations(): void {
   getStorageOptions().then(updateSubMenus).catch(doNothing);
 }
 
-function updateSubMenus(result: VoiceStorageOptions): void {
+function updateSubMenus(
+  result: { rate: number, pitch: number, voiceName: string }
+): void {
   const MENU_IDS = [
     `${PITCH_SUBMENU_ID_KEY}${result.pitch}`,
     `${VOICES_SUBMENU_ID_KEY}${result.voiceName}`,
@@ -227,6 +229,6 @@ function updateSubMenus(result: VoiceStorageOptions): void {
   );
 }
 
-function resetToDefault(): void {
-  chrome.storage.sync.clear(logChromeErrorMessage);
+async function resetToDefault(): Promise<void> {
+  await storeDefaultOptions();
 }

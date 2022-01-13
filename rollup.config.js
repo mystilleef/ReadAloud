@@ -5,6 +5,8 @@ import typescript from 'rollup-plugin-typescript2';
 import zip from 'rollup-plugin-zip'
 import { chromeExtension, simpleReloader } from 'rollup-plugin-chrome-extension'
 import { emptyDir } from 'rollup-plugin-empty-dir'
+import resolve from '@rollup/plugin-node-resolve'
+import commonjs from '@rollup/plugin-commonjs'
 
 const isProduction = process.env.NODE_ENV === 'production'
 
@@ -20,6 +22,8 @@ const OUTPUT_OPTIONS = {
 const PLUGINS = [
   chromeExtension(),
   simpleReloader(),
+  resolve(),
+  commonjs(),
   replace({
     preventAssignment: true,
     'process.env.NODE_ENV': isProduction
