@@ -1,29 +1,8 @@
-import {
-  addListenersToContextMenus,
-  createContextMenu,
-  resolveStorageConfigurations
-} from "./context";
-
 import { logError } from "./error";
 import { read, stop } from "./reader";
 import { isSpeaking } from "./utils";
 
 const COMMAND = "read-aloud-selected-text";
-
-chrome.runtime.onInstalled.addListener(createContextMenu);
-
-
-chrome.contextMenus.onClicked.addListener((info, _tab) => {
-  addListenersToContextMenus(info);
-});
-
-
-chrome.storage.onChanged.addListener(
-  (_changes: chrome.storage.StorageChange, _areaName: string) => {
-    resolveStorageConfigurations();
-  }
-);
-
 
 chrome.commands.onCommand.addListener(handleChromeCommand);
 
@@ -57,9 +36,7 @@ function handleReadSelectionMessage(
   sender: chrome.runtime.MessageSender,
   _senderResponse: (response: { result: string }) => void
 ): void {
-  console.log("handle read selection messages");
   if (sender.id !== chrome.runtime.id) return;
   if (request.message === "READ_SELECTION" && request.selection !== "")
     read(request.selection).catch(logError);
 }
-

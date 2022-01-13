@@ -1,10 +1,10 @@
 import { PITCH, RATE, VOICENAME } from "./constants";
 import { chromeRuntimeError, logChromeErrorMessage } from "./error";
 
-const DEFAULT_RATE      = 1.2;
-const DEFAULT_PITCH     = 0;
+const DEFAULT_RATE = 1.2;
+const DEFAULT_PITCH = 0;
 const DEFAULT_VOICENAME = "Google UK English Female";
-const STORAGE_KEYS      = [PITCH, VOICENAME, RATE];
+const STORAGE_KEYS = [PITCH, VOICENAME, RATE];
 
 export interface VoiceStorageOptions {
   readonly [index: string]: number | string | undefined;
@@ -15,8 +15,8 @@ export interface VoiceStorageOptions {
 }
 
 async function getStorageOptions(): Promise<VoiceStorageOptions> {
-  const rate      = await getRate() as number;
-  const pitch     = await getPitch() as number;
+  const rate = await getRate() as number;
+  const pitch = await getPitch() as number;
   const voiceName = await getVoiceName() as string;
   return { rate, pitch, voiceName };
 }
@@ -36,24 +36,14 @@ async function getRate(): Promise<string | number> {
 async function getValueFromStorage(key: string): Promise<string | number> {
   return new Promise((resolve, reject): void => {
     if (STORAGE_KEYS.includes(key))
-      valueFromChromeStorage(key, resolve);
+      chrome.storage.sync.get(key, item => {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+        if (valueDoesNotExist(item[key])) resolveDefaultValue(key, resolve);
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+        else resolve(item[key]);
+      });
     else
       reject(new Error(`${key} is not a valid keystore`));
-  });
-}
-
-function valueFromChromeStorage(
-  key: string,
-  resolve: {
-    (value: string | number): void;
-    (arg0: string | number): void;
-  }
-): void {
-  chrome.storage.sync.get(key, item => {
-    if (valueDoesNotExist(item[key]))
-      resolveDefaultValue(key, resolve);
-    else
-      resolve(item[key]);
   });
 }
 
