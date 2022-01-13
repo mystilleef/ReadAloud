@@ -2,7 +2,15 @@
   "$schema": "https://json.schemastore.org/tsconfig",
   "display": "Google Chrome Extension",
   "compileOnSave": true,
-  "exclude": ["node_modules", "dist", "out", "public", "build", "**/*.js"],
+  "exclude": [
+    "node_modules",
+    "releases",
+    "dist",
+    "out",
+    "public",
+    "build",
+    "**/*.js"
+  ],
   "compilerOptions": {
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
@@ -14,7 +22,6 @@
     "downlevelIteration": true,
     "esModuleInterop": true,
     "exactOptionalPropertyTypes": true,
-    "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,
     "importHelpers": true,
     "importsNotUsedAsValues": "error",
