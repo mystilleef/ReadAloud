@@ -5,6 +5,7 @@ import {
 } from "./context";
 
 import { logChromeErrorMessage, logError } from "./error";
+import { readStream, sendSelectedText } from "./message";
 import { read, stop } from "./reader";
 import { isSpeaking } from "./utils";
 
@@ -12,18 +13,15 @@ const COMMAND = "read-aloud-selected-text";
 
 chrome.runtime.onInstalled.addListener(createContextMenu);
 
-
 chrome.contextMenus.onClicked.addListener((info, _tab) => {
-  addListenersToContextMenus(info).then().catch(logChromeErrorMessage);
+  addListenersToContextMenus(info).catch(logChromeErrorMessage);
 });
-
 
 chrome.storage.onChanged.addListener(
   (_changes: chrome.storage.StorageChange, _areaName: string) => {
     resolveStorageConfigurations();
   }
 );
-
 
 chrome.commands.onCommand.addListener(handleChromeCommand);
 
@@ -45,21 +43,15 @@ function queryContentForSelection(): void {
     { active: true, currentWindow: true },
     (tabs: chrome.tabs.Tab[]): void => {
       const tabid = tabs[0].id || -1;
-      if (tabid) chrome.tabs.sendMessage(tabid, { query: "GET_SELECTION" });
+      if (tabid < 0) return;
+      const options = { tabId: tabid };
+      sendSelectedText("", options).catch(logChromeErrorMessage);
     }
   );
 }
 
-chrome.runtime.onMessage.addListener(handleReadSelectionMessage);
-
-function handleReadSelectionMessage(
-  request: { message: string; selection: string; speaking: boolean },
-  sender: chrome.runtime.MessageSender,
-  _senderResponse: (response: { result: string }) => void
-): void {
-  console.log("handle read selection messages");
+readStream.subscribe(([selectedText, sender]) => {
   if (sender.id !== chrome.runtime.id) return;
-  if (request.message === "READ_SELECTION" && request.selection !== "")
-    read(request.selection).catch(logError);
-}
+  read(selectedText).catch(logError);
+});
 
