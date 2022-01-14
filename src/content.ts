@@ -1,3 +1,6 @@
+import { logChromeErrorMessage } from "./error";
+import { selectedTextStream, sendRead } from "./message";
+
 const SELECTION_TIMEOUT = 500;
 let TIMEOUT_ID = 0;
 
@@ -6,22 +9,13 @@ document.addEventListener("mouseup", _e => {
   TIMEOUT_ID = window.setTimeout(sendSelectedTextMessage, SELECTION_TIMEOUT);
 });
 
-chrome.runtime.onMessage.addListener(handleSelectionMessage);
-
-function handleSelectionMessage(
-  request: { query: string },
-  _sender: chrome.runtime.MessageSender,
-  _senderResponse: (response: { result: string }) => void
-): boolean {
-  if (request.query === "GET_SELECTION") sendSelectedTextMessage();
-  return true;
-}
+selectedTextStream.subscribe(([_data, sender]) => {
+  if (sender.id !== chrome.runtime.id) return;
+  sendSelectedTextMessage();
+});
 
 function sendSelectedTextMessage(): void {
-  chrome.runtime.sendMessage(chrome.runtime.id, {
-    message: "READ_SELECTION",
-    selection: selectedText().trim()
-  });
+  sendRead(selectedText().trim()).catch(logChromeErrorMessage);
 }
 
 function selectedText(): string {

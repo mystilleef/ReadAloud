@@ -44,6 +44,7 @@
     "watch": "rollup -cw"
   },
   "dependencies": {
+    "@extend-chrome/messages": "^1.2.2",
     "@extend-chrome/storage": "^1.5.0",
     "eslint-plugin-prettier": "^4.0.0"
   }
