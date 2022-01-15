@@ -12,6 +12,11 @@ import { isSpeaking } from "./utils";
 
 const COMMAND = "read-aloud-selected-text";
 
+readStream.subscribe(([selectedText, sender]) => {
+  if (sender.id !== EXTENSION_ID) return;
+  read(selectedText).catch(logError);
+});
+
 chrome.runtime.onInstalled.addListener(createContextMenu);
 
 chrome.contextMenus.onClicked.addListener((info, _tab) => {
@@ -50,9 +55,4 @@ function queryContentForSelection(): void {
     }
   );
 }
-
-readStream.subscribe(([selectedText, sender]) => {
-  if (sender.id !== EXTENSION_ID) return;
-  read(selectedText).catch(logError);
-});
 
