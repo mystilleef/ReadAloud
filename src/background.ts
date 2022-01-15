@@ -1,4 +1,4 @@
-import { chromeaction } from "./constants";
+import { chromeaction, EXTENSION_ID } from "./constants";
 import {
   addListenersToContextMenus,
   createContextMenu,
@@ -24,15 +24,15 @@ chrome.storage.onChanged.addListener(
   }
 );
 
-chrome.commands.onCommand.addListener(handleChromeCommand);
+chrome.commands.onCommand.addListener(onChromeCommand);
 
-function handleChromeCommand(command: string): void {
+function onChromeCommand(command: string): void {
   if (command === COMMAND) queryContentForSelection();
 }
 
-chromeaction.onClicked.addListener(handleBrowserAction);
+chromeaction.onClicked.addListener(onAction);
 
-function handleBrowserAction(_tab: chrome.tabs.Tab): void {
+function onAction(_tab: chrome.tabs.Tab): void {
   const stopOrQuery = (speaking: boolean): void => {
     speaking ? stop() : queryContentForSelection();
   };
@@ -52,7 +52,7 @@ function queryContentForSelection(): void {
 }
 
 readStream.subscribe(([selectedText, sender]) => {
-  if (sender.id !== chrome.runtime.id) return;
+  if (sender.id !== EXTENSION_ID) return;
   read(selectedText).catch(logError);
 });
 
