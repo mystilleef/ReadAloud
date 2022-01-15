@@ -2,15 +2,7 @@
   "$schema": "https://json.schemastore.org/tsconfig",
   "display": "Google Chrome Extension",
   "compileOnSave": true,
-  "exclude": [
-    "node_modules",
-    "releases",
-    "dist",
-    "out",
-    "public",
-    "build",
-    "**/*.js"
-  ],
+  "exclude": ["node_modules", "releases", "dist", "out", "public", "build"],
   "compilerOptions": {
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
@@ -18,7 +10,6 @@
     "allowUnusedLabels": false,
     "checkJs": true,
     "composite": true,
-    "declarationDir": "./types",
     "disableSizeLimit": true,
     "downlevelIteration": true,
     "esModuleInterop": true,
