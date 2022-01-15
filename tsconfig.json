@@ -19,6 +19,7 @@
     "importsNotUsedAsValues": "error",
     "incremental": true,
     "inlineSources": true,
+    "lib": ["esnext", "webworker", "dom"],
     "module": "esnext",
     "moduleResolution": "node",
     "newLine": "lf",
@@ -35,6 +36,6 @@
     "sourceMap": true,
     "strict": true,
     "stripInternal": true,
-    "target": "es2020"
+    "target": "es2021"
   }
 }
