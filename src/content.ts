@@ -1,8 +1,16 @@
 import { logError } from "./error";
-import { selectedTextStream, sendRead } from "./message";
+import {
+  selectedTextStream,
+  sendRead,
+  sendRefreshTts,
+  startedSpeakingStream,
+  stoppedSpeakingStream
+} from "./message";
 
-const SELECTION_TIMEOUT = 500;
 let TIMEOUT_ID = 0;
+let SPEAKING_TIMEOUT_ID = 0;
+const SELECTION_TIMEOUT = 500;
+const SPEAKING_TIMEOUT = 5000;
 
 document.addEventListener("mouseup", _e => {
   window.clearTimeout(TIMEOUT_ID);
@@ -12,6 +20,21 @@ document.addEventListener("mouseup", _e => {
 selectedTextStream.subscribe(([_data, sender]) => {
   if (sender.id !== chrome.runtime.id) return;
   sendSelectedTextMessage();
+});
+
+startedSpeakingStream.subscribe(([_data, sender]) => {
+  if (sender.id !== chrome.runtime.id) return;
+  window.clearTimeout(SPEAKING_TIMEOUT_ID);
+  SPEAKING_TIMEOUT_ID = window.setInterval(
+    () => {
+      sendRefreshTts().catch(logError);
+    },
+    SPEAKING_TIMEOUT);
+});
+
+stoppedSpeakingStream.subscribe(([_data, sender]) => {
+  if (sender.id !== chrome.runtime.id) return;
+  window.clearTimeout(SPEAKING_TIMEOUT_ID);
 });
 
 function sendSelectedTextMessage(): void {

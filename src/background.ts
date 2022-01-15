@@ -1,8 +1,8 @@
 import { EXTENSION_ID } from "./constants";
-import { isSpeaking } from "./utils";
+import { isSpeaking, messageToContentScript } from "./utils";
 import { logError } from "./error";
-import { read, stop } from "./reader";
-import { readStream, sendSelectedText } from "./message";
+import { read, stop, refresh } from "./reader";
+import { readStream, refreshTtsStream, sendSelectedText } from "./message";
 import {
   addListenersToContextMenus,
   createContextMenu,
@@ -14,6 +14,11 @@ const COMMAND = "read-aloud-selected-text";
 readStream.subscribe(([selectedText, sender]) => {
   if (sender.id !== EXTENSION_ID) return;
   read(selectedText).catch(logError);
+});
+
+refreshTtsStream.subscribe(([_data, sender]) => {
+  if (sender.id !== EXTENSION_ID) return;
+  refresh();
 });
 
 chrome.contextMenus.onClicked.addListener((info, _tab) => {
@@ -42,15 +47,7 @@ function onAction(_tab: chrome.tabs.Tab): void {
 }
 
 function queryContentForSelection(): void {
-  chrome.tabs.query(
-    { active: true, currentWindow: true },
-    (tabs: chrome.tabs.Tab[]): void => {
-      const tabid = tabs[0].id || -1;
-      if (tabid < 0) return;
-      const options = { tabId: tabid };
-      sendSelectedText("", options).catch(logError);
-    }
-  );
+  messageToContentScript(sendSelectedText, "").catch(logError);
 }
 
 chrome.runtime.onInstalled.addListener(createContextMenu);

@@ -1,11 +1,22 @@
 import badgeCounter from "./counter";
 import updateBrowserIcon from "./icon";
-import { isSpeaking } from "./utils";
+import { isSpeaking, messageToContentScript } from "./utils";
 import { logError } from "./error";
 import type { __assign } from "tslib";
+import { sendStartedSpeaking, sendStoppedSpeaking } from "./message";
 
 const ALARM_NAME = "readaloud-tts-alarm";
-const DELAY_IN_MINUTES = 1;
+const PERIOD_IN_MINUTES = 1;
+
+chrome.runtime.onInstalled.addListener(() => {
+  chrome.alarms.get(ALARM_NAME, present => {
+    if (!present)
+      chrome.alarms.create(ALARM_NAME, {
+        delayInMinutes: PERIOD_IN_MINUTES,
+        periodInMinutes: PERIOD_IN_MINUTES
+      });
+  });
+});
 
 export function onTtsEvent(event: chrome.tts.TtsEvent): void {
   isSpeaking().then(updateBrowserIcon).catch(logError);
@@ -25,41 +36,32 @@ function onError(message: string): void {
 }
 
 export function stop(): void {
-  stopTtsTimer();
   chrome.tts.stop();
   badgeCounter.reset().catch(logError);
+  messageToContentScript(sendStoppedSpeaking, "").catch(logError);
 }
 
 function onStart() {
-  stopTtsTimer();
-  resumeTtsTimer();
   refreshTts();
+  messageToContentScript(sendStartedSpeaking, "").catch(logError);
 }
 
 function onInterrupted() {
   refreshTts();
-  resumeTtsTimer();
+  messageToContentScript(sendStoppedSpeaking, "").catch(logError);
 }
 
 function onEnd() {
-  stopTtsTimer();
   badgeCounter.decrement().catch(logError);
   refreshTts();
+  messageToContentScript(sendStoppedSpeaking, "").catch(logError);
 }
 
-function resumeTtsTimer() {
-  chrome.alarms.create(ALARM_NAME, { delayInMinutes: DELAY_IN_MINUTES });
-}
-
-function stopTtsTimer() {
-  chrome.alarms.clear(ALARM_NAME).catch(logError);
-}
-
-chrome.alarms.onAlarm.addListener(() => {
-  resetTts();
+chrome.alarms.onAlarm.addListener(alarm => {
+  if (alarm.name === ALARM_NAME) resetTts();
 });
 
-function resetTts(): void {
+export function resetTts(): void {
   isSpeaking().then(refreshTts).catch(logError);
 }
 
