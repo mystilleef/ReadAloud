@@ -2,6 +2,7 @@
   "$schema": "https://json.schemastore.org/tsconfig",
   "display": "Google Chrome Extension",
   "compileOnSave": true,
+  "include": ["./src"],
   "exclude": ["node_modules", "releases", "dist", "out", "public", "build"],
   "compilerOptions": {
     "allowJs": true,
@@ -23,6 +24,7 @@
     "module": "esnext",
     "moduleResolution": "node",
     "newLine": "lf",
+    "noEmit": true,
     "noEmitHelpers": true,
     "noEmitOnError": true,
     "noFallthroughCasesInSwitch": true,
@@ -36,6 +38,6 @@
     "sourceMap": true,
     "strict": true,
     "stripInternal": true,
-    "target": "es2021"
+    "target": "esnext"
   }
 }
