@@ -1,6 +1,6 @@
 {
-  "manifest_version": 2,
-  "background": {"scripts": ["background.ts"]},
+  "manifest_version": 3,
+  "background": {"service_worker": "background.ts", "type": "module"},
   "content_scripts": [
     {
       "all_frames": true,
@@ -8,7 +8,7 @@
       "js": ["content.ts"]
     }
   ],
-  "browser_action": {
+  "action": {
     "default_title": "Read aloud selected text",
     "default_icon": {
       "16": "images/default16.png",
@@ -29,5 +29,15 @@
     "48": "images/default48.png",
     "128": "images/default128.png"
   },
-  "web_accessible_resources": ["images/default.svg", "images/stop.svg"]
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "images/default.svg",
+        "images/stop.svg",
+        "images/default.png",
+        "images/stop.png"
+      ],
+      "matches": ["<all_urls>"]
+    }
+  ]
 }

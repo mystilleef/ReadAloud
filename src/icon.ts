@@ -1,5 +1,3 @@
-import { chromeaction } from "./constants";
-
 async function updateBrowserIcon(speaking: boolean): Promise<void> {
   if (speaking) await setStopIcon();
   else await setDefaultIcon();
@@ -16,16 +14,13 @@ async function setStopIcon(): Promise<void> {
 }
 
 async function setIcon(name: string): Promise<void> {
-  return new Promise<void>(resolve => {
-    const details = { path: `images/${name}.svg` };
-    resolve(chromeaction.setIcon(details));
-  });
+  const details = { path: `images/${name}.png` };
+  // eslint-disable-next-line @typescript-eslint/await-thenable
+  await chrome.action.setIcon(details);
 }
 
 async function setTooltip(tip: string): Promise<void> {
-  return new Promise<void>(resolve => {
-    resolve(chromeaction.setTitle({ title: tip }));
-  });
+  await chrome.action.setTitle({ title: tip });
 }
 
 export { updateBrowserIcon as default };

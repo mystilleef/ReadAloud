@@ -2,9 +2,10 @@ import badgeCounter from "./counter";
 import updateBrowserIcon from "./icon";
 import { isSpeaking } from "./utils";
 import { logError } from "./error";
+import type { __assign } from "tslib";
 
-let TIMEOUT_RESUME_SPEAKING = 0;
-const RESET_INTERVAL = 5000;
+const ALARM_NAME = "readaloud-tts-alarm";
+const DELAY_IN_MINUTES = 1;
 
 export function onTtsEvent(event: chrome.tts.TtsEvent): void {
   isSpeaking().then(updateBrowserIcon).catch(logError);
@@ -47,12 +48,16 @@ function onEnd() {
 }
 
 function resumeTtsTimer() {
-  TIMEOUT_RESUME_SPEAKING = window.setInterval(resetTts, RESET_INTERVAL);
+  chrome.alarms.create(ALARM_NAME, { delayInMinutes: DELAY_IN_MINUTES });
 }
 
 function stopTtsTimer() {
-  clearTimeout(TIMEOUT_RESUME_SPEAKING);
+  chrome.alarms.clear(ALARM_NAME).catch(logError);
 }
+
+chrome.alarms.onAlarm.addListener(() => {
+  resetTts();
+});
 
 function resetTts(): void {
   isSpeaking().then(refreshTts).catch(logError);
