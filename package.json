@@ -12,6 +12,16 @@
     "typescript",
     "read aloud"
   ],
+  "scripts": {
+    "clean": "rimraf build dist out public/js tsconfig.tsbuildinfo",
+    "check": "eslint src/**",
+    "build": "rollup -c",
+    "predist": "npm run clean",
+    "dist": "npm run build",
+    "release": "cross-env NODE_ENV=production npm run dist",
+    "prewatch": "npm run clean",
+    "watch": "rollup -cw"
+  },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^21.0.1",
     "@rollup/plugin-node-resolve": "^13.1.3",
@@ -33,15 +43,6 @@
     "rollup-plugin-zip": "^1.0.3",
     "tslib": "^2.3.1",
     "typescript": "^4.5.4"
-  },
-  "scripts": {
-    "clean": "rimraf build dist out public/js tsconfig.tsbuildinfo",
-    "check": "eslint src/**",
-    "build": "rollup -c",
-    "predist": "npm run clean",
-    "dist": "npm run build",
-    "release": "cross-env NODE_ENV=production npm run dist",
-    "watch": "rollup -cw"
   },
   "dependencies": {
     "@extend-chrome/messages": "^1.2.2",
