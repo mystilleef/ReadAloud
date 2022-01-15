@@ -1,3 +1,4 @@
+import { chromeaction } from "./constants";
 import {
   addListenersToContextMenus,
   createContextMenu,
@@ -29,7 +30,7 @@ function handleChromeCommand(command: string): void {
   if (command === COMMAND) queryContentForSelection();
 }
 
-chrome.browserAction.onClicked.addListener(handleBrowserAction);
+chromeaction.onClicked.addListener(handleBrowserAction);
 
 function handleBrowserAction(_tab: chrome.tabs.Tab): void {
   const stopOrQuery = (speaking: boolean): void => {

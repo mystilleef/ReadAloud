@@ -1,3 +1,4 @@
+import { chromeaction } from "./constants";
 import { isSpeaking } from "./utils";
 
 class BadgeCounter {
@@ -25,7 +26,7 @@ class BadgeCounter {
   private async updateText(): Promise<void> {
     return new Promise<void>(resolve => {
       resolve(
-        chrome.browserAction.setBadgeText({
+        chromeaction.setBadgeText({
           text: `${this.counter === 0 ? "" : this.counter}`
         })
       );
