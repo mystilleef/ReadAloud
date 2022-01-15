@@ -31,7 +31,12 @@
   },
   "web_accessible_resources": [
     {
-      "resources": ["images/default.svg", "images/stop.svg"],
+      "resources": [
+        "images/default.svg",
+        "images/stop.svg",
+        "images/default.png",
+        "images/stop.png"
+      ],
       "matches": ["<all_urls>"]
     }
   ]
