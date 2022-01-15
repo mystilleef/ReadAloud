@@ -20,9 +20,9 @@ async function speak(
 async function getSpeakOptions(): Promise<chrome.tts.SpeakOptions> {
   const { rate, pitch, voiceName } = await getStorageOptions();
   return {
-    pitch: pitch as number,
-    rate: rate as number,
-    voiceName: voiceName as string,
+    pitch,
+    rate,
+    voiceName,
     volume: 1,
     enqueue: true,
     onEvent: onTtsEvent
