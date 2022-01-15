@@ -3,6 +3,7 @@ import type { ManifestV3 } from "rollup-plugin-chrome-extension";
 export const manifest: ManifestV3 = {
   "manifest_version": 3,
   "background": { "service_worker": "background.ts" },
+  "permissions": ["activeTab"],
   "content_scripts": [
     {
       "all_frames": true,
