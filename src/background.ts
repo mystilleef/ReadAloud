@@ -5,7 +5,7 @@ import {
   resolveStorageConfigurations
 } from "./context";
 
-import { logChromeErrorMessage, logError } from "./error";
+import { logError } from "./error";
 import { readStream, sendSelectedText } from "./message";
 import { read, stop } from "./reader";
 import { isSpeaking } from "./utils";
@@ -20,7 +20,7 @@ readStream.subscribe(([selectedText, sender]) => {
 chrome.runtime.onInstalled.addListener(createContextMenu);
 
 chrome.contextMenus.onClicked.addListener((info, _tab) => {
-  addListenersToContextMenus(info).catch(logChromeErrorMessage);
+  addListenersToContextMenus(info).catch(logError);
 });
 
 chrome.storage.onChanged.addListener(
@@ -51,7 +51,7 @@ function queryContentForSelection(): void {
       const tabid = tabs[0].id || -1;
       if (tabid < 0) return;
       const options = { tabId: tabid };
-      sendSelectedText("", options).catch(logChromeErrorMessage);
+      sendSelectedText("", options).catch(logError);
     }
   );
 }

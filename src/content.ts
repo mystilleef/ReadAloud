@@ -1,4 +1,4 @@
-import { logChromeErrorMessage } from "./error";
+import { logError } from "./error";
 import { selectedTextStream, sendRead } from "./message";
 
 const SELECTION_TIMEOUT = 500;
@@ -15,7 +15,7 @@ selectedTextStream.subscribe(([_data, sender]) => {
 });
 
 function sendSelectedTextMessage(): void {
-  sendRead(selectedText().trim()).catch(logChromeErrorMessage);
+  sendRead(selectedText().trim()).catch(logError);
 }
 
 function selectedText(): string {
