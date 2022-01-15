@@ -1,3 +1,5 @@
+import { chromeaction } from "./constants";
+
 async function updateBrowserIcon(speaking: boolean): Promise<void> {
   if (speaking) await setStopIcon();
   else await setDefaultIcon();
@@ -16,13 +18,13 @@ async function setStopIcon(): Promise<void> {
 async function setIcon(name: string): Promise<void> {
   return new Promise<void>(resolve => {
     const details = { path: `images/${name}.svg` };
-    resolve(chrome.browserAction.setIcon(details));
+    resolve(chromeaction.setIcon(details));
   });
 }
 
 async function setTooltip(tip: string): Promise<void> {
   return new Promise<void>(resolve => {
-    resolve(chrome.browserAction.setTitle({ title: tip }));
+    resolve(chromeaction.setTitle({ title: tip }));
   });
 }
 
