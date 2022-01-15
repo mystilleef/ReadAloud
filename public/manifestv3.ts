@@ -7,8 +7,8 @@ const manifest: ManifestV3 = {
     {
       "all_frames": true,
       "js": ["content.ts"],
-      "matches": ["<all_urls>"]
-      // "matches": ["https://*/*", "http://*/*"]
+      // "matches": ["<all_urls>"]
+      "matches": ["https://*/*", "http://*/*"]
     }
   ],
   "action": {
