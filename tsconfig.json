@@ -3,7 +3,7 @@
   "display": "Google Chrome Extension",
   "compileOnSave": true,
   "include": ["src", "vite.config.ts"],
-  "exclude": ["node_modules", "releases", "dist"],
+  "exclude": ["node_modules", "releases", "images", "dist"],
   "compilerOptions": {
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
@@ -37,6 +37,7 @@
     "skipLibCheck": true,
     "strict": true,
     "stripInternal": true,
-    "target": "esnext"
+    "target": "esnext",
+    "useDefineForClassFields": true
   }
 }
