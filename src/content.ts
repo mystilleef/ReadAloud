@@ -39,7 +39,7 @@ stoppedSpeakingStream.subscribe(([_data, sender]) => {
 
 function sendSelectedTextMessage(): void {
   const text = selectedText().trim();
-  if (text.length > 0) sendRead(text).catch(logError);
+  if (text) sendRead(text).catch(logError);
 }
 
 function selectedText(): string {
