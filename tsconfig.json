@@ -19,6 +19,7 @@
     "importHelpers": true,
     "importsNotUsedAsValues": "error",
     "incremental": true,
+    "isolatedModules": true,
     "lib": ["esnext", "webworker", "dom"],
     "module": "esnext",
     "moduleResolution": "node",

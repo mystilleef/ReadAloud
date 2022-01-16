@@ -2,7 +2,7 @@
   "name": "readaloud",
   "author": "Lateef Alabi-Oki <mystilleef@gmail.com>",
   "license": "GPL-3.0-or-later",
-  "version": "0.31.0",
+  "version": "0.31.4",
   "type": "module",
   "repository": "https://github.com/mystilleef/ReadAloud",
   "description": "An extension to read aloud selected text in Google Chrome",
@@ -13,11 +13,13 @@
     "read aloud"
   ],
   "scripts": {
-    "clean": "rimraf build dist out tsconfig.tsbuildinfo",
+    "clean": "rimraf dist tsconfig.tsbuildinfo",
     "check": "eslint src/**",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build --mode development",
     "predist": "npm run clean",
     "dist": "npm run build",
+    "prerelease": "npm run clean",
+    "release": "vite build --mode production",
     "prewatch": "npm run clean",
     "watch": "vite"
   },
@@ -36,6 +38,7 @@
     "rimraf": "^3.0.2",
     "rollup": "^2.64.0",
     "rollup-plugin-chrome-extension": "^4.0.1-11",
+    "rollup-plugin-zip": "^1.0.3",
     "tslib": "^2.3.1",
     "typescript": "^4.5.4",
     "vite": "^2.7.12"

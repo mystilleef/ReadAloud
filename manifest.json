@@ -1,11 +1,11 @@
 {
   "manifest_version": 3,
-  "background": {"service_worker": "background.ts", "type": "module"},
+  "background": {"service_worker": "src/background.ts", "type": "module"},
   "content_scripts": [
     {
       "all_frames": true,
       "matches": ["<all_urls>"],
-      "js": ["content.ts"]
+      "js": ["src/content.ts"]
     }
   ],
   "action": {
@@ -31,12 +31,7 @@
   },
   "web_accessible_resources": [
     {
-      "resources": [
-        "images/default.svg",
-        "images/stop.svg",
-        "images/default.png",
-        "images/stop.png"
-      ],
+      "resources": ["images/default.png", "images/stop.png"],
       "matches": ["<all_urls>"]
     }
   ]
