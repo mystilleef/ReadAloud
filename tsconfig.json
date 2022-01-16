@@ -2,8 +2,8 @@
   "$schema": "https://json.schemastore.org/tsconfig",
   "display": "Google Chrome Extension",
   "compileOnSave": true,
-  "include": ["./src", "vite.config.ts"],
-  "exclude": ["node_modules", "releases", "dist", "out", "public", "build"],
+  "include": ["src", "vite.config.ts"],
+  "exclude": ["node_modules", "releases", "dist"],
   "compilerOptions": {
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
