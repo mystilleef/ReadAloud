@@ -182,7 +182,6 @@ export async function addListenersToContextMenus(
 ) {
   if (info.menuItemId === RESET_DEFAULT_MENU_ID) await resetToDefault();
   else onRadioMenuItemClick(info);
-
 }
 
 function onRadioMenuItemClick(info: chrome.contextMenus.OnClickData): void {
