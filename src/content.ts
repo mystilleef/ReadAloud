@@ -16,7 +16,7 @@ startedSpeakingStream.subscribe(([_data, sender]) => {
   if (sender.id !== chrome.runtime.id) return;
   window.clearTimeout(SPEAKING_TIMEOUT_ID);
   SPEAKING_TIMEOUT_ID = window.setInterval(() => {
-      sendRefreshTts().catch(logError);
+      sendRefreshTts("").catch(logError);
     },
     SPEAKING_TIMEOUT);
 });
