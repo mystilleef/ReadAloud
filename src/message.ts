@@ -10,7 +10,7 @@ export const [sendStoppedSpeaking, stoppedSpeakingStream] =
   getMessage<string>("STOPPED_SPEAKING");
 
 export const [sendRefreshTts, refreshTtsStream] =
-  getMessage<void>("REFRESH_TTS");
+  getMessage<string>("REFRESH_TTS");
 
 export const [sendSelectedText, selectedTextStream] =
   getMessage<string>("SELECTED_TEXT");
