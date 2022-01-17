@@ -10,8 +10,7 @@ const PERIOD_IN_MINUTES = 1;
 
 chrome.runtime.onInstalled.addListener(() => {
   chrome.alarms.get(ALARM_NAME, present => {
-    if (!present)
-      chrome.alarms.create(ALARM_NAME, {
+    if (!present) chrome.alarms.create(ALARM_NAME, {
         delayInMinutes: PERIOD_IN_MINUTES,
         periodInMinutes: PERIOD_IN_MINUTES
       });
