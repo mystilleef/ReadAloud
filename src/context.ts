@@ -224,8 +224,7 @@ function updateSubMenus(
   ];
   MENU_IDS.forEach(id => {
     chrome.contextMenus.update(id, { checked: true }, logChromeErrorMessage);
-  }
-  );
+  });
 }
 
 async function resetToDefault(): Promise<void> {
