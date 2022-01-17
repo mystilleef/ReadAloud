@@ -18,7 +18,7 @@
     }
   },
   "commands": {
-    "read-aloud-selected-text": {
+    "read_aloud_selected_text": {
       "description": "Read aloud selected text",
       "suggested_key": {"default": "Ctrl+Space"}
     }

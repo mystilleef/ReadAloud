@@ -1,4 +1,4 @@
-import { EXTENSION_ID } from "./constants";
+import { READ_ALOUD_COMMAND_STRING, EXTENSION_ID } from "./constants";
 import { isSpeaking, messageToContentScript } from "./utils";
 import { logError } from "./error";
 import { read, stop, refresh } from "./reader";
@@ -9,7 +9,7 @@ import {
   resolveStorageConfigurations
 } from "./context";
 
-const COMMAND = "read-aloud-selected-text";
+const COMMAND = READ_ALOUD_COMMAND_STRING;
 
 readStream.subscribe(([selectedText, sender]) => {
   if (sender.id !== EXTENSION_ID) return;
@@ -50,4 +50,6 @@ function queryContentForSelection(): void {
   messageToContentScript(sendSelectedText, "").catch(logError);
 }
 
-chrome.runtime.onInstalled.addListener(createContextMenu);
+chrome.runtime.onInstalled.addListener(({reason}) => {
+  if (reason === chrome.runtime.OnInstalledReason.INSTALL) createContextMenu();
+});
