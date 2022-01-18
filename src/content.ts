@@ -8,22 +8,22 @@ import {
 } from "./message";
 
 let TIMEOUT_ID = 0;
-let SPEAKING_TIMEOUT_ID = 0;
+let REFRESH_TTS_TIMEOUT_ID = 0;
 const SELECTION_TIMEOUT = 500;
-const SPEAKING_TIMEOUT = 5000;
+const REFRESH_TTS_TIMEOUT = 5000;
 
 startedSpeakingStream.subscribe(([_data, sender]) => {
   if (sender.id !== chrome.runtime.id) return;
-  window.clearTimeout(SPEAKING_TIMEOUT_ID);
-  SPEAKING_TIMEOUT_ID = window.setInterval(() => {
+  window.clearTimeout(REFRESH_TTS_TIMEOUT_ID);
+  REFRESH_TTS_TIMEOUT_ID = window.setInterval(() => {
       sendRefreshTts("").catch(logError);
     },
-    SPEAKING_TIMEOUT);
+    REFRESH_TTS_TIMEOUT);
 });
 
 stoppedSpeakingStream.subscribe(([_data, sender]) => {
   if (sender.id !== chrome.runtime.id) return;
-  window.clearTimeout(SPEAKING_TIMEOUT_ID);
+  window.clearTimeout(REFRESH_TTS_TIMEOUT_ID);
 });
 
 selectedTextStream.subscribe(([_data, sender]) => {
