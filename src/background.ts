@@ -3,11 +3,8 @@ import { isSpeaking, messageToContentScript } from "./utils";
 import { logError } from "./error";
 import { read, stop, refresh } from "./reader";
 import { readStream, refreshTtsStream, sendSelectedText } from "./message";
-import {
-  addListenersToContextMenus,
-  createContextMenu,
-  resolveStorageConfigurations
-} from "./context";
+import { createContextMenu } from "./context";
+import { storeDefaultOptions } from "./storage";
 
 const COMMAND = READ_ALOUD_COMMAND_STRING;
 
@@ -20,16 +17,6 @@ refreshTtsStream.subscribe(([_data, sender]) => {
   if (sender.id !== EXTENSION_ID) return;
   refresh();
 });
-
-chrome.contextMenus.onClicked.addListener((info, _tab) => {
-  addListenersToContextMenus(info).catch(logError);
-});
-
-chrome.storage.onChanged.addListener(
-  (_changes: chrome.storage.StorageChange, _areaName: string) => {
-    resolveStorageConfigurations();
-  }
-);
 
 chrome.commands.onCommand.addListener(onChromeCommand);
 
@@ -51,5 +38,9 @@ function queryContentForSelection(): void {
 }
 
 chrome.runtime.onInstalled.addListener(({reason}) => {
-  if (reason === chrome.runtime.OnInstalledReason.INSTALL) createContextMenu();
+  if (reason === chrome.runtime.OnInstalledReason.INSTALL)
+    storeDefaultOptions().catch(logError);
 });
+
+chrome.runtime.onInstalled.addListener(createContextMenu);
+

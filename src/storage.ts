@@ -14,26 +14,29 @@ async function getStorageOptions() {
 
 async function getVoiceName(): Promise<string> {
   const voice = await storage.sync.get(VOICENAME);
-  return voice[VOICENAME] as string;
+  if (voice && voice[VOICENAME]) return voice[VOICENAME] as string;
+  return DEFAULT_VOICENAME;
 }
 
 async function getPitch(): Promise<number> {
   const pitch = await storage.sync.get(PITCH);
-  return Number(pitch[PITCH]);
+  if (pitch && pitch[PITCH] >= 0) return Number(pitch[PITCH]);
+  return DEFAULT_PITCH;
 }
 
 async function getRate(): Promise<number> {
   const rate = await storage.sync.get(RATE);
-  return Number(rate[RATE]);
+  if (rate && rate[RATE] > 0) return Number(rate[RATE]);
+  return DEFAULT_RATE;
 }
 
 async function storeDefaultOptions(): Promise<void> {
   await storage.sync.clear();
-  await store(DEFAULT_VOICENAME, DEFAULT_RATE, DEFAULT_PITCH);
-}
-
-async function store(voiceName: string, rate: number, pitch: number) {
-  await storage.sync.set({ rate, pitch, voiceName });
+  await storage.sync.set({
+    rate: DEFAULT_RATE,
+    pitch: DEFAULT_PITCH,
+    voiceName: DEFAULT_VOICENAME
+  });
 }
 
 async function storeVoice(voiceName: string) {
@@ -56,6 +59,5 @@ export {
   storeVoice,
   storePitch,
   storeRate,
-  store,
   storeDefaultOptions
 };
