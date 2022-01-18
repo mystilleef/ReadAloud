@@ -2,20 +2,7 @@ import badgeCounter from "./counter";
 import updateBrowserIcon from "./icon";
 import { isSpeaking, messageToContentScript } from "./utils";
 import { logError } from "./error";
-import type { __assign } from "tslib";
 import { sendStartedSpeaking, sendStoppedSpeaking } from "./message";
-
-const ALARM_NAME = "readaloud-tts-alarm";
-const PERIOD_IN_MINUTES = 1;
-
-chrome.runtime.onInstalled.addListener(() => {
-  chrome.alarms.get(ALARM_NAME, present => {
-    if (!present) chrome.alarms.create(ALARM_NAME, {
-        delayInMinutes: PERIOD_IN_MINUTES,
-        periodInMinutes: PERIOD_IN_MINUTES
-      });
-  });
-});
 
 export function onTtsEvent(event: chrome.tts.TtsEvent): void {
   isSpeaking().then(updateBrowserIcon).catch(logError);
@@ -41,24 +28,17 @@ export function stop(): void {
 }
 
 function onStart() {
-  refreshTts();
   messageToContentScript(sendStartedSpeaking, "").catch(logError);
 }
 
 function onInterrupted() {
-  refreshTts();
   messageToContentScript(sendStoppedSpeaking, "").catch(logError);
 }
 
 function onEnd() {
   badgeCounter.decrement().catch(logError);
-  refreshTts();
   messageToContentScript(sendStoppedSpeaking, "").catch(logError);
 }
-
-chrome.alarms.onAlarm.addListener(alarm => {
-  if (alarm.name === ALARM_NAME) resetTts();
-});
 
 export function resetTts(): void {
   isSpeaking().then(refreshTts).catch(logError);
