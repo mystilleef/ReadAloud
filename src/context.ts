@@ -60,8 +60,18 @@ const TOP_LEVEL_MENU_INFO = [
   }
 ];
 
-const SPEED_OPTIONS = [1, 1.2, 1.4, 1.6, 1.8, 2];
+const SPEED_OPTIONS = [1, 1.2, 1.4, 1.5, 1.6, 1.8, 2];
 const PITCH_OPTIONS = [0, 0.5, 1, 1.5, 2];
+
+chrome.storage.onChanged.addListener(
+  (_changes: chrome.storage.StorageChange, _areaName: string) => {
+    resolveStorageConfigurations();
+  }
+);
+
+chrome.contextMenus.onClicked.addListener((info, _tab) => {
+  addListenersToContextMenus(info).catch(logError);
+});
 
 export function createContextMenu() {
   chrome.contextMenus.create({
