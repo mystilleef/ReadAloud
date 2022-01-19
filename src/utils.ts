@@ -1,5 +1,7 @@
 import { logError } from "./error";
 
+export interface EmptyData { data?: string }
+
 async function getTtsVoices(): Promise<chrome.tts.TtsVoice[]> {
   return new Promise(resolve => {
     chrome.tts.getVoices(voices => resolve(voices));
@@ -13,8 +15,8 @@ async function isSpeaking(): Promise<boolean> {
 }
 
 export async function messageToContentScript(
-  func: (_arg0: unknown, _arg1: { tabId: number; }) => Promise<void>,
-  data: unknown
+  func: (_arg0: EmptyData, _arg1: { tabId: number; }) => Promise<void>,
+  data: EmptyData
 ): Promise<void> {
   return new Promise(_resolve => {
     chrome.tabs.query(

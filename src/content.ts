@@ -49,7 +49,7 @@ function sendSelectedTextMessage(): void {
 function startRefreshTimer() {
   stopRefreshTimer();
   REFRESH_TTS_TIMEOUT_ID = window.setInterval(() => {
-    sendRefreshTts("").catch(logError);
+    sendRefreshTts({}).catch(logError);
   }, REFRESH_TTS_TIMEOUT);
 }
 
@@ -60,7 +60,7 @@ function stopRefreshTimer() {
 function startTimeoutTimer() {
   stopTimeoutTimer();
   RESET_TIMEOUT_ID = window.setInterval(() => {
-    sendTimeout("").catch(logError);
+    sendTimeout({}).catch(logError);
   }, RESET_TIMEOUT);
 }
 

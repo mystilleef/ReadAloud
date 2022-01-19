@@ -41,7 +41,7 @@ function onAction(_tab: chrome.tabs.Tab): void {
 }
 
 function queryContentForSelection(): void {
-  messageToContentScript(sendSelectedText, "").catch(logError);
+  messageToContentScript(sendSelectedText, {}).catch(logError);
 }
 
 chrome.runtime.onInstalled.addListener(({ reason }) => {
