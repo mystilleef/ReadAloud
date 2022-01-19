@@ -46,6 +46,7 @@
     "multiline-ternary": ["error", "always-multiline"],
     "function-paren-newline": ["error", "multiline-arguments"],
     "no-ternary": ["off"],
+    "@typescript-eslint/no-explicit-any": ["error", {"fixToUnknown": true}],
     "object-property-newline": [
       "error",
       {"allowAllPropertiesOnSameLine": true}
