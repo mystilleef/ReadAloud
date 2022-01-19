@@ -26,20 +26,20 @@ function onError(message: string): void {
 export function stop(): void {
   chrome.tts.stop();
   badgeCounter.reset().catch(logError);
-  messageToContentScript(sendStoppedSpeaking, "").catch(logError);
+  messageToContentScript(sendStoppedSpeaking, {}).catch(logError);
 }
 
 function onStart() {
-  messageToContentScript(sendStartedSpeaking, "").catch(logError);
+  messageToContentScript(sendStartedSpeaking, {}).catch(logError);
 }
 
 function onInterrupted() {
-  messageToContentScript(sendStoppedSpeaking, "").catch(logError);
+  messageToContentScript(sendStoppedSpeaking, {}).catch(logError);
 }
 
 function onEnd() {
   badgeCounter.decrement().catch(logError);
-  messageToContentScript(sendStoppedSpeaking, "").catch(logError);
+  messageToContentScript(sendStoppedSpeaking, {}).catch(logError);
 }
 
 export function resetTts(): void {

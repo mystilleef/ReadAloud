@@ -1,19 +1,21 @@
+import type { EmptyData } from "./utils";
 import { getMessage } from "@extend-chrome/messages";
 
 export const [sendRead, readStream] =
   getMessage<string>("READ");
 
 export const [sendStartedSpeaking, startedSpeakingStream] =
-  getMessage<string>("STARTED_SPEAKING");
+  getMessage<EmptyData>("STARTED_SPEAKING");
 
 export const [sendStoppedSpeaking, stoppedSpeakingStream] =
-  getMessage<string>("STOPPED_SPEAKING");
+  getMessage<EmptyData>("STOPPED_SPEAKING");
 
 export const [sendRefreshTts, refreshTtsStream] =
-  getMessage<string>("REFRESH_TTS");
+  getMessage<EmptyData>("REFRESH_TTS");
 
 export const [sendTimeout, resetTimeout] =
-  getMessage<string>("RESET");
+  getMessage<EmptyData>("RESET");
 
 export const [sendSelectedText, selectedTextStream] =
-  getMessage<string>("SELECTED_TEXT");
+  getMessage<EmptyData>("SELECTED_TEXT");
+
