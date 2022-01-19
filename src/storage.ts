@@ -1,5 +1,5 @@
-import { storage } from "@extend-chrome/storage";
 import { PITCH, RATE, VOICENAME } from "./constants";
+import { storage } from "@extend-chrome/storage";
 
 const DEFAULT_RATE = 1.2;
 const DEFAULT_PITCH = 0;
@@ -9,7 +9,7 @@ async function getStorageOptions() {
   const rate = await getRate();
   const pitch = await getPitch();
   const voiceName = await getVoiceName();
-  return { rate, pitch, voiceName };
+  return { pitch, rate, voiceName };
 }
 
 async function getVoiceName(): Promise<string> {
@@ -33,8 +33,8 @@ async function getRate(): Promise<number> {
 async function storeDefaultOptions(): Promise<void> {
   await storage.sync.clear();
   await storage.sync.set({
-    rate: DEFAULT_RATE,
     pitch: DEFAULT_PITCH,
+    rate: DEFAULT_RATE,
     voiceName: DEFAULT_VOICENAME
   });
 }

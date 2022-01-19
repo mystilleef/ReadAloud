@@ -1,7 +1,7 @@
-import badgeCounter from "./counter";
 import { logChromeErrorMessage, logError } from "./error";
+import { onTtsEvent, resetTts as refresh, stop } from "./ttshandler";
+import badgeCounter from "./counter";
 import { getStorageOptions } from "./storage";
-import { onTtsEvent, stop, resetTts as refresh } from "./ttshandler";
 
 async function read(utterances: string): Promise<void> {
   await speak(utterances, await getSpeakOptions());
@@ -20,12 +20,12 @@ async function speak(
 async function getSpeakOptions(): Promise<chrome.tts.SpeakOptions> {
   const { rate, pitch, voiceName } = await getStorageOptions();
   return {
+    enqueue: true,
+    onEvent: onTtsEvent,
     pitch,
     rate,
     voiceName,
-    volume: 1,
-    enqueue: true,
-    onEvent: onTtsEvent
+    volume: 1
   };
 }
 

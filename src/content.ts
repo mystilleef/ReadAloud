@@ -1,29 +1,31 @@
-import { logError } from "./error";
 import {
   selectedTextStream,
   sendRead,
   sendRefreshTts,
+  sendTimeout,
   startedSpeakingStream,
   stoppedSpeakingStream
 } from "./message";
+import { logError } from "./error";
 
-let TIMEOUT_ID = 0;
+const REFRESH_TTS_TIMEOUT = 10000;
+const RESET_TIMEOUT = 300000;
+const SELECTION_TIMEOUT = 1000;
+
 let REFRESH_TTS_TIMEOUT_ID = 0;
-const SELECTION_TIMEOUT = 500;
-const REFRESH_TTS_TIMEOUT = 5000;
+let RESET_TIMEOUT_ID = 0;
+let SELECTION_TIMEOUT_ID = 0;
 
 startedSpeakingStream.subscribe(([_data, sender]) => {
   if (sender.id !== chrome.runtime.id) return;
-  window.clearTimeout(REFRESH_TTS_TIMEOUT_ID);
-  REFRESH_TTS_TIMEOUT_ID = window.setInterval(() => {
-      sendRefreshTts("").catch(logError);
-    },
-    REFRESH_TTS_TIMEOUT);
+  startTimeoutTimer();
+  startRefreshTimer();
 });
 
 stoppedSpeakingStream.subscribe(([_data, sender]) => {
   if (sender.id !== chrome.runtime.id) return;
-  window.clearTimeout(REFRESH_TTS_TIMEOUT_ID);
+  stopTimeoutTimer();
+  stopRefreshTimer();
 });
 
 selectedTextStream.subscribe(([_data, sender]) => {
@@ -32,26 +34,37 @@ selectedTextStream.subscribe(([_data, sender]) => {
 });
 
 document.addEventListener("mouseup", _e => {
-  window.clearTimeout(TIMEOUT_ID);
-  TIMEOUT_ID = window.setTimeout(sendSelectedTextMessage, SELECTION_TIMEOUT);
+  window.clearTimeout(SELECTION_TIMEOUT_ID);
+  SELECTION_TIMEOUT_ID =
+    window.setTimeout(sendSelectedTextMessage, SELECTION_TIMEOUT);
 });
 
 function sendSelectedTextMessage(): void {
-  const text = selectedText().trim();
-  if (text) sendRead(text).catch(logError);
+  const selectedText = window.getSelection()?.toString();
+  if (!selectedText) return;
+  sendRead(selectedText).catch(logError);
+  startTimeoutTimer();
 }
 
-function selectedText(): string {
-  if (selectionExistsIn(window)) return selectionFrom(window);
-  if (selectionExistsIn(document)) return selectionFrom(document);
-  return "";
+function startRefreshTimer() {
+  stopRefreshTimer();
+  REFRESH_TTS_TIMEOUT_ID = window.setInterval(() => {
+    sendRefreshTts("").catch(logError);
+  }, REFRESH_TTS_TIMEOUT);
 }
 
-function selectionExistsIn(root: Window | Document): boolean {
-  return root ? Boolean(root.getSelection()) : false;
+function stopRefreshTimer() {
+  window.clearTimeout(REFRESH_TTS_TIMEOUT_ID);
 }
 
-function selectionFrom(root: Window | Document): string {
-  const selection = root.getSelection();
-  return selection ? selection.toString() : "";
+function startTimeoutTimer() {
+  stopTimeoutTimer();
+  RESET_TIMEOUT_ID = window.setInterval(() => {
+    sendTimeout("").catch(logError);
+  }, RESET_TIMEOUT);
 }
+
+function stopTimeoutTimer() {
+  window.clearTimeout(RESET_TIMEOUT_ID);
+}
+
