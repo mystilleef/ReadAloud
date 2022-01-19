@@ -4,18 +4,19 @@ async function updateBrowserIcon(speaking: boolean): Promise<void> {
 }
 
 async function setDefaultIcon(): Promise<void> {
-  setIcon("default");
+  await setIcon("default");
   await setTooltip("Read aloud selected text");
 }
 
 async function setStopIcon(): Promise<void> {
-  setIcon("stop");
+  await setIcon("stop");
   await setTooltip("Stop reading");
 }
 
-function setIcon(name: string): void {
-  const details = { path: `images/${name}.png` };
-  chrome.action.setIcon(details);
+async function setIcon(name: string): Promise<void> {
+  return new Promise(_resolve => {
+    chrome.action.setIcon({ path: `images/${name}.png` });
+  });
 }
 
 async function setTooltip(tip: string): Promise<void> {
