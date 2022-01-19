@@ -4,7 +4,6 @@ import { read, refresh, stop } from "./reader";
 import {
   readStream,
   refreshTtsStream,
-  resetTimeout,
   sendSelectedText
 } from "./message";
 import { createContextMenu } from "./context";
@@ -19,10 +18,6 @@ readStream.subscribe(([selectedText, sender]) => {
 
 refreshTtsStream.subscribe(([_data, sender]) => {
   if (sender.id === EXTENSION_ID) refresh();
-});
-
-resetTimeout.subscribe(([_data, sender]) => {
-  if (sender.id === EXTENSION_ID) stop();
 });
 
 chrome.commands.onCommand.addListener(onChromeCommand);
