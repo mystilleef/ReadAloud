@@ -1,5 +1,5 @@
 export function logChromeErrorMessage(): void {
-  const error = chrome.runtime.lastError || undefined;
+  const error = chrome.runtime.lastError;
   if (error) logError(error.message as string);
 }
 
@@ -12,6 +12,6 @@ export function chromeRuntimeError(): boolean {
 }
 
 export function doNothing(_any?: unknown | undefined): void {
-  return undefined;
+  // Doing nothing
 }
 

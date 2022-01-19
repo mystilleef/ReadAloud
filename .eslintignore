@@ -1,6 +1,2 @@
-build/
-out/
 dist/
-public/
 node_modules/
-rollup.config.js

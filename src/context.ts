@@ -1,4 +1,3 @@
-import { EXTENSION_ID } from "./constants";
 import {
   chromeRuntimeError,
   doNothing,
@@ -15,6 +14,7 @@ import {
   storeRate,
   storeVoice
 } from "./storage";
+import { EXTENSION_ID } from "./constants";
 import { getTtsVoices } from "./utils";
 
 const SUBMENU_ID_DELIMETER = "|";
@@ -35,32 +35,34 @@ const RESET_DEFAULT_MENU_ID = `ReadAloudResetDefaultMenu-${UNIQUE_STAMP}`;
 const CONTEXTS = ["all"] as chrome.contextMenus.ContextType[];
 const TOP_LEVEL_MENU_INFO = [
   {
-    title: "Speed",
-    parentId: READ_ALOUD_ROOT_MENU_ID,
+    contexts: CONTEXTS,
     id: SPEED_MENU_ID,
-    contexts: CONTEXTS
+    parentId: READ_ALOUD_ROOT_MENU_ID,
+    title: "Speed"
   },
   {
-    title: "Voices",
-    parentId: READ_ALOUD_ROOT_MENU_ID,
+    contexts: CONTEXTS,
     id: VOICES_MENU_ID,
-    contexts: CONTEXTS
+    parentId: READ_ALOUD_ROOT_MENU_ID,
+    title: "Voices"
   },
   {
-    title: "Pitch",
-    parentId: READ_ALOUD_ROOT_MENU_ID,
+    contexts: CONTEXTS,
     id: PITCH_MENU_ID,
-    contexts: CONTEXTS
+    parentId: READ_ALOUD_ROOT_MENU_ID,
+    title: "Pitch"
   },
   {
-    title: "Reset to Default",
-    parentId: READ_ALOUD_ROOT_MENU_ID,
+    contexts: CONTEXTS,
     id: RESET_DEFAULT_MENU_ID,
-    contexts: CONTEXTS
+    parentId: READ_ALOUD_ROOT_MENU_ID,
+    title: "Reset to Default"
   }
 ];
 
+// eslint-disable-next-line no-magic-numbers
 const SPEED_OPTIONS = [1, 1.2, 1.4, 1.5, 1.6, 1.8, 2];
+// eslint-disable-next-line no-magic-numbers
 const PITCH_OPTIONS = [0, 0.5, 1, 1.5, 2];
 
 chrome.storage.onChanged.addListener(
@@ -74,15 +76,17 @@ chrome.contextMenus.onClicked.addListener((info, _tab) => {
 });
 
 export function createContextMenu() {
-  chrome.contextMenus.create({
-    title: "Read Aloud",
-    id: READ_ALOUD_ROOT_MENU_ID,
-    contexts: CONTEXTS
-  },
+  chrome.contextMenus.create(
+    {
+      contexts: CONTEXTS,
+      id: READ_ALOUD_ROOT_MENU_ID,
+      title: "Read Aloud"
+    },
     () => {
       if (chromeRuntimeError()) logChromeErrorMessage();
       else TOP_LEVEL_MENU_INFO.forEach(createTopLevelMenus);
-    });
+    }
+  );
 }
 
 function createTopLevelMenus(menu: {
@@ -127,17 +131,16 @@ async function createSpeedRadioMenuItems(menu: {
   SPEED_OPTIONS.forEach(speed => {
     chrome.contextMenus.create(
       {
-        parentId: menu.id,
+        checked: rate === Number(speed),
         contexts: menu.contexts,
-        type: "radio",
-        title: `${speed}x`,
         id: `${SPEED_SUBMENU_ID_KEY}${speed}`,
-        checked: rate === Number(speed)
+        parentId: menu.id,
+        title: `${speed}x`,
+        type: "radio"
       },
       logChromeErrorMessage
     );
-  }
-  );
+  });
 }
 
 async function createVoicesRadioMenuItems(menu: {
@@ -151,17 +154,16 @@ async function createVoicesRadioMenuItems(menu: {
   voices.forEach(voice => {
     chrome.contextMenus.create(
       {
-        parentId: menu.id,
+        checked: voiceName === voice.voiceName,
         contexts: menu.contexts,
-        type: "radio",
-        title: `${voice.voiceName}`,
-        id: `${VOICES_SUBMENU_ID_KEY}${voice.voiceName}`,
-        checked: voiceName === voice.voiceName
+        id: `${VOICES_SUBMENU_ID_KEY}${voice.voiceName || ""}`,
+        parentId: menu.id,
+        title: `${voice.voiceName || ""}`,
+        type: "radio"
       },
       logChromeErrorMessage
     );
-  }
-  );
+  });
 }
 
 async function createPitchRadioMenuItems(menu: {
@@ -174,17 +176,16 @@ async function createPitchRadioMenuItems(menu: {
   PITCH_OPTIONS.forEach(pitch => {
     chrome.contextMenus.create(
       {
-        parentId: menu.id,
-        type: "radio",
+        checked: pitchFromStore === Number(pitch),
         contexts: menu.contexts,
-        title: `${pitch}`,
         id: `${PITCH_SUBMENU_ID_KEY}${pitch}`,
-        checked: pitchFromStore === Number(pitch)
+        parentId: menu.id,
+        title: `${pitch}`,
+        type: "radio"
       },
       logChromeErrorMessage
     );
-  }
-  );
+  });
 }
 
 export async function addListenersToContextMenus(

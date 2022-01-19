@@ -14,7 +14,7 @@ async function isSpeaking(): Promise<boolean> {
 
 export async function messageToContentScript(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  func: (arg0: any, arg1: { tabId: number; }) => Promise<void>,
+  func: (_arg0: any, _arg1: { tabId: number; }) => Promise<void>,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: any
 ): Promise<void> {
@@ -22,9 +22,9 @@ export async function messageToContentScript(
     chrome.tabs.query(
       { active: true, currentWindow: true },
       (tabs: chrome.tabs.Tab[]): void => {
+        if (!tabs || !tabs[0]) return;
         const tabid = tabs[0].id || -1;
-        if (tabid < 0) return;
-        func(data, { tabId: tabid }).catch(logError);
+        if (tabid) func(data, { tabId: tabid }).catch(logError);
       }
     );
   });

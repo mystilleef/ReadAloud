@@ -12,5 +12,8 @@ export const [sendStoppedSpeaking, stoppedSpeakingStream] =
 export const [sendRefreshTts, refreshTtsStream] =
   getMessage<string>("REFRESH_TTS");
 
+export const [sendTimeout, resetTimeout] =
+  getMessage<string>("RESET");
+
 export const [sendSelectedText, selectedTextStream] =
   getMessage<string>("SELECTED_TEXT");

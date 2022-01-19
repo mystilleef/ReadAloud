@@ -1,90 +1,66 @@
 {
+  "root": true,
   "env": {
     "browser": true,
-    "es6": true
-  },
-  "settings": {
-    "import/resolver": {
-      "node": {
-        "paths": [
-          "src"
-        ],
-        "extensions": [
-          ".js",
-          ".jsx",
-          ".ts",
-          ".tsx"
-        ]
-      }
-    }
-  },
-  "extends": [
-    "eslint:all",
-    "plugin:@typescript-eslint/eslint-recommended",
-    "plugin:@typescript-eslint/recommended",
-    "plugin:@typescript-eslint/recommended-requiring-type-checking"
-  ],
-  "globals": {
-    "Atomics": "readonly",
-    "SharedArrayBuffer": "readonly"
+    "es2021": true,
+    "jest": true,
+    "serviceworker": true,
+    "worker": true
   },
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "ecmaVersion": 2018,
-    "sourceType": "module",
-    "project": "tsconfig.json"
+    "project": ["./tsconfig.json"],
+    "ecmaVersion": "latest",
+    "sourceType": "module"
   },
-  "plugins": [
-    "@typescript-eslint"
+  "plugins": ["@typescript-eslint"],
+  "extends": [
+    "eslint:all",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking"
   ],
   "rules": {
-    "object-curly-newline": "off",
-    "sort-imports": "off",
-    "one-var": "off",
-    "no-magic-numbers": "off",
-    "function-paren-newline": "off",
-    "array-element-newline": "off",
-    "sort-keys": "off",
-    "capitalized-comments": "off",
-    "dot-location": "off",
-    "multiline-ternary": "off",
-    "object-curly-spacing": "off",
-    "no-use-before-define": "off",
-    "padded-blocks": "off",
-    "space-before-function-paren": "off",
-    "func-style": "off",
-    "quote-props": "off",
-    "object-property-newline": "off",
-    "no-ternary": "off",
-    "newline-per-chained-call": "off",
-    "no-confusing-arrow": "off",
-    "indent": "off",
-    "quotes": [
+    "indent": ["off"],
+    "arrow-parens": ["error", "as-needed"],
+    "object-curly-spacing": ["error", "always"],
+    "padded-blocks": ["error", "never"],
+    "curly": ["error", "multi"],
+    "nonblock-statement-body-position": ["error", "any"],
+    "space-before-function-paren": ["error", "never"],
+    "newline-per-chained-call": ["error", {"ignoreChainWithDepth": 3}],
+    "quote-props": ["error", "as-needed"],
+    "no-use-before-define": ["error", "nofunc"],
+    "one-var": ["error", "never"],
+    "array-element-newline": ["error", "consistent"],
+    "no-unused-expressions": [
       "error",
-      "double"
+      {
+        "allowShortCircuit": true,
+        "allowTernary": true,
+        "allowTaggedTemplates": true,
+        "enforceForJSX": true
+      }
     ],
-    "import/no-extraneous-dependencies": "off",
-    "@typescript-eslint/no-use-before-define": "off",
-    "@typescript-eslint/no-unused-vars": "off",
-    "@typescript-eslint/restrict-template-expressions": "off",
-    "no-undefined": "off",
-    "curly": [
+    "no-console": ["off"],
+    "function-call-argument-newline": ["error", "consistent"],
+    "multiline-ternary": ["error", "always-multiline"],
+    "function-paren-newline": ["error", "multiline-arguments"],
+    "no-ternary": ["off"],
+    "object-property-newline": [
       "error",
-      "multi"
+      {"allowAllPropertiesOnSameLine": true}
     ],
-    "comma-dangle": [
+    "func-style": ["error", "declaration", {"allowArrowFunctions": true}],
+    "no-unused-vars": ["error", {"argsIgnorePattern": "^_"}],
+    "no-magic-numbers": [
       "error",
-      "never"
+      {
+        "ignore": [-1, 0, 1],
+        "ignoreArrayIndexes": true,
+        "ignoreDefaultValues": true,
+        "enforceConst": true
+      }
     ],
-    "nonblock-statement-body-position": "off",
-    "arrow-parens": [
-      "error",
-      "as-needed"
-    ],
-    "no-multi-spaces": "off",
-    "key-spacing": "off",
-    "no-unused-expressions": "off",
-    "no-console": "off",
-    "function-call-argument-newline": "off"
+    "@typescript-eslint/no-unused-vars": ["warn", {"argsIgnorePattern": "^_"}]
   }
 }
