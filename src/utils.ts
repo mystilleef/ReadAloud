@@ -1,4 +1,4 @@
-import { logError } from "./error";
+import { logChromeErrorMessage, logError } from "./error";
 
 export interface EmptyData { data?: string }
 
@@ -11,6 +11,40 @@ async function getTtsVoices(): Promise<chrome.tts.TtsVoice[]> {
 async function isSpeaking(): Promise<boolean> {
   return new Promise(resolve => {
     chrome.tts.isSpeaking(speaking => resolve(speaking));
+  });
+}
+
+export async function speak(
+  phrase: string,
+  options: chrome.ttsEngine.SpeakOptions
+): Promise<void> {
+  await new Promise<void>((_resolve, _reject) => {
+    chrome.tts.speak(phrase, options, logChromeErrorMessage);
+  });
+}
+
+export async function resume(): Promise<void> {
+  return new Promise(_resolve => {
+    chrome.tts.resume();
+  });
+}
+
+export async function stop(): Promise<void> {
+  return new Promise(_resolve => {
+    chrome.tts.stop();
+  });
+}
+
+export async function pause(): Promise<void> {
+  return new Promise(_resolve => {
+    chrome.tts.pause();
+  });
+}
+
+export async function refresh(): Promise<void> {
+  return new Promise(_resolve => {
+    chrome.tts.pause();
+    chrome.tts.resume();
   });
 }
 
