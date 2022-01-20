@@ -5,7 +5,7 @@ class BadgeCounter {
 
   public async increment(): Promise<void> {
     this.counter += 1;
-    await this.checkSpeakingState();
+    await this.updateText();
   }
 
   public async decrement(): Promise<void> {

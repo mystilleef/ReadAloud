@@ -1,9 +1,13 @@
 import {
+  endSpeakingStream,
+  finishedSpeakingStream,
   selectedTextStream,
+  sendGotEndSpeaking,
+  sendGotFinishedSpeaking,
+  sendGotStartedSpeaking,
   sendRead,
   sendRefreshTts,
-  startedSpeakingStream,
-  stoppedSpeakingStream
+  startedSpeakingStream
 } from "./message";
 import { logError } from "./error";
 
@@ -16,11 +20,19 @@ let SELECTION_TIMEOUT_ID = 0;
 startedSpeakingStream.subscribe(([_data, sender]) => {
   if (sender.id !== chrome.runtime.id) return;
   startRefreshTimer();
+  sendGotStartedSpeaking({}).catch(logError);
 });
 
-stoppedSpeakingStream.subscribe(([_data, sender]) => {
+endSpeakingStream.subscribe(([_data, sender]) => {
   if (sender.id !== chrome.runtime.id) return;
   stopRefreshTimer();
+  sendGotEndSpeaking({}).catch(logError);
+});
+
+finishedSpeakingStream.subscribe(([_data, sender]) => {
+  if (sender.id !== chrome.runtime.id) return;
+  stopRefreshTimer();
+  sendGotFinishedSpeaking({}).catch(logError);
 });
 
 selectedTextStream.subscribe(([_data, sender]) => {
