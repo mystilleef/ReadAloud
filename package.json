@@ -15,6 +15,7 @@
   "scripts": {
     "clean": "rimraf dist tsconfig.tsbuildinfo",
     "check": "eslint src/**",
+    "prebuild": "npm run check",
     "build": "tsc -b && vite build",
     "watch": "vite"
   },
