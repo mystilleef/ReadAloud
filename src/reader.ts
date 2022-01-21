@@ -1,4 +1,4 @@
-import { onTtsEvent, resetTts as refresh, stop } from "./ttshandler";
+import { onTtsEvent, refreshTts as refresh, stopTts } from "./ttshandler";
 import { getStorageOptions } from "./storage";
 import { speak } from "./utils";
 
@@ -18,4 +18,4 @@ async function getSpeakOptions(): Promise<chrome.tts.SpeakOptions> {
   };
 }
 
-export { read, stop, refresh };
+export { read, stopTts, refresh };

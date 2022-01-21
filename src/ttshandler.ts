@@ -1,8 +1,8 @@
 import {
-  stop as chromettsstop,
   isSpeaking,
   messageToContentScript,
-  refresh
+  refresh,
+  stop
 } from "./utils";
 import {
   sendEndSpeaking,
@@ -10,35 +10,26 @@ import {
   sendStartedSpeaking
 } from "./message";
 import { logError } from "./error";
-import updateBrowserIcon from "./icon";
+
+export async function refreshTts(): Promise<void> {
+  if (await isSpeaking()) await refresh();
+}
+
+export async function stopTts(): Promise<void> {
+  await stop();
+  await messageToContentScript(sendFinishedSpeaking, {});
+}
 
 export function onTtsEvent(event: chrome.tts.TtsEvent): void {
-  isSpeaking().then(updateBrowserIcon).catch(logError);
   onTts(event).catch(logError);
 }
 
 async function onTts(event: chrome.tts.TtsEvent): Promise<void> {
   const errorMessage = event.errorMessage || "undefined";
-  if (event.type === "error") await onError(`Error: ${errorMessage}`);
-  else if (event.type === "start") await onStart();
+  if (event.type === "start") await onStart();
   else if (event.type === "interrupted") await onInterrupted();
   else if (event.type === "end") await onEnd();
-}
-
-async function onError(message: string): Promise<void> {
-  await log(message);
-  await stop();
-}
-
-async function log(message: string): Promise<void> {
-  return new Promise(_resolve => {
-    logError(message);
-  });
-}
-
-export async function stop(): Promise<void> {
-  await chromettsstop();
-  await messageToContentScript(sendFinishedSpeaking, {});
+  else if (event.type === "error") await onError(`Error: ${errorMessage}`);
 }
 
 async function onStart(): Promise<void> {
@@ -46,18 +37,21 @@ async function onStart(): Promise<void> {
 }
 
 async function onInterrupted(): Promise<void> {
-  await messageToContentScript(sendEndSpeaking, {});
+  await messageToContentScript(sendFinishedSpeaking, {});
 }
 
 async function onEnd(): Promise<void> {
   await messageToContentScript(sendEndSpeaking, {});
 }
 
-export async function resetTts(): Promise<void> {
-  if (await isSpeaking()) await refreshTts();
+async function onError(message: string): Promise<void> {
+  await stopTts();
+  await error(message);
 }
 
-async function refreshTts(): Promise<void> {
-  await refresh();
+async function error(message: string): Promise<void> {
+  return new Promise(() => {
+    logError(message);
+  });
 }
 
