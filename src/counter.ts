@@ -1,34 +1,31 @@
-import { isSpeaking } from "./utils";
+import updateBrowserIcon from "./icon";
 
 class BadgeCounter {
   private counter = 0;
 
   public async increment(): Promise<void> {
     this.counter += 1;
-    await this.updateText();
+    await this.update();
   }
 
   public async decrement(): Promise<void> {
-    this.counter -= 1;
-    await this.checkSpeakingState();
-  }
-
-  private async checkSpeakingState(): Promise<void> {
-    await isSpeaking() ? await this.updateText() : await this.reset();
+    if (this.counter > 0) this.counter -= 1;
+    await this.update();
   }
 
   public async reset(): Promise<void> {
     this.counter = 0;
+    await this.update();
+  }
+
+  public async update(): Promise<void> {
     await this.updateText();
+    await updateBrowserIcon(this.counter);
   }
 
   private async updateText(): Promise<void> {
-    return new Promise<void>(resolve => {
-      resolve(
-        chrome.action.setBadgeText({
-          text: `${this.counter === 0 ? "" : this.counter}`
-        })
-      );
+    await chrome.action.setBadgeText({
+      text: `${this.counter === 0 ? "" : this.counter}`
     });
   }
 }

@@ -18,31 +18,31 @@ export async function speak(
   phrase: string,
   options: chrome.ttsEngine.SpeakOptions
 ): Promise<void> {
-  await new Promise<void>((_resolve, _reject) => {
+  await new Promise<void>(() => {
     chrome.tts.speak(phrase, options, logChromeErrorMessage);
   });
 }
 
 export async function resume(): Promise<void> {
-  return new Promise(_resolve => {
+  return new Promise(() => {
     chrome.tts.resume();
   });
 }
 
 export async function stop(): Promise<void> {
-  return new Promise(_resolve => {
+  return new Promise(() => {
     chrome.tts.stop();
   });
 }
 
 export async function pause(): Promise<void> {
-  return new Promise(_resolve => {
+  return new Promise(() => {
     chrome.tts.pause();
   });
 }
 
 export async function refresh(): Promise<void> {
-  return new Promise(_resolve => {
+  return new Promise(() => {
     chrome.tts.pause();
     chrome.tts.resume();
   });
@@ -52,7 +52,7 @@ export async function messageToContentScript(
   func: (_arg0: EmptyData, _arg1: { tabId: number; }) => Promise<void>,
   data: EmptyData
 ): Promise<void> {
-  return new Promise(_resolve => {
+  return new Promise(() => {
     chrome.tabs.query(
       { active: true, currentWindow: true },
       (tabs: chrome.tabs.Tab[]): void => {
