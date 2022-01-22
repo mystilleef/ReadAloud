@@ -20,38 +20,5 @@ selected text.
 
 ## Installation
 
-- Make sure you have Git, Node.js, and `Npm` installed on
-  your computer
-- Clone this repository on your computer and navigate to it
-
-```bash
-git clone https://github.com/mystilleef/ReadAloud/
-cd ReadAloud
-```
-
-- Build the extension
-
-```bash
-npm i
-npm run dist
-```
-
-- The unpacked extension builds in the **`dist`** folder
-- Open Chrome and navigate to **`chrome://extensions`**
-- Enable **`Developer mode`** on the extensions page
-- Press **`Load unpacked`** and select the **`dist`** folder
-  you just built
-- The **`Read Aloud`** icon should now be present on the
-  Chrome toolbar
-
-## Todo
-
-- [x] Add UI to change language voice
-- [x] Add UI to change speaking rate
-- [ ] Make extension easy to install for normal users
-- [ ] Distribute to Chrome Store
-
-## Caveats
-
-- This extension is a work in progress
-- Non-English text, language and locales are not yet tested
+Install this extension from the
+[Chrome Web Store.](https://chrome.google.com/webstore/detail/jelomlaehalbblopojchlcibdemonfef)
