@@ -48,8 +48,7 @@ document.addEventListener("mouseup", _e => {
 
 function sendSelectedTextMessage(): void {
   const selectedText = window.getSelection()?.toString();
-  if (!selectedText) return;
-  sendRead(selectedText).catch(logError);
+  if (selectedText) sendRead(selectedText).catch(logError);
 }
 
 function startRefreshTimer() {
