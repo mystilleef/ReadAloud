@@ -13,12 +13,15 @@ import { logError } from "./error";
 
 const REFRESH_TTS_TIMEOUT = 3000;
 const SELECTION_TIMEOUT = 1000;
+const FINISH_TTS_TIMEOUT = 1000;
 
 let REFRESH_TTS_TIMEOUT_ID = 0;
+let FINISH_TTS_TIMEOUT_ID = 0;
 let SELECTION_TIMEOUT_ID = 0;
 
 startedSpeakingStream.subscribe(([_data, sender]) => {
   if (sender.id !== chrome.runtime.id) return;
+  stopFinishTimer();
   startRefreshTimer();
   sendGotStartedSpeaking({}).catch(logError);
 });
@@ -27,6 +30,7 @@ endSpeakingStream.subscribe(([_data, sender]) => {
   if (sender.id !== chrome.runtime.id) return;
   stopRefreshTimer();
   sendGotEndSpeaking({}).catch(logError);
+  startFinishTimer();
 });
 
 finishedSpeakingStream.subscribe(([_data, sender]) => {
@@ -60,5 +64,16 @@ function startRefreshTimer() {
 
 function stopRefreshTimer() {
   window.clearTimeout(REFRESH_TTS_TIMEOUT_ID);
+}
+
+function startFinishTimer() {
+  stopFinishTimer();
+  FINISH_TTS_TIMEOUT_ID = window.setTimeout(() => {
+    sendGotFinishedSpeaking({}).catch(logError);
+  }, FINISH_TTS_TIMEOUT);
+}
+
+function stopFinishTimer() {
+  window.clearTimeout(FINISH_TTS_TIMEOUT_ID);
 }
 
