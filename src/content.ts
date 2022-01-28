@@ -13,7 +13,7 @@ import { logError } from "./error";
 
 const REFRESH_TTS_TIMEOUT = 3000;
 const SELECTION_TIMEOUT = 1000;
-const FINISH_TTS_TIMEOUT = 2000;
+const FINISH_TTS_TIMEOUT = 5000;
 
 let REFRESH_TTS_TIMEOUT_ID = 0;
 let FINISH_TTS_TIMEOUT_ID = 0;
