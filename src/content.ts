@@ -9,6 +9,7 @@ import {
   sendRefreshTts,
   startedSpeakingStream
 } from "./message";
+import { EXTENSION_ID } from "./constants";
 import { logError } from "./error";
 
 const REFRESH_TTS_TIMEOUT = 3000;
@@ -20,27 +21,27 @@ let FINISH_TTS_TIMEOUT_ID = 0;
 let SELECTION_TIMEOUT_ID = 0;
 
 startedSpeakingStream.subscribe(([_data, sender]) => {
-  if (sender.id !== chrome.runtime.id) return;
+  if (sender.id !== EXTENSION_ID) return;
   stopFinishTimer();
   startRefreshTimer();
   sendGotStartedSpeaking({}).catch(logError);
 });
 
 endSpeakingStream.subscribe(([_data, sender]) => {
-  if (sender.id !== chrome.runtime.id) return;
+  if (sender.id !== EXTENSION_ID) return;
   stopRefreshTimer();
   sendGotEndSpeaking({}).catch(logError);
   startFinishTimer();
 });
 
 finishedSpeakingStream.subscribe(([_data, sender]) => {
-  if (sender.id !== chrome.runtime.id) return;
+  if (sender.id !== EXTENSION_ID) return;
   stopRefreshTimer();
   sendGotFinishedSpeaking({}).catch(logError);
 });
 
 selectedTextStream.subscribe(([_data, sender]) => {
-  if (sender.id !== chrome.runtime.id) return;
+  if (sender.id !== EXTENSION_ID) return;
   sendSelectedTextMessage();
 });
 
