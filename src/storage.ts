@@ -51,6 +51,20 @@ async function storePitch(pitch: number) {
   await storage.sync.set({ pitch });
 }
 
+export async function getSpeakOptions(
+  ttsEvent: (_e: chrome.tts.TtsEvent) => void
+): Promise<chrome.tts.SpeakOptions> {
+  const { rate, pitch, voiceName } = await getStorageOptions();
+  return {
+    enqueue: true,
+    onEvent: ttsEvent,
+    pitch,
+    rate,
+    voiceName,
+    volume: 1
+  };
+}
+
 export {
   getVoiceName,
   getRate,

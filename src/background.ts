@@ -8,7 +8,7 @@ import {
   sendSelectedText
 } from "./message";
 import { isSpeaking, messageToContentScript } from "./utils";
-import { read, refresh, stopTts } from "./reader";
+import { read, refresh, stop } from "./reader";
 import badgeCounter from "./counter";
 import { createContextMenu } from "./context";
 import { logError } from "./error";
@@ -55,7 +55,7 @@ chrome.action.onClicked.addListener(onAction);
 function onAction(_tab: chrome.tabs.Tab): void {
   badgeCounter.reset().catch(logError);
   const stopOrQuery = (speaking: boolean): void => {
-    speaking ? stopTts().catch(logError) : getSelectedTextFromContent();
+    speaking ? stop().catch(logError) : getSelectedTextFromContent();
   };
   isSpeaking().then(stopOrQuery).catch(logError);
 }

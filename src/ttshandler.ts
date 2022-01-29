@@ -2,6 +2,7 @@ import {
   isSpeaking,
   messageToContentScript,
   refresh,
+  speak,
   stop
 } from "./utils";
 import {
@@ -10,6 +11,13 @@ import {
   sendStartedSpeaking
 } from "./message";
 import { logError } from "./error";
+
+export async function readTts(
+  utterances: string,
+  options: chrome.ttsEngine.SpeakOptions
+): Promise<void> {
+  await speak(utterances, options);
+}
 
 export async function refreshTts(): Promise<void> {
   if (await isSpeaking()) await refresh();
