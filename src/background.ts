@@ -24,20 +24,20 @@ readStream.subscribe(([_data, sender]) => {
   if (sender.id === EXTENSION_ID) badgeCounter.increment().catch(logError);
 });
 
-refreshTtsStream.subscribe(([_data, sender]) => {
-  if (sender.id === EXTENSION_ID) refresh().catch(logError);
-});
-
-refreshTtsStream.subscribe(([_data, sender]) => {
-  if (sender.id === EXTENSION_ID) badgeCounter.update().catch(logError);
+gotEndSpeakingStream.subscribe(([_data, sender]) => {
+  if (sender.id === EXTENSION_ID) badgeCounter.decrement().catch(logError);
 });
 
 gotStartedSpeakingStream.subscribe(([_data, sender]) => {
   if (sender.id === EXTENSION_ID) badgeCounter.update().catch(logError);
 });
 
-gotEndSpeakingStream.subscribe(([_data, sender]) => {
-  if (sender.id === EXTENSION_ID) badgeCounter.decrement().catch(logError);
+refreshTtsStream.subscribe(([_data, sender]) => {
+  if (sender.id === EXTENSION_ID) badgeCounter.update().catch(logError);
+});
+
+refreshTtsStream.subscribe(([_data, sender]) => {
+  if (sender.id === EXTENSION_ID) refresh().catch(logError);
 });
 
 gotFinishedSpeakingStream.subscribe(([_data, sender]) => {
