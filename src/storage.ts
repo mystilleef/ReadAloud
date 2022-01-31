@@ -1,4 +1,4 @@
-import { PITCH, RATE, VOICENAME } from "./constants";
+import { RATE, VOICENAME } from "./constants";
 import { storage } from "@extend-chrome/storage";
 
 const DEFAULT_RATE = 1.2;
@@ -19,9 +19,9 @@ async function getVoiceName(): Promise<string> {
 }
 
 async function getPitch(): Promise<number> {
-  const pitch = await storage.sync.get(PITCH);
-  if (pitch && pitch[PITCH] >= 0) return Number(pitch[PITCH]);
-  return DEFAULT_PITCH;
+  return new Promise<number>(resolve => {
+    resolve(DEFAULT_PITCH);
+  });
 }
 
 async function getRate(): Promise<number> {

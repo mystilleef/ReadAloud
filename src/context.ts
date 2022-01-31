@@ -48,12 +48,6 @@ const TOP_LEVEL_MENU_INFO = [
   },
   {
     contexts: CONTEXTS,
-    id: PITCH_MENU_ID,
-    parentId: READ_ALOUD_ROOT_MENU_ID,
-    title: "Pitch"
-  },
-  {
-    contexts: CONTEXTS,
     id: RESET_DEFAULT_MENU_ID,
     parentId: READ_ALOUD_ROOT_MENU_ID,
     title: "Reset to Default"
