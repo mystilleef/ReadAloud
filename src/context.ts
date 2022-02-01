@@ -5,7 +5,6 @@ import {
   logError
 } from "./error";
 import {
-  getPitch,
   getRate,
   getStorageOptions,
   getVoiceName,
@@ -55,9 +54,9 @@ const TOP_LEVEL_MENU_INFO = [
 ];
 
 // eslint-disable-next-line no-magic-numbers
-const SPEED_OPTIONS = [1, 1.2, 1.4, 1.5, 1.6, 1.8, 2];
+const SPEED_OPTIONS = [1, 1.3, 1.5, 1.8, 2];
 // eslint-disable-next-line no-magic-numbers
-const PITCH_OPTIONS = [0, 0.5, 1, 1.5, 2];
+// Const PITCH_OPTIONS = [0, 0.5, 1, 1.5, 2];
 
 chrome.storage.onChanged.addListener(
   (_changes: chrome.storage.StorageChange, _areaName: string) => {
@@ -108,9 +107,6 @@ function createRadioMenuItems(menu: {
     case VOICES_MENU_ID:
       createVoicesRadioMenuItems(menu).catch(logError);
       break;
-    case PITCH_MENU_ID:
-      createPitchRadioMenuItems(menu).catch(logError);
-      break;
     default:
   }
 }
@@ -153,28 +149,6 @@ async function createVoicesRadioMenuItems(menu: {
         id: `${VOICES_SUBMENU_ID_KEY}${voice.voiceName || ""}`,
         parentId: menu.id,
         title: `${voice.voiceName || ""}`,
-        type: "radio"
-      },
-      logChromeErrorMessage
-    );
-  });
-}
-
-async function createPitchRadioMenuItems(menu: {
-  id: string;
-  title: string;
-  parentId: string;
-  contexts: chrome.contextMenus.ContextType[];
-}): Promise<void> {
-  const pitchFromStore = await getPitch();
-  PITCH_OPTIONS.forEach(pitch => {
-    chrome.contextMenus.create(
-      {
-        checked: pitchFromStore === Number(pitch),
-        contexts: menu.contexts,
-        id: `${PITCH_SUBMENU_ID_KEY}${pitch}`,
-        parentId: menu.id,
-        title: `${pitch}`,
         type: "radio"
       },
       logChromeErrorMessage
