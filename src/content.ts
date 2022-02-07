@@ -45,11 +45,11 @@ selectedTextStream.subscribe(([_data, sender]) => {
   sendSelectedTextMessage();
 });
 
-document.addEventListener("mouseup", _e => {
+document.onselectionchange = () => {
   window.clearTimeout(SELECTION_TIMEOUT_ID);
   SELECTION_TIMEOUT_ID =
     window.setTimeout(sendSelectedTextMessage, SELECTION_TIMEOUT);
-});
+};
 
 function sendSelectedTextMessage(): void {
   const selectedText = window.getSelection()?.toString();
