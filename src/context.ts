@@ -54,7 +54,7 @@ const TOP_LEVEL_MENU_INFO = [
 ];
 
 // eslint-disable-next-line no-magic-numbers
-const SPEED_OPTIONS = [1, 1.3, 1.5, 1.8, 2];
+const SPEED_OPTIONS = [1, 1.2, 1.4, 1.5, 1.6, 1.8, 2];
 // eslint-disable-next-line no-magic-numbers
 // Const PITCH_OPTIONS = [0, 0.5, 1, 1.5, 2];
 
