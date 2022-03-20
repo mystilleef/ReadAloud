@@ -12,8 +12,8 @@ import {
 import { EXTENSION_ID } from "./constants";
 import { logError } from "./error";
 
-const REFRESH_TTS_TIMEOUT = 3000;
-const SELECTION_TIMEOUT = 1000;
+const REFRESH_TTS_TIMEOUT = 1000;
+const SELECTION_TIMEOUT = 500;
 const FINISH_TTS_TIMEOUT = 5000;
 
 let REFRESH_TTS_TIMEOUT_ID = 0;
