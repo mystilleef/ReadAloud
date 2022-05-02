@@ -1,5 +1,4 @@
 import {
-  isSpeaking,
   messageToContentScript,
   refresh,
   speak,
@@ -20,7 +19,7 @@ export async function readTts(
 }
 
 export async function refreshTts(): Promise<void> {
-  if (await isSpeaking()) await refresh();
+  await refresh();
 }
 
 export async function stopTts(): Promise<void> {
@@ -33,11 +32,13 @@ export function onTtsEvent(event: chrome.tts.TtsEvent): void {
 }
 
 async function onTts(event: chrome.tts.TtsEvent): Promise<void> {
+  await refresh();
   const errorMessage = event.errorMessage || "undefined";
   if (event.type === "start") await onStart();
   else if (event.type === "interrupted") await onInterrupted();
   else if (event.type === "end") await onEnd();
   else if (event.type === "error") await onError(`Error: ${errorMessage}`);
+  await refresh();
 }
 
 async function onStart(): Promise<void> {

@@ -17,11 +17,9 @@ import { storeDefaultOptions } from "./storage";
 const COMMAND = READ_ALOUD_COMMAND_STRING;
 
 readStream.subscribe(([selectedText, sender]) => {
-  if (sender.id === EXTENSION_ID) read(selectedText).catch(logError);
-});
-
-readStream.subscribe(([_data, sender]) => {
-  if (sender.id === EXTENSION_ID) badgeCounter.increment().catch(logError);
+  if (sender.id !== EXTENSION_ID) return;
+  read(selectedText).catch(logError);
+  badgeCounter.increment().catch(logError);
 });
 
 gotEndSpeakingStream.subscribe(([_data, sender]) => {
@@ -33,11 +31,9 @@ gotStartedSpeakingStream.subscribe(([_data, sender]) => {
 });
 
 refreshTtsStream.subscribe(([_data, sender]) => {
-  if (sender.id === EXTENSION_ID) badgeCounter.update().catch(logError);
-});
-
-refreshTtsStream.subscribe(([_data, sender]) => {
-  if (sender.id === EXTENSION_ID) refresh().catch(logError);
+  if (sender.id !== EXTENSION_ID) return;
+  refresh().catch(logError);
+  badgeCounter.update().catch(logError);
 });
 
 gotFinishedSpeakingStream.subscribe(([_data, sender]) => {
