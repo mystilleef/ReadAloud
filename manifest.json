@@ -1,7 +1,10 @@
 {
   "name": "Read Aloud",
   "manifest_version": 3,
-  "background": {"service_worker": "src/background.ts", "type": "module"},
+  "background": {
+    "service_worker": "src/background.ts",
+    "type": "module"
+  },
   "content_scripts": [
     {
       "all_frames": true,
@@ -21,7 +24,9 @@
   "commands": {
     "read_aloud_selected_text": {
       "description": "Read aloud selected text",
-      "suggested_key": {"default": "Ctrl+Space"}
+      "suggested_key": {
+        "default": "Ctrl+Shift+Space"
+      }
     }
   },
   "icons": {
