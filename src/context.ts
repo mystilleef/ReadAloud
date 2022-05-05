@@ -9,7 +9,6 @@ import {
   getStorageOptions,
   getVoiceName,
   storeDefaultOptions,
-  storePitch,
   storeRate,
   storeVoice
 } from "./storage";
@@ -23,8 +22,6 @@ const keyFromId = (id: string): string => `${id}${SUBMENU_ID_DELIMETER}`;
 const UNIQUE_STAMP = `${EXTENSION_ID}`;
 const SPEED_MENU_ID = `ReadAloudSpeedMenu-${UNIQUE_STAMP}`;
 const SPEED_SUBMENU_ID_KEY = keyFromId(SPEED_MENU_ID);
-const PITCH_MENU_ID = `ReadAloudPitchMenu-${UNIQUE_STAMP}`;
-const PITCH_SUBMENU_ID_KEY = keyFromId(PITCH_MENU_ID);
 const VOICES_MENU_ID = `ReadAloudVoicesMenu-${UNIQUE_STAMP}`;
 const VOICES_SUBMENU_ID_KEY = keyFromId(VOICES_MENU_ID);
 const READ_ALOUD_ROOT_MENU_ID = `ReadAloudMenu-${UNIQUE_STAMP}`;
@@ -171,9 +168,6 @@ function onRadioMenuItemClick(info: chrome.contextMenus.OnClickData): void {
     case SPEED_MENU_ID:
       storeRate(numberValueFrom(info.menuItemId)).catch(logError);
       break;
-    case PITCH_MENU_ID:
-      storePitch(numberValueFrom(info.menuItemId)).catch(logError);
-      break;
     default:
       logError("ERROR: Invalid menu item parameter");
   }
@@ -197,7 +191,6 @@ function updateSubMenus(
   result: { rate: number, pitch: number, voiceName: string }
 ): void {
   const MENU_IDS = [
-    `${PITCH_SUBMENU_ID_KEY}${result.pitch}`,
     `${VOICES_SUBMENU_ID_KEY}${result.voiceName}`,
     `${SPEED_SUBMENU_ID_KEY}${result.rate}`
   ];
