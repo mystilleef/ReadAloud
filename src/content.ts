@@ -12,7 +12,7 @@ import {
 import { EXTENSION_ID } from "./constants";
 import { logError } from "./error";
 
-const REFRESH_TTS_TIMEOUT = 15000;
+const REFRESH_TTS_TIMEOUT = 10000;
 const SELECTION_TIMEOUT = 1000;
 const FINISH_TTS_TIMEOUT = 60000;
 
@@ -61,6 +61,7 @@ function sendSelectedTextMessage(): void {
 
 function startRefreshTimer() {
   stopRefreshTimer();
+  startFinishTimer();
   REFRESH_TTS_TIMEOUT_ID = window.setInterval(() => {
     sendRefreshTts({}).catch(logError);
   }, REFRESH_TTS_TIMEOUT);
