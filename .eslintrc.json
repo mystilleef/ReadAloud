@@ -22,12 +22,18 @@
   "rules": {
     "indent": ["off"],
     "arrow-parens": ["error", "as-needed"],
+    "dot-location": ["error", "property"],
     "object-curly-spacing": ["error", "always"],
     "padded-blocks": ["error", "never"],
     "curly": ["error", "multi"],
     "nonblock-statement-body-position": ["error", "any"],
     "space-before-function-paren": ["error", "never"],
-    "newline-per-chained-call": ["error", {"ignoreChainWithDepth": 3}],
+    "newline-per-chained-call": [
+      "error",
+      {
+        "ignoreChainWithDepth": 3
+      }
+    ],
     "quote-props": ["error", "as-needed"],
     "no-use-before-define": ["error", "nofunc"],
     "one-var": ["error", "never"],
@@ -46,13 +52,31 @@
     "multiline-ternary": ["error", "always-multiline"],
     "function-paren-newline": ["error", "multiline-arguments"],
     "no-ternary": ["off"],
-    "@typescript-eslint/no-explicit-any": ["error", {"fixToUnknown": true}],
+    "@typescript-eslint/no-explicit-any": [
+      "error",
+      {
+        "fixToUnknown": true
+      }
+    ],
     "object-property-newline": [
       "error",
-      {"allowAllPropertiesOnSameLine": true}
+      {
+        "allowAllPropertiesOnSameLine": true
+      }
     ],
-    "func-style": ["error", "declaration", {"allowArrowFunctions": true}],
-    "no-unused-vars": ["error", {"argsIgnorePattern": "^_"}],
+    "func-style": [
+      "error",
+      "declaration",
+      {
+        "allowArrowFunctions": true
+      }
+    ],
+    "no-unused-vars": [
+      "error",
+      {
+        "argsIgnorePattern": "^_"
+      }
+    ],
     "no-magic-numbers": [
       "error",
       {
@@ -62,6 +86,11 @@
         "enforceConst": true
       }
     ],
-    "@typescript-eslint/no-unused-vars": ["warn", {"argsIgnorePattern": "^_"}]
+    "@typescript-eslint/no-unused-vars": [
+      "warn",
+      {
+        "argsIgnorePattern": "^_"
+      }
+    ]
   }
 }

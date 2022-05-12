@@ -15,6 +15,7 @@ export async function readTts(
   utterances: string,
   options: chrome.ttsEngine.SpeakOptions
 ): Promise<void> {
+  await refresh();
   await speak(utterances, options);
 }
 
@@ -38,7 +39,6 @@ async function onTts(event: chrome.tts.TtsEvent): Promise<void> {
   else if (event.type === "interrupted") await onInterrupted();
   else if (event.type === "end") await onEnd();
   else if (event.type === "error") await onError(`Error: ${errorMessage}`);
-  await refresh();
 }
 
 async function onStart(): Promise<void> {

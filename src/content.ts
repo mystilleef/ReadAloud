@@ -12,7 +12,7 @@ import {
 import { EXTENSION_ID } from "./constants";
 import { logError } from "./error";
 
-const REFRESH_TTS_TIMEOUT = 10000;
+const REFRESH_TTS_TIMEOUT = 5000;
 const SELECTION_TIMEOUT = 1000;
 const FINISH_TTS_TIMEOUT = 60000;
 
@@ -72,9 +72,9 @@ function stopRefreshTimer() {
 }
 
 function startFinishTimer() {
-  stopFinishTimer();
+  // StopFinishTimer();
   FINISH_TTS_TIMEOUT_ID = window.setTimeout(() => {
-    sendGotFinishedSpeaking({}).catch(logError);
+    // SendGotFinishedSpeaking({}).catch(logError);
   }, FINISH_TTS_TIMEOUT);
 }
 
