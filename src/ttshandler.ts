@@ -15,7 +15,6 @@ export async function readTts(
   utterances: string,
   options: chrome.ttsEngine.SpeakOptions
 ): Promise<void> {
-  await refresh();
   await speak(utterances, options);
 }
 
