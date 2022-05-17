@@ -14,7 +14,7 @@ import { logError } from "./error";
 
 const REFRESH_TTS_TIMEOUT = 5000;
 const SELECTION_TIMEOUT = 1000;
-const FINISH_TTS_TIMEOUT = 60000;
+const FINISH_TTS_TIMEOUT = 10000;
 
 let REFRESH_TTS_TIMEOUT_ID = 0;
 let FINISH_TTS_TIMEOUT_ID = 0;
@@ -72,9 +72,9 @@ function stopRefreshTimer() {
 }
 
 function startFinishTimer() {
-  // StopFinishTimer();
+  stopFinishTimer();
   FINISH_TTS_TIMEOUT_ID = window.setTimeout(() => {
-    // SendGotFinishedSpeaking({}).catch(logError);
+    sendGotFinishedSpeaking({}).catch(logError);
   }, FINISH_TTS_TIMEOUT);
 }
 
