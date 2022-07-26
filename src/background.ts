@@ -14,14 +14,17 @@ import { logError } from "./error";
 import { storeDefaultOptions } from "./storage";
 
 const COMMAND = READ_ALOUD_COMMAND_STRING;
-const DELAY_TIMEOUT = 1000;
-const REFRESH_TIMEOUT = 5000;
+const DELAY_TIMEOUT = 500;
+const REFRESH_TIMEOUT = 7000;
 
-readStream.subscribe(([selectedText, sender]) => {
-  if (sender.id !== EXTENSION_ID) return;
-  badgeCounter.increment().catch(logError);
-  read(selectedText).catch(logError);
-});
+readStream
+  .pipe(throttleTime(DELAY_TIMEOUT))
+  .pipe(debounceTime(DELAY_TIMEOUT))
+  .subscribe(([selectedText, sender]) => {
+    if (sender.id !== EXTENSION_ID) return;
+    badgeCounter.increment().catch(logError);
+    read(selectedText).catch(logError);
+  });
 
 refreshTtsStream
   .pipe(throttleTime(REFRESH_TIMEOUT))
