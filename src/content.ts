@@ -1,10 +1,8 @@
 import { debounceTime, throttleTime } from "rxjs";
 import {
   endedSpeakingStream,
-  finishedSpeakingStream,
   selectedTextStream,
   sendGotEndSpeaking,
-  sendGotFinishedSpeaking,
   sendRead,
   sendRefreshTts,
   startedSpeakingStream
@@ -35,12 +33,6 @@ endedSpeakingStream
     stopRefreshTimer();
     sendGotEndSpeaking({}).catch(logError);
   });
-
-finishedSpeakingStream.subscribe(([_data, sender]) => {
-  if (sender.id !== EXTENSION_ID) return;
-  stopRefreshTimer();
-  sendGotFinishedSpeaking({}).catch(logError);
-});
 
 selectedTextStream.subscribe(([_data, sender]) => {
   if (sender.id !== EXTENSION_ID) return;
