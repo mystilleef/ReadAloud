@@ -9,7 +9,7 @@ import {
 import { EXTENSION_ID } from "./constants";
 import { logError } from "./error";
 
-const ONE_SECOND_TIMEOUT = 1000;
+const SELECTION_TIMEOUT = 500;
 const REFRESH_TTS_TIMEOUT = 5000;
 
 let REFRESH_TTS_TIMEOUT_ID = 0;
@@ -34,7 +34,7 @@ selectedTextStream.subscribe(([_data, sender]) => {
 document.onselectionchange = () => {
   window.clearTimeout(SELECTION_TIMEOUT_ID);
   SELECTION_TIMEOUT_ID =
-    window.setTimeout(sendSelectedTextMessage, ONE_SECOND_TIMEOUT);
+    window.setTimeout(sendSelectedTextMessage, SELECTION_TIMEOUT);
 };
 
 function sendSelectedTextMessage(): void {
