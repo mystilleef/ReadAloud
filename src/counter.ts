@@ -9,7 +9,8 @@ class BadgeCounter {
   }
 
   public async decrement(): Promise<void> {
-    if (this.counter > 0) this.counter -= 1;
+    this.counter -= 1;
+    if (this.counter < 1) this.counter = 0;
     await this.update();
   }
 
@@ -25,7 +26,7 @@ class BadgeCounter {
 
   private async updateText(): Promise<void> {
     await chrome.action.setBadgeText({
-      text: `${this.counter === 0 ? "" : this.counter}`
+      text: `${this.counter < 1 ? "" : this.counter}`
     });
   }
 }

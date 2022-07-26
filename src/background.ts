@@ -1,8 +1,7 @@
 import { EXTENSION_ID, READ_ALOUD_COMMAND_STRING } from "./constants";
+import { debounceTime, throttleTime } from "rxjs";
 import {
   gotEndSpeakingStream,
-  gotFinishedSpeakingStream,
-  gotStartedSpeakingStream,
   readStream,
   refreshTtsStream,
   sendSelectedText
@@ -15,30 +14,29 @@ import { logError } from "./error";
 import { storeDefaultOptions } from "./storage";
 
 const COMMAND = READ_ALOUD_COMMAND_STRING;
+const DELAY_TIMEOUT = 1000;
+const REFRESH_TIMEOUT = 5000;
 
 readStream.subscribe(([selectedText, sender]) => {
   if (sender.id !== EXTENSION_ID) return;
-  read(selectedText).catch(logError);
   badgeCounter.increment().catch(logError);
+  read(selectedText).catch(logError);
 });
 
-gotEndSpeakingStream.subscribe(([_data, sender]) => {
-  if (sender.id === EXTENSION_ID) badgeCounter.decrement().catch(logError);
-});
+refreshTtsStream
+  .pipe(throttleTime(REFRESH_TIMEOUT))
+  .pipe(debounceTime(REFRESH_TIMEOUT))
+  .subscribe(([_data, sender]) => {
+    if (sender.id !== EXTENSION_ID) return;
+    refresh().catch(logError);
+  });
 
-gotStartedSpeakingStream.subscribe(([_data, sender]) => {
-  if (sender.id === EXTENSION_ID) badgeCounter.update().catch(logError);
-});
-
-refreshTtsStream.subscribe(([_data, sender]) => {
-  if (sender.id !== EXTENSION_ID) return;
-  refresh().catch(logError);
-  badgeCounter.update().catch(logError);
-});
-
-gotFinishedSpeakingStream.subscribe(([_data, sender]) => {
-  if (sender.id === EXTENSION_ID) badgeCounter.reset().catch(logError);
-});
+gotEndSpeakingStream
+  .pipe(throttleTime(DELAY_TIMEOUT))
+  .pipe(debounceTime(DELAY_TIMEOUT))
+  .subscribe(([_data, sender]) => {
+    if (sender.id === EXTENSION_ID) badgeCounter.decrement().catch(logError);
+  });
 
 chrome.commands.onCommand.addListener(onChromeCommand);
 
@@ -66,4 +64,3 @@ chrome.runtime.onInstalled.addListener(({ reason }) => {
 });
 
 chrome.runtime.onInstalled.addListener(createContextMenu);
-

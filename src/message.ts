@@ -4,14 +4,17 @@ import { getMessage } from "@extend-chrome/messages";
 export const [sendRead, readStream] =
   getMessage<string>("READ");
 
-export const [sendStartedSpeaking, startedSpeakingStream] =
-  getMessage<EmptyData>("STARTED_SPEAKING");
+export const [
+  sendStartedSpeaking,
+  startedSpeakingStream,
+  waitForStartedSpeaking
+] = getMessage<EmptyData>("STARTED_SPEAKING");
 
 export const [sendGotStartedSpeaking, gotStartedSpeakingStream] =
   getMessage<EmptyData>("GOT_STARTED_SPEAKING");
 
-export const [sendEndSpeaking, endSpeakingStream] =
-  getMessage<EmptyData>("STOPPED_SPEAKING");
+export const [sendEndedSpeaking, endedSpeakingStream] =
+  getMessage<EmptyData>("ENDED_SPEAKING");
 
 export const [sendGotEndSpeaking, gotEndSpeakingStream] =
   getMessage<EmptyData>("GOT_END_SPEAKING");
