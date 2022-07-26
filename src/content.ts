@@ -1,4 +1,3 @@
-import { debounceTime, throttleTime } from "rxjs";
 import {
   endedSpeakingStream,
   selectedTextStream,
@@ -12,27 +11,20 @@ import { logError } from "./error";
 
 const ONE_SECOND_TIMEOUT = 1000;
 const REFRESH_TTS_TIMEOUT = 5000;
-const STREAM_TIMEOUT = 1000;
 
 let REFRESH_TTS_TIMEOUT_ID = 0;
 let SELECTION_TIMEOUT_ID = 0;
 
-startedSpeakingStream
-  .pipe(throttleTime(STREAM_TIMEOUT))
-  .pipe(debounceTime(STREAM_TIMEOUT))
-  .subscribe(([_data, sender]) => {
-    if (sender.id !== EXTENSION_ID) return;
-    startRefreshTimer();
-  });
+startedSpeakingStream.subscribe(([_data, sender]) => {
+  if (sender.id !== EXTENSION_ID) return;
+  startRefreshTimer();
+});
 
-endedSpeakingStream
-  .pipe(throttleTime(STREAM_TIMEOUT))
-  .pipe(debounceTime(STREAM_TIMEOUT))
-  .subscribe(([_data, sender]) => {
-    if (sender.id !== EXTENSION_ID) return;
-    stopRefreshTimer();
-    sendGotEndSpeaking({}).catch(logError);
-  });
+endedSpeakingStream.subscribe(([_data, sender]) => {
+  if (sender.id !== EXTENSION_ID) return;
+  stopRefreshTimer();
+  sendGotEndSpeaking({}).catch(logError);
+});
 
 selectedTextStream.subscribe(([_data, sender]) => {
   if (sender.id !== EXTENSION_ID) return;
