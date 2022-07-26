@@ -5,7 +5,7 @@ import {
   stop
 } from "./utils";
 import {
-  sendEndSpeaking,
+  sendEndedSpeaking,
   sendFinishedSpeaking,
   sendStartedSpeaking
 } from "./message";
@@ -32,7 +32,6 @@ export function onTtsEvent(event: chrome.tts.TtsEvent): void {
 }
 
 async function onTts(event: chrome.tts.TtsEvent): Promise<void> {
-  await refresh();
   const errorMessage = event.errorMessage || "undefined";
   if (event.type === "start") await onStart();
   else if (event.type === "interrupted") await onInterrupted();
@@ -49,7 +48,7 @@ async function onInterrupted(): Promise<void> {
 }
 
 async function onEnd(): Promise<void> {
-  await messageToContentScript(sendEndSpeaking, {});
+  await messageToContentScript(sendEndedSpeaking, {});
 }
 
 async function onError(message: string): Promise<void> {
