@@ -20,29 +20,6 @@ startedSpeakingStream.subscribe(([_data, sender]) => {
   startRefreshTimer();
 });
 
-endedSpeakingStream.subscribe(([_data, sender]) => {
-  if (sender.id !== EXTENSION_ID) return;
-  stopRefreshTimer();
-  sendGotEndSpeaking({}).catch(logError);
-});
-
-selectedTextStream.subscribe(([_data, sender]) => {
-  if (sender.id !== EXTENSION_ID) return;
-  sendSelectedTextMessage();
-});
-
-document.onselectionchange = () => {
-  window.clearTimeout(SELECTION_TIMEOUT_ID);
-  SELECTION_TIMEOUT_ID =
-    window.setTimeout(sendSelectedTextMessage, SELECTION_TIMEOUT);
-};
-
-function sendSelectedTextMessage(): void {
-  const selectedText = window.getSelection()?.toString();
-  if (!selectedText) return;
-  sendRead(selectedText).catch(logError);
-}
-
 function startRefreshTimer() {
   stopRefreshTimer();
   REFRESH_TTS_TIMEOUT_ID = window.setInterval(() => {
@@ -50,7 +27,30 @@ function startRefreshTimer() {
   }, REFRESH_TTS_TIMEOUT);
 }
 
+endedSpeakingStream.subscribe(([_data, sender]) => {
+  if (sender.id !== EXTENSION_ID) return;
+  stopRefreshTimer();
+  sendGotEndSpeaking({}).catch(logError);
+});
+
 function stopRefreshTimer() {
   window.clearTimeout(REFRESH_TTS_TIMEOUT_ID);
+}
+
+document.onselectionchange = () => {
+  window.clearTimeout(SELECTION_TIMEOUT_ID);
+  SELECTION_TIMEOUT_ID =
+    window.setTimeout(sendSelectedTextMessage, SELECTION_TIMEOUT);
+};
+
+selectedTextStream.subscribe(([_data, sender]) => {
+  if (sender.id !== EXTENSION_ID) return;
+  sendSelectedTextMessage();
+});
+
+function sendSelectedTextMessage(): void {
+  const selectedText = window.getSelection()?.toString();
+  if (!selectedText) return;
+  sendRead(selectedText).catch(logError);
 }
 
