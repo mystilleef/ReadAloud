@@ -14,12 +14,13 @@ import { logError } from "./error";
 import { storeDefaultOptions } from "./storage";
 
 const COMMAND = READ_ALOUD_COMMAND_STRING;
-const DELAY_TIMEOUT = 500;
+const END_TIMEOUT = 500;
+const READ_TIMEOUT = 750;
 const REFRESH_TIMEOUT = 7000;
 
 readStream
-  .pipe(throttleTime(DELAY_TIMEOUT))
-  .pipe(debounceTime(DELAY_TIMEOUT))
+  .pipe(throttleTime(READ_TIMEOUT))
+  .pipe(debounceTime(READ_TIMEOUT))
   .subscribe(([selectedText, sender]) => {
     if (sender.id !== EXTENSION_ID) return;
     badgeCounter.increment().catch(logError);
@@ -35,8 +36,8 @@ refreshTtsStream
   });
 
 gotEndSpeakingStream
-  .pipe(throttleTime(DELAY_TIMEOUT))
-  .pipe(debounceTime(DELAY_TIMEOUT))
+  .pipe(throttleTime(END_TIMEOUT))
+  .pipe(debounceTime(END_TIMEOUT))
   .subscribe(([_data, sender]) => {
     if (sender.id === EXTENSION_ID) badgeCounter.decrement().catch(logError);
   });
