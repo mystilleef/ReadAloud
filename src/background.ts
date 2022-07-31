@@ -23,16 +23,15 @@ readStream
   .pipe(debounceTime(READ_TIMEOUT))
   .subscribe(([selectedText, sender]) => {
     if (sender.id !== EXTENSION_ID) return;
-    badgeCounter.increment().catch(logError);
     read(selectedText).catch(logError);
+    badgeCounter.increment().catch(logError);
   });
 
 refreshTtsStream
   .pipe(throttleTime(REFRESH_TIMEOUT))
   .pipe(debounceTime(REFRESH_TIMEOUT))
   .subscribe(([_data, sender]) => {
-    if (sender.id !== EXTENSION_ID) return;
-    refresh().catch(logError);
+    if (sender.id === EXTENSION_ID) refresh().catch(logError);
   });
 
 gotEndSpeakingStream
