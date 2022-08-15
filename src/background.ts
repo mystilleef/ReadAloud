@@ -31,7 +31,9 @@ refreshTtsStream
   .pipe(throttleTime(REFRESH_TIMEOUT))
   .pipe(debounceTime(REFRESH_TIMEOUT))
   .subscribe(([_data, sender]) => {
-    if (sender.id === EXTENSION_ID) refresh().catch(logError);
+    if (sender.id !== EXTENSION_ID) return;
+    refresh().catch(logError);
+    badgeCounter.update().catch(logError);
   });
 
 gotEndSpeakingStream
