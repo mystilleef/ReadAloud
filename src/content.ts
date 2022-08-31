@@ -53,4 +53,3 @@ function sendSelectedTextMessage(): void {
   if (!selectedText) return;
   sendRead(selectedText).catch(logError);
 }
-
