@@ -61,4 +61,3 @@ async function error(message: string): Promise<void> {
     logError(message);
   });
 }
-
