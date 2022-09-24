@@ -21,20 +21,21 @@
   ],
   "rules": {
     "indent": ["off"],
+    "no-trailing-spaces": ["warn"],
     "arrow-parens": ["error", "as-needed"],
     "dot-location": ["error", "property"],
-    "object-curly-spacing": ["error", "always"],
-    "padded-blocks": ["error", "never"],
-    "curly": ["error", "multi"],
+    "object-curly-spacing": ["warn", "always"],
+    "padded-blocks": ["warn", "never"],
+    "curly": ["warn", "multi"],
     "nonblock-statement-body-position": ["error", "any"],
-    "space-before-function-paren": ["error", "never"],
+    "space-before-function-paren": ["warn", "never"],
     "newline-per-chained-call": [
       "error",
       {
         "ignoreChainWithDepth": 3
       }
     ],
-    "quote-props": ["error", "as-needed"],
+    "quote-props": ["warn", "as-needed"],
     "no-use-before-define": ["error", "nofunc"],
     "one-var": ["error", "never"],
     "array-element-newline": ["error", "consistent"],
