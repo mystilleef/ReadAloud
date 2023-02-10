@@ -1,9 +1,20 @@
-import { chromeExtension } from "rollup-plugin-chrome-extension";
+import { crx } from "@crxjs/vite-plugin";
 import { defineConfig } from "vite";
-import zip from "rollup-plugin-zip";
+import manifest from "./manifest.json";
+import { viteStaticCopy } from "vite-plugin-static-copy";
+import zipPack from "vite-plugin-zip-pack";
 
-const isProduction = process.env.NODE_ENV === "production";
+const PACKAGE_NAME = `readaloud-${manifest.version}.zip`;
 
 export default defineConfig({
-  plugins: [chromeExtension(), isProduction && zip({ dir: "releases" })]
+  plugins: [
+    crx({ manifest }),
+    viteStaticCopy({
+      targets: [
+        { dest: "images", src: "images/default.png" },
+        { dest: "images", src: "images/stop.png" }
+      ]
+    }),
+    zipPack({ outDir: "releases", outFileName: PACKAGE_NAME })
+  ]
 });
