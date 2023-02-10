@@ -3,7 +3,6 @@ import { storage } from "@extend-chrome/storage";
 
 const DEFAULT_RATE = 1;
 const DEFAULT_VOICENAME = "Google US English";
-// Const DEFAULT_VOICENAME = "";
 
 async function getStorageOptions() {
   const rate = await getRate();
