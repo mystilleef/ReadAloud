@@ -15,7 +15,8 @@
   "scripts": {
     "clean": "rimraf dist tsconfig.tsbuildinfo",
     "build": "tsc -b && vite build",
-    "watch": "vite"
+    "watch": "vite",
+    "preview": "vite preview"
   },
   "dependencies": {
     "@extend-chrome/messages": "^1.2.2",
