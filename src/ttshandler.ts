@@ -13,9 +13,10 @@ import { logError } from "./error";
 
 export async function readTts(
   utterances: string,
-  options: chrome.ttsEngine.SpeakOptions
+  options: chrome.tts.SpeakOptions
 ): Promise<void> {
-  await speak(utterances, options);
+  const ttsoptions = { ...options, onEvent: onTtsEvent };
+  await speak(utterances, ttsoptions);
 }
 
 export async function refreshTts(): Promise<void> {
@@ -27,7 +28,7 @@ export async function stopTts(): Promise<void> {
   await messageToContentScript(sendFinishedSpeaking, {});
 }
 
-export function onTtsEvent(event: chrome.tts.TtsEvent): void {
+function onTtsEvent(event: chrome.tts.TtsEvent): void {
   onTts(event).catch(logError);
 }
 
