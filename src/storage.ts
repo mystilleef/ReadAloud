@@ -2,14 +2,13 @@ import { RATE, VOICENAME } from "./constants";
 import { storage } from "@extend-chrome/storage";
 
 const DEFAULT_RATE = 1;
-const DEFAULT_PITCH = 0;
-const DEFAULT_VOICENAME = "Google US English Female";
+const DEFAULT_VOICENAME = "Google US English";
+// Const DEFAULT_VOICENAME = "";
 
 async function getStorageOptions() {
   const rate = await getRate();
-  const pitch = await getPitch();
   const voiceName = await getVoiceName();
-  return { pitch, rate, voiceName };
+  return { rate, voiceName };
 }
 
 async function getVoiceName(): Promise<string> {
