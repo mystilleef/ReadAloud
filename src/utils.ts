@@ -16,7 +16,7 @@ async function isSpeaking(): Promise<boolean> {
 
 export async function speak(
   phrase: string,
-  options: chrome.ttsEngine.SpeakOptions
+  options: chrome.tts.SpeakOptions
 ): Promise<void> {
   await new Promise<void>(() => {
     chrome.tts.speak(phrase, options, logChromeErrorMessage);
