@@ -1,7 +1,7 @@
 {
   "name": "Read Aloud",
   "manifest_version": 3,
-  "version": "0.42.7",
+  "version": "0.43.0",
   "permissions": ["contextMenus", "storage", "tts"],
   "background": {
     "service_worker": "src/background.ts"
