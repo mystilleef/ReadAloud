@@ -12,7 +12,9 @@ export default defineConfig({
     viteStaticCopy({
       targets: [
         { dest: "images", src: "images/default.png" },
-        { dest: "images", src: "images/stop.png" }
+        { dest: "images", src: "images/default.svg" },
+        { dest: "images", src: "images/stop.png" },
+        { dest: "images", src: "images/stop.svg" }
       ]
     }),
     zipPack({ outDir: "releases", outFileName: PACKAGE_NAME })
