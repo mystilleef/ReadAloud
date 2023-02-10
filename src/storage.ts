@@ -17,12 +17,6 @@ async function getVoiceName(): Promise<string> {
   return DEFAULT_VOICENAME;
 }
 
-async function getPitch(): Promise<number> {
-  return new Promise<number>(resolve => {
-    resolve(DEFAULT_PITCH);
-  });
-}
-
 async function getRate(): Promise<number> {
   const rate = await storage.sync.get(RATE);
   if (rate && rate[RATE] > 0) return Number(rate[RATE]);
@@ -32,7 +26,6 @@ async function getRate(): Promise<number> {
 async function storeDefaultOptions(): Promise<void> {
   await storage.sync.clear();
   await storage.sync.set({
-    pitch: DEFAULT_PITCH,
     rate: DEFAULT_RATE,
     voiceName: DEFAULT_VOICENAME
   });
@@ -50,14 +43,10 @@ async function storePitch(pitch: number) {
   await storage.sync.set({ pitch });
 }
 
-export async function getSpeakOptions(
-  ttsEvent: (_e: chrome.tts.TtsEvent) => void
-): Promise<chrome.tts.SpeakOptions> {
-  const { rate, pitch, voiceName } = await getStorageOptions();
+export async function getSpeakOptions(): Promise<chrome.tts.SpeakOptions> {
+  const { rate, voiceName } = await getStorageOptions();
   return {
     enqueue: true,
-    onEvent: ttsEvent,
-    pitch,
     rate,
     voiceName,
     volume: 1
@@ -67,7 +56,6 @@ export async function getSpeakOptions(
 export {
   getVoiceName,
   getRate,
-  getPitch,
   getStorageOptions,
   storeVoice,
   storePitch,

@@ -188,7 +188,7 @@ export function resolveStorageConfigurations(): void {
 }
 
 function updateSubMenus(
-  result: { rate: number, pitch: number, voiceName: string }
+  result: { rate: number, voiceName: string }
 ): void {
   const MENU_IDS = [
     `${VOICES_SUBMENU_ID_KEY}${result.voiceName}`,
