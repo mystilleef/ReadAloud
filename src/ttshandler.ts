@@ -2,18 +2,18 @@ import {
   messageToContentScript,
   refresh,
   speak,
-  stop
+  stop,
 } from "./utils";
 import {
   sendEndedSpeaking,
   sendFinishedSpeaking,
-  sendStartedSpeaking
+  sendStartedSpeaking,
 } from "./message";
 import { logError } from "./error";
 
 export async function readTts(
   utterances: string,
-  options: chrome.tts.SpeakOptions
+  options: chrome.tts.SpeakOptions,
 ): Promise<void> {
   const ttsoptions = { ...options, onEvent: onTtsEvent };
   await speak(utterances, ttsoptions);

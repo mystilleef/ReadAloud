@@ -1,5 +1,5 @@
-import type { EmptyData } from "./utils";
 import { getMessage } from "@extend-chrome/messages";
+import type { EmptyData } from "./utils";
 
 export const [sendRead, readStream] =
   getMessage<string>("READ");
@@ -7,7 +7,7 @@ export const [sendRead, readStream] =
 export const [
   sendStartedSpeaking,
   startedSpeakingStream,
-  waitForStartedSpeaking
+  waitForStartedSpeaking,
 ] = getMessage<EmptyData>("STARTED_SPEAKING");
 
 export const [sendGotStartedSpeaking, gotStartedSpeakingStream] =
@@ -30,4 +30,3 @@ export const [sendRefreshTts, refreshTtsStream] =
 
 export const [sendSelectedText, selectedTextStream] =
   getMessage<EmptyData>("SELECTED_TEXT");
-

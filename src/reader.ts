@@ -1,7 +1,7 @@
 import {
   readTts,
   refreshTts as refresh,
-  stopTts as stop
+  stopTts as stop,
 } from "./ttshandler";
 import { getSpeakOptions } from "./storage";
 

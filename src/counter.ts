@@ -26,11 +26,10 @@ class BadgeCounter {
 
   private async updateText(): Promise<void> {
     await chrome.action.setBadgeText({
-      text: `${this.counter < 1 ? "" : this.counter}`
+      text: `${this.counter < 1 ? "" : this.counter}`,
     });
   }
 }
 
 const badgeCounter = new BadgeCounter();
-
-export { badgeCounter as default };
+export default badgeCounter;

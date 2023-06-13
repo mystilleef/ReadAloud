@@ -2,7 +2,7 @@ import {
   chromeRuntimeError,
   doNothing,
   logChromeErrorMessage,
-  logError
+  logError,
 } from "./error";
 import {
   getRate,
@@ -10,7 +10,7 @@ import {
   getVoiceName,
   storeDefaultOptions,
   storeRate,
-  storeVoice
+  storeVoice,
 } from "./storage";
 import { EXTENSION_ID } from "./constants";
 import { getTtsVoices } from "./utils";
@@ -27,27 +27,26 @@ const VOICES_SUBMENU_ID_KEY = keyFromId(VOICES_MENU_ID);
 const READ_ALOUD_ROOT_MENU_ID = `ReadAloudMenu-${UNIQUE_STAMP}`;
 const RESET_DEFAULT_MENU_ID = `ReadAloudResetDefaultMenu-${UNIQUE_STAMP}`;
 
-
 const CONTEXTS = ["all"] as chrome.contextMenus.ContextType[];
 const TOP_LEVEL_MENU_INFO = [
   {
     contexts: CONTEXTS,
     id: SPEED_MENU_ID,
     parentId: READ_ALOUD_ROOT_MENU_ID,
-    title: "Speed"
+    title: "Speed",
   },
   {
     contexts: CONTEXTS,
     id: VOICES_MENU_ID,
     parentId: READ_ALOUD_ROOT_MENU_ID,
-    title: "Voices"
+    title: "Voices",
   },
   {
     contexts: CONTEXTS,
     id: RESET_DEFAULT_MENU_ID,
     parentId: READ_ALOUD_ROOT_MENU_ID,
-    title: "Reset to Default"
-  }
+    title: "Reset to Default",
+  },
 ];
 
 // eslint-disable-next-line no-magic-numbers
@@ -56,7 +55,7 @@ const SPEED_OPTIONS = [1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2];
 chrome.storage.onChanged.addListener(
   (_changes: chrome.storage.StorageChange, _areaName: string) => {
     resolveStorageConfigurations();
-  }
+  },
 );
 
 chrome.contextMenus.onClicked.addListener((info, _tab) => {
@@ -68,12 +67,12 @@ export function createContextMenu() {
     {
       contexts: CONTEXTS,
       id: READ_ALOUD_ROOT_MENU_ID,
-      title: "Read Aloud"
+      title: "Read Aloud",
     },
     () => {
       if (chromeRuntimeError()) logChromeErrorMessage();
       else TOP_LEVEL_MENU_INFO.forEach(createTopLevelMenus);
-    }
+    },
   );
 }
 
@@ -121,9 +120,9 @@ async function createSpeedRadioMenuItems(menu: {
         id: `${SPEED_SUBMENU_ID_KEY}${speed}`,
         parentId: menu.id,
         title: `${speed}x`,
-        type: "radio"
+        type: "radio",
       },
-      logChromeErrorMessage
+      logChromeErrorMessage,
     );
   });
 }
@@ -144,15 +143,15 @@ async function createVoicesRadioMenuItems(menu: {
         id: `${VOICES_SUBMENU_ID_KEY}${voice.voiceName || ""}`,
         parentId: menu.id,
         title: `${voice.voiceName || ""}`,
-        type: "radio"
+        type: "radio",
       },
-      logChromeErrorMessage
+      logChromeErrorMessage,
     );
   });
 }
 
 export async function addListenersToContextMenus(
-  info: chrome.contextMenus.OnClickData
+  info: chrome.contextMenus.OnClickData,
 ) {
   if (info.menuItemId === RESET_DEFAULT_MENU_ID) await resetToDefault();
   else onRadioMenuItemClick(info);
@@ -186,11 +185,11 @@ export function resolveStorageConfigurations(): void {
 }
 
 function updateSubMenus(
-  result: { rate: number, voiceName: string }
+  result: { rate: number, voiceName: string },
 ): void {
   const MENU_IDS = [
     `${VOICES_SUBMENU_ID_KEY}${result.voiceName}`,
-    `${SPEED_SUBMENU_ID_KEY}${result.rate}`
+    `${SPEED_SUBMENU_ID_KEY}${result.rate}`,
   ];
   MENU_IDS.forEach(id => {
     chrome.contextMenus.update(id, { checked: true }, logChromeErrorMessage);

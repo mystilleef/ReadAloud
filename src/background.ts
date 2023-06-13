@@ -1,10 +1,10 @@
-import { EXTENSION_ID, READ_ALOUD_COMMAND_STRING } from "./constants";
 import { debounceTime, throttleTime } from "rxjs";
+import { EXTENSION_ID, READ_ALOUD_COMMAND_STRING } from "./constants";
 import {
   gotEndSpeakingStream,
   readStream,
   refreshTtsStream,
-  sendSelectedText
+  sendSelectedText,
 } from "./message";
 import { isSpeaking, messageToContentScript } from "./utils";
 import { read, refresh, stop } from "./reader";
@@ -56,7 +56,7 @@ chrome.commands.onCommand.addListener((command: string): void => {
 
 chrome.action.onClicked.addListener((_tab: chrome.tabs.Tab): void => {
   const stopOrQuery = (speaking: boolean): void => {
-    speaking ? stop().catch(logError) : selectTextFromContent();
+    if (speaking) stop().catch(logError); else selectTextFromContent();
   };
   isSpeaking().then(stopOrQuery).catch(logError);
   badgeCounter.reset().catch(logError);

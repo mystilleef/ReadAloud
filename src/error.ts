@@ -14,4 +14,3 @@ export function chromeRuntimeError(): boolean {
 export function doNothing(_any?: unknown | undefined): void {
   // Doing nothing
 }
-

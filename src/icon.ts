@@ -1,4 +1,4 @@
-async function updateBrowserIcon(counter: number): Promise<void> {
+export default async function updateBrowserIcon(counter: number): Promise<void> {
   if (counter) await setStopIcon();
   else await setDefaultIcon();
 }
@@ -14,13 +14,9 @@ async function setStopIcon(): Promise<void> {
 }
 
 async function setIcon(name: string): Promise<void> {
-  return new Promise(() => {
-    chrome.action.setIcon({ path: `images/${name}.png` });
-  });
+  await chrome.action.setIcon({ path: `images/${name}.png` });
 }
 
 async function setTooltip(tip: string): Promise<void> {
   await chrome.action.setTitle({ title: tip });
 }
-
-export { updateBrowserIcon as default };

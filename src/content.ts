@@ -4,7 +4,7 @@ import {
   sendGotEndSpeaking,
   sendRead,
   sendRefreshTts,
-  startedSpeakingStream
+  startedSpeakingStream,
 } from "./message";
 import { EXTENSION_ID } from "./constants";
 import { logError } from "./error";

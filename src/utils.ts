@@ -16,7 +16,7 @@ async function isSpeaking(): Promise<boolean> {
 
 export async function speak(
   phrase: string,
-  options: chrome.tts.SpeakOptions
+  options: chrome.tts.SpeakOptions,
 ): Promise<void> {
   await new Promise<void>(() => {
     chrome.tts.speak(phrase, options, logChromeErrorMessage);
@@ -50,7 +50,7 @@ export async function refresh(): Promise<void> {
 
 export async function messageToContentScript(
   func: (_arg0: EmptyData, _arg1: { tabId: number; }) => Promise<void>,
-  data: EmptyData
+  data: EmptyData,
 ): Promise<void> {
   return new Promise(() => {
     chrome.tabs.query(
@@ -59,7 +59,7 @@ export async function messageToContentScript(
         if (!tabs || !tabs[0]) return;
         const tabid = tabs[0].id || -1;
         if (tabid) func(data, { tabId: tabid }).catch(logError);
-      }
+      },
     );
   });
 }

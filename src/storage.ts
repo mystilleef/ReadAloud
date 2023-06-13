@@ -1,5 +1,5 @@
-import { RATE, VOICENAME } from "./constants";
 import { storage } from "@extend-chrome/storage";
+import { RATE, VOICENAME } from "./constants";
 
 const DEFAULT_RATE = 1;
 const DEFAULT_VOICENAME = "Google US English";
@@ -26,7 +26,7 @@ async function storeDefaultOptions(): Promise<void> {
   await storage.sync.clear();
   await storage.sync.set({
     rate: DEFAULT_RATE,
-    voiceName: DEFAULT_VOICENAME
+    voiceName: DEFAULT_VOICENAME,
   });
 }
 
@@ -48,7 +48,7 @@ export async function getSpeakOptions(): Promise<chrome.tts.SpeakOptions> {
     enqueue: true,
     rate,
     voiceName,
-    volume: 1
+    volume: 1,
   };
 }
 
@@ -59,5 +59,5 @@ export {
   storeVoice,
   storePitch,
   storeRate,
-  storeDefaultOptions
+  storeDefaultOptions,
 };
