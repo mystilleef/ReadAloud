@@ -1,16 +1,24 @@
 {
   "name": "Read Aloud",
   "manifest_version": 3,
-  "version": "0.43.1",
-  "permissions": ["contextMenus", "storage", "tts"],
+  "version": "0.43.2",
+  "permissions": [
+    "contextMenus",
+    "storage",
+    "tts"
+  ],
   "background": {
     "service_worker": "src/background.ts"
   },
   "content_scripts": [
     {
       "all_frames": true,
-      "matches": ["<all_urls>"],
-      "js": ["src/content.ts"]
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "src/content.ts"
+      ]
     }
   ],
   "action": {
