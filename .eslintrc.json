@@ -14,7 +14,9 @@
     "ecmaVersion": "latest",
     "sourceType": "module"
   },
-  "plugins": ["@typescript-eslint"],
+  "plugins": [
+    "@typescript-eslint"
+  ],
   "extends": [
     "airbnb-base",
     "airbnb-typescript/base",
@@ -31,30 +33,80 @@
       }
     ],
     "@typescript-eslint/lines-between-class-members": "off",
-    "operator-linebreak": ["warn", "after"],
+    "@typescript-eslint/semi": "warn",
+    "operator-linebreak": [
+      "warn",
+      "after"
+    ],
     "no-use-before-define": "off",
     "@typescript-eslint/no-use-before-define": [
       "error",
-      {"functions": false, "classes": false}
+      {
+        "functions": false,
+        "classes": false
+      }
     ],
-    "@typescript-eslint/quotes": ["warn", "double"],
+    "@typescript-eslint/quotes": [
+      "warn",
+      "double"
+    ],
     "space-in-parens": "warn",
     "@typescript-eslint/no-unsafe-call": "warn",
     "no-multi-spaces": "warn",
-    "comma-spacing": ["warn", {"before": false, "after": true}],
-    "semi": ["warn", "always"],
-    "multiline-comment-style": ["off"],
-    "quotes": ["warn", "double"],
-    "lines-between-class-members": ["off"],
-    "capitalized-comments": ["off"],
-    "indent": ["off"],
-    "no-trailing-spaces": ["warn"],
-    "arrow-parens": ["warn", "as-needed"],
-    "dot-location": ["warn", "property"],
-    "object-curly-spacing": ["warn", "always"],
-    "padded-blocks": ["warn", "never"],
-    "curly": ["warn", "multi"],
-    "nonblock-statement-body-position": ["warn", "any"],
+    "comma-spacing": [
+      "warn",
+      {
+        "before": false,
+        "after": true
+      }
+    ],
+    "semi": [
+      "warn",
+      "always"
+    ],
+    "multiline-comment-style": [
+      "off"
+    ],
+    "quotes": [
+      "warn",
+      "double"
+    ],
+    "lines-between-class-members": [
+      "off"
+    ],
+    "capitalized-comments": [
+      "off"
+    ],
+    "indent": [
+      "off"
+    ],
+    "no-trailing-spaces": [
+      "warn"
+    ],
+    "arrow-parens": [
+      "warn",
+      "as-needed"
+    ],
+    "dot-location": [
+      "warn",
+      "property"
+    ],
+    "object-curly-spacing": [
+      "warn",
+      "always"
+    ],
+    "padded-blocks": [
+      "warn",
+      "never"
+    ],
+    "curly": [
+      "warn",
+      "multi"
+    ],
+    "nonblock-statement-body-position": [
+      "warn",
+      "any"
+    ],
     "space-before-function-paren": [
       "warn",
       {
@@ -69,9 +121,18 @@
         "ignoreChainWithDepth": 3
       }
     ],
-    "quote-props": ["warn", "as-needed"],
-    "one-var": ["error", "never"],
-    "array-element-newline": ["warn", "consistent"],
+    "quote-props": [
+      "warn",
+      "as-needed"
+    ],
+    "one-var": [
+      "error",
+      "never"
+    ],
+    "array-element-newline": [
+      "warn",
+      "consistent"
+    ],
     "no-unused-expressions": [
       "error",
       {
@@ -81,11 +142,24 @@
         "enforceForJSX": true
       }
     ],
-    "no-console": ["off"],
-    "function-call-argument-newline": ["warn", "consistent"],
-    "multiline-ternary": ["warn", "always-multiline"],
-    "function-paren-newline": ["warn", "multiline-arguments"],
-    "no-ternary": ["off"],
+    "no-console": [
+      "off"
+    ],
+    "function-call-argument-newline": [
+      "warn",
+      "consistent"
+    ],
+    "multiline-ternary": [
+      "warn",
+      "always-multiline"
+    ],
+    "function-paren-newline": [
+      "warn",
+      "multiline-arguments"
+    ],
+    "no-ternary": [
+      "off"
+    ],
     "@typescript-eslint/no-explicit-any": [
       "error",
       {
@@ -114,7 +188,11 @@
     "no-magic-numbers": [
       "error",
       {
-        "ignore": [-1, 0, 1],
+        "ignore": [
+          -1,
+          0,
+          1
+        ],
         "ignoreArrayIndexes": true,
         "ignoreDefaultValues": true,
         "enforceConst": true
