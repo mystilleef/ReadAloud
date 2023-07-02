@@ -34,6 +34,7 @@
     ],
     "@typescript-eslint/lines-between-class-members": "off",
     "@typescript-eslint/semi": "warn",
+    "@typescript-eslint/indent": "warn",
     "operator-linebreak": [
       "warn",
       "after"
@@ -53,6 +54,18 @@
     "space-in-parens": "warn",
     "@typescript-eslint/no-unsafe-call": "warn",
     "no-multi-spaces": "warn",
+    "no-multiple-empty-lines": "warn",
+    "object-curly-newline": "warn",
+    "import/order": "warn",
+    "block-spacing": "warn",
+    "key-spacing": "warn",
+    "max-len": "warn",
+    "@typescript-eslint/object-curly-spacing": "warn",
+    "@typescript-eslint/brace-style": "warn",
+    "@typescript-eslint/keyword-spacing": "warn",
+    "@typescript-eslint/comma-dangle": "warn",
+    "@typescript-eslint/space-before-blocks": "warn",
+    "semi-spacing": "warn",
     "comma-spacing": [
       "warn",
       {
