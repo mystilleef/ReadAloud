@@ -11,6 +11,6 @@ export function chromeRuntimeError(): boolean {
   return Boolean(chrome.runtime.lastError);
 }
 
-export function doNothing(_any?: unknown | undefined): void {
+export function doNothing(_any?: unknown): void {
   // Doing nothing
 }
