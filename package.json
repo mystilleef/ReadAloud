@@ -21,26 +21,26 @@
   "dependencies": {
     "@extend-chrome/messages": "^1.2.2",
     "@extend-chrome/storage": "^1.5.0",
-    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-prettier": "^5.0.0",
     "rxjs": "^7.8.1"
   },
   "devDependencies": {
     "@crxjs/vite-plugin": "^2.0.0-beta.12",
-    "@types/chrome": "0.0.239",
-    "@types/node": "^20.3.3",
-    "@typescript-eslint/eslint-plugin": "^5.61.0",
-    "@typescript-eslint/parser": "^5.61.0",
-    "eslint": "^8.44.0",
-    "eslint-config-airbnb-typescript": "^17.0.0",
+    "@types/chrome": "0.0.241",
+    "@types/node": "^20.4.4",
+    "@typescript-eslint/eslint-plugin": "^6.2.0",
+    "@typescript-eslint/parser": "^6.2.0",
+    "eslint": "^8.45.0",
+    "eslint-config-airbnb-typescript": "^17.1.0",
     "eslint-config-prettier": "^8.8.0",
     "rimraf": "^5.0.1",
-    "rollup": "^3.26.1",
+    "rollup": "^3.26.3",
     "rollup-plugin-zip": "^1.0.3",
-    "tslib": "^2.6.0",
+    "tslib": "^2.6.1",
     "typescript": "^5.1.6",
-    "vite": "^4.3.9",
+    "vite": "^4.4.7",
     "vite-plugin-eslint": "^1.8.1",
-    "vite-plugin-static-copy": "^0.16.0",
+    "vite-plugin-static-copy": "^0.17.0",
     "vite-plugin-zip-pack": "^1.0.6"
   }
 }
