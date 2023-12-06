@@ -71,7 +71,7 @@ export function createContextMenu() {
     },
     () => {
       if (chromeRuntimeError()) logChromeErrorMessage();
-      else TOP_LEVEL_MENU_INFO.forEach(createTopLevelMenus);
+      else for (const menu of TOP_LEVEL_MENU_INFO) createTopLevelMenus(menu);
     },
   );
 }
@@ -112,7 +112,7 @@ async function createSpeedRadioMenuItems(menu: {
   contexts: chrome.contextMenus.ContextType[];
 }): Promise<void> {
   const rate = await getRate();
-  SPEED_OPTIONS.forEach(speed => {
+  for (const speed of SPEED_OPTIONS)
     chrome.contextMenus.create(
       {
         checked: rate === Number(speed),
@@ -124,7 +124,6 @@ async function createSpeedRadioMenuItems(menu: {
       },
       logChromeErrorMessage,
     );
-  });
 }
 
 async function createVoicesRadioMenuItems(menu: {
@@ -135,7 +134,7 @@ async function createVoicesRadioMenuItems(menu: {
 }): Promise<void> {
   const voices = await getTtsVoices();
   const voiceName = await getVoiceName();
-  voices.forEach(voice => {
+  for (const voice of voices)
     chrome.contextMenus.create(
       {
         checked: voiceName === voice.voiceName,
@@ -147,7 +146,6 @@ async function createVoicesRadioMenuItems(menu: {
       },
       logChromeErrorMessage,
     );
-  });
 }
 
 export async function addListenersToContextMenus(
@@ -184,16 +182,13 @@ export function resolveStorageConfigurations(): void {
   getStorageOptions().then(updateSubMenus).catch(doNothing);
 }
 
-function updateSubMenus(
-  result: { rate: number, voiceName: string },
-): void {
+function updateSubMenus(result: { rate: number; voiceName: string }): void {
   const MENU_IDS = [
     `${VOICES_SUBMENU_ID_KEY}${result.voiceName}`,
     `${SPEED_SUBMENU_ID_KEY}${result.rate}`,
   ];
-  MENU_IDS.forEach(id => {
+  for (const id of MENU_IDS)
     chrome.contextMenus.update(id, { checked: true }, logChromeErrorMessage);
-  });
 }
 
 async function resetToDefault(): Promise<void> {

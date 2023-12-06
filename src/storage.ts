@@ -12,7 +12,7 @@ async function getStorageOptions() {
 
 async function getVoiceName(): Promise<string> {
   const voice = await storage.sync.get(VOICENAME);
-  if (voice && voice[VOICENAME]) return voice[VOICENAME] as string;
+  if (voice?.[VOICENAME]) return voice[VOICENAME] as string;
   return DEFAULT_VOICENAME;
 }
 

@@ -24,6 +24,7 @@
     "plugin:@typescript-eslint/recommended-requiring-type-checking"
   ],
   "rules": {
+    "no-restricted-syntax": "off",
     "import/no-extraneous-dependencies": [
       "warn",
       {
