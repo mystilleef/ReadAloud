@@ -56,7 +56,8 @@ chrome.commands.onCommand.addListener((command: string): void => {
 
 chrome.action.onClicked.addListener((_tab: chrome.tabs.Tab): void => {
   const stopOrQuery = (speaking: boolean): void => {
-    if (speaking) stop().catch(logError); else selectTextFromContent();
+    if (speaking) stop().catch(logError);
+    else selectTextFromContent();
   };
   isSpeaking().then(stopOrQuery).catch(logError);
   badgeCounter.reset().catch(logError);
