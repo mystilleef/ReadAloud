@@ -2,23 +2,15 @@
   "name": "Read Aloud",
   "manifest_version": 3,
   "version": "0.43.5",
-  "permissions": [
-    "contextMenus",
-    "storage",
-    "tts"
-  ],
+  "permissions": ["contextMenus", "storage", "tts"],
   "background": {
     "service_worker": "src/background.ts"
   },
   "content_scripts": [
     {
       "all_frames": true,
-      "matches": [
-        "<all_urls>"
-      ],
-      "js": [
-        "src/content.ts"
-      ]
+      "matches": ["<all_urls>"],
+      "js": ["src/content.ts"]
     }
   ],
   "action": {
@@ -37,5 +29,16 @@
         "default": "Ctrl+Shift+Space"
       }
     }
-  }
+  },
+  "web_accessible_resources": [
+    {
+      "matches": ["<all_urls>"],
+      "resources": [
+        "images/default.png",
+        "images/default.svg",
+        "images/stop.svg",
+        "images/stop.png"
+      ]
+    }
+  ]
 }

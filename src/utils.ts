@@ -1,16 +1,18 @@
 import { logChromeErrorMessage, logError } from "./error";
 
-export interface EmptyData { data?: string }
+export interface EmptyData {
+  data?: string;
+}
 
 async function getTtsVoices(): Promise<chrome.tts.TtsVoice[]> {
-  return new Promise(resolve => {
-    chrome.tts.getVoices(voices => resolve(voices));
+  return new Promise((resolve) => {
+    chrome.tts.getVoices((voices) => resolve(voices));
   });
 }
 
 async function isSpeaking(): Promise<boolean> {
-  return new Promise(resolve => {
-    chrome.tts.isSpeaking(speaking => resolve(speaking));
+  return new Promise((resolve) => {
+    chrome.tts.isSpeaking((speaking) => resolve(speaking));
   });
 }
 
@@ -49,7 +51,7 @@ export async function refresh(): Promise<void> {
 }
 
 export async function messageToContentScript(
-  func: (_arg0: EmptyData, _arg1: { tabId: number; }) => Promise<void>,
+  func: (_arg0: EmptyData, _arg1: { tabId: number }) => Promise<void>,
   data: EmptyData,
 ): Promise<void> {
   return new Promise(() => {

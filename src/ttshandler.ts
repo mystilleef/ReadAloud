@@ -1,15 +1,10 @@
-import {
-  messageToContentScript,
-  refresh,
-  speak,
-  stop,
-} from "./utils";
+import { logError } from "./error";
 import {
   sendEndedSpeaking,
   sendFinishedSpeaking,
   sendStartedSpeaking,
 } from "./message";
-import { logError } from "./error";
+import { messageToContentScript, refresh, speak, stop } from "./utils";
 
 export async function readTts(
   utterances: string,

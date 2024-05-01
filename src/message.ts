@@ -1,8 +1,7 @@
 import { getMessage } from "@extend-chrome/messages";
 import type { EmptyData } from "./utils";
 
-export const [sendRead, readStream] =
-  getMessage<string>("READ");
+export const [sendRead, readStream] = getMessage<string>("READ");
 
 export const [
   sendStartedSpeaking,

@@ -1,3 +1,4 @@
+import { EXTENSION_ID } from "./constants";
 import {
   chromeRuntimeError,
   doNothing,
@@ -12,7 +13,6 @@ import {
   storeRate,
   storeVoice,
 } from "./storage";
-import { EXTENSION_ID } from "./constants";
 import { getTtsVoices } from "./utils";
 
 const SUBMENU_ID_DELIMETER = "|";

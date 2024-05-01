@@ -1,3 +1,5 @@
+import { EXTENSION_ID } from "./constants";
+import { logError } from "./error";
 import {
   endedSpeakingStream,
   selectedTextStream,
@@ -6,8 +8,6 @@ import {
   sendRefreshTts,
   startedSpeakingStream,
 } from "./message";
-import { EXTENSION_ID } from "./constants";
-import { logError } from "./error";
 
 const SELECTION_TIMEOUT = 500;
 const REFRESH_TTS_TIMEOUT = 5000;
@@ -39,8 +39,10 @@ function stopRefreshTimer() {
 
 document.onselectionchange = () => {
   window.clearTimeout(SELECTION_TIMEOUT_ID);
-  SELECTION_TIMEOUT_ID =
-    window.setTimeout(sendSelectedTextMessage, SELECTION_TIMEOUT);
+  SELECTION_TIMEOUT_ID = window.setTimeout(
+    sendSelectedTextMessage,
+    SELECTION_TIMEOUT,
+  );
 };
 
 selectedTextStream.subscribe(([_data, sender]) => {

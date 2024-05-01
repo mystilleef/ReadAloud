@@ -1,4 +1,6 @@
-export default async function updateBrowserIcon(counter: number): Promise<void> {
+export default async function updateBrowserIcon(
+  counter: number,
+): Promise<void> {
   if (counter) await setStopIcon();
   else await setDefaultIcon();
 }

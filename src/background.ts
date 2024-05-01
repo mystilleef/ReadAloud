@@ -1,17 +1,17 @@
 import { debounceTime, throttleTime } from "rxjs";
 import { EXTENSION_ID, READ_ALOUD_COMMAND_STRING } from "./constants";
+import { createContextMenu } from "./context";
+import badgeCounter from "./counter";
+import { logError } from "./error";
 import {
   gotEndSpeakingStream,
   readStream,
   refreshTtsStream,
   sendSelectedText,
 } from "./message";
-import { isSpeaking, messageToContentScript } from "./utils";
 import { read, refresh, stop } from "./reader";
-import badgeCounter from "./counter";
-import { createContextMenu } from "./context";
-import { logError } from "./error";
 import { storeDefaultOptions } from "./storage";
+import { isSpeaking, messageToContentScript } from "./utils";
 
 const COMMAND = READ_ALOUD_COMMAND_STRING;
 const END_TIMEOUT = 500;
