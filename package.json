@@ -40,6 +40,7 @@
     "tslib": "^2.6.2",
     "typescript": "^5.3.3",
     "vite": "^5.1.1",
+    "vite-plugin-biome": "^1.0.9",
     "vite-plugin-eslint": "^1.8.1",
     "vite-plugin-static-copy": "^1.0.1",
     "vite-plugin-zip-pack": "^1.2.1"
