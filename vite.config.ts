@@ -1,7 +1,7 @@
 import { crx } from "@crxjs/vite-plugin";
 import { defineConfig } from "vite";
-import eslint from "vite-plugin-eslint";
 import biomePlugin from "vite-plugin-biome";
+import eslint from "vite-plugin-eslint";
 import { viteStaticCopy } from "vite-plugin-static-copy";
 import zipPack from "vite-plugin-zip-pack";
 import manifest from "./manifest.json";
