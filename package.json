@@ -23,6 +23,7 @@
     "@crxjs/vite-plugin": "^2.0.0-beta.12",
     "@types/chrome": "0.0.267",
     "@types/node": "^20.12.8",
+    "@types/web": "^0.0.143",
     "eslint": "^9.1.1",
     "rimraf": "^5.0.5",
     "rollup": "^4.17.2",
