@@ -1,7 +1,6 @@
 import { crx } from "@crxjs/vite-plugin";
 import { defineConfig } from "vite";
 import biomePlugin from "vite-plugin-biome";
-import eslint from "vite-plugin-eslint";
 import { viteStaticCopy } from "vite-plugin-static-copy";
 import zipPack from "vite-plugin-zip-pack";
 import manifest from "./manifest.json";
@@ -12,11 +11,9 @@ export default defineConfig({
   plugins: [
     biomePlugin({
       mode: "check",
-      files: "src",
       applyFixes: true,
       failOnError: true,
     }),
-    eslint({ cache: true, failOnWarning: true }),
     crx({ manifest }),
     viteStaticCopy({
       targets: [

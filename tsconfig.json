@@ -2,17 +2,8 @@
   "$schema": "https://json.schemastore.org/tsconfig",
   "display": "Google Chrome Extension",
   "compileOnSave": true,
-  "include": [
-    "src",
-    "vite.config.ts",
-    "manifest.json"
-  ],
-  "exclude": [
-    "node_modules",
-    "releases",
-    "images",
-    "dist"
-  ],
+  "include": ["src", "vite.config.ts", "manifest.json"],
+  "exclude": ["node_modules", "releases", "images", "dist"],
   "compilerOptions": {
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
@@ -28,11 +19,7 @@
     "importHelpers": true,
     "incremental": true,
     "isolatedModules": true,
-    "lib": [
-      "esnext",
-      "webworker",
-      "dom"
-    ],
+    "lib": ["esnext", "webworker", "dom"],
     "module": "esnext",
     "moduleResolution": "node",
     "newLine": "lf",

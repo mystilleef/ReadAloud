@@ -1,0 +1,30 @@
+{
+  "$schema": "https://biomejs.dev/schemas/1.7.2/schema.json",
+  "organizeImports": {
+    "enabled": true
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "recommended": true
+    }
+  },
+  "formatter": {
+    "indentStyle": "space"
+  },
+  "files": {
+    "ignore": [
+      "node_modules",
+      "releases",
+      "images",
+      "dist",
+      "build",
+      "out",
+      ".git",
+      ".gitignore",
+      "**/*.md",
+      "**/*.lockb",
+      "LICENSE"
+    ]
+  }
+}
