@@ -1,18 +1,7 @@
 {
-  "$schema": "https://biomejs.dev/schemas/1.7.2/schema.json",
-  "organizeImports": {
-    "enabled": true
-  },
-  "linter": {
-    "enabled": true,
-    "rules": {
-      "recommended": true
-    }
-  },
-  "formatter": {
-    "indentStyle": "space"
-  },
+  "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
   "files": {
+    "ignoreUnknown": true,
     "ignore": [
       "node_modules",
       "releases",
@@ -24,7 +13,31 @@
       ".gitignore",
       "**/*.md",
       "**/*.lockb",
-      "LICENSE"
-    ]
-  }
+      "LICENSE",
+    ],
+  },
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true,
+  },
+  "organizeImports": {
+    "enabled": true,
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "recommended": true,
+    },
+  },
+  "formatter": {
+    "indentStyle": "space",
+    "useEditorconfig": true,
+    "attributePosition": "multiline",
+  },
+  "json": {
+    "formatter": {
+      "trailingCommas": "all",
+    },
+  },
 }
