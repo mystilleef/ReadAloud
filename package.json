@@ -11,12 +11,12 @@
     "clean": "rimraf dist tsconfig.tsbuildinfo",
     "build": "tsc -b && vite build",
     "watch": "vite",
-    "preview": "vite preview",
+    "preview": "vite preview"
   },
   "dependencies": {
     "@extend-chrome/messages": "^1.2.2",
     "@extend-chrome/storage": "^1.5.0",
-    "rxjs": "^7.8.1",
+    "rxjs": "^7.8.1"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
@@ -33,6 +33,6 @@
     "vite": "^5.4.11",
     "vite-plugin-biome": "^1.0.12",
     "vite-plugin-static-copy": "^2.1.0",
-    "vite-plugin-zip-pack": "^1.2.4",
-  },
+    "vite-plugin-zip-pack": "^1.2.4"
+  }
 }

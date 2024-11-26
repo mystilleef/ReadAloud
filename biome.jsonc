@@ -13,31 +13,26 @@
       ".gitignore",
       "**/*.md",
       "**/*.lockb",
-      "LICENSE",
-    ],
+      "LICENSE"
+    ]
   },
   "vcs": {
     "enabled": true,
     "clientKind": "git",
-    "useIgnoreFile": true,
+    "useIgnoreFile": true
   },
   "organizeImports": {
-    "enabled": true,
+    "enabled": true
   },
   "linter": {
     "enabled": true,
     "rules": {
-      "recommended": true,
-    },
+      "recommended": true
+    }
   },
   "formatter": {
     "indentStyle": "space",
     "useEditorconfig": true,
-    "attributePosition": "multiline",
-  },
-  "json": {
-    "formatter": {
-      "trailingCommas": "all",
-    },
-  },
+    "attributePosition": "multiline"
+  }
 }

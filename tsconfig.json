@@ -38,6 +38,6 @@
     "stripInternal": true,
     "target": "esnext",
     "types": ["@types/chrome", "@types/web", "@types/node"],
-    "useDefineForClassFields": true,
-  },
+    "useDefineForClassFields": true
+  }
 }
