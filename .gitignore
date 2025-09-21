@@ -87,3 +87,4 @@ public/js/
 build/
 dist/
 releases/
+.claude/
