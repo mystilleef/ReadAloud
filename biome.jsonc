@@ -1,19 +1,20 @@
 {
-  "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.2.4/schema.json",
   "files": {
     "ignoreUnknown": true,
-    "ignore": [
-      "node_modules",
-      "releases",
-      "images",
-      "dist",
-      "build",
-      "out",
-      ".git",
-      ".gitignore",
-      "**/*.md",
-      "**/*.lockb",
-      "LICENSE"
+    "includes": [
+      "**",
+      "!**/node_modules",
+      "!**/releases",
+      "!**/images",
+      "!**/dist",
+      "!**/build",
+      "!**/out",
+      "!**/.git",
+      "!**/.gitignore",
+      "!**/*.md",
+      "!**/*.lockb",
+      "!**/LICENSE"
     ]
   },
   "vcs": {
@@ -21,9 +22,7 @@
     "clientKind": "git",
     "useIgnoreFile": true
   },
-  "organizeImports": {
-    "enabled": true
-  },
+  "assist": { "actions": { "source": { "organizeImports": "on" } } },
   "linter": {
     "enabled": true,
     "rules": {
