@@ -16,7 +16,8 @@
     "clean": "rimraf dist tsconfig.tsbuildinfo",
     "build": "tsc -b && vite build",
     "watch": "vite",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "release": "ts-node-esm scripts/release.ts"
   },
   "dependencies": {
     "@extend-chrome/messages": "^1.2.2",
@@ -29,10 +30,14 @@
     "@types/chrome": "^0.1.12",
     "@types/node": "^24.5.2",
     "@types/web": "^0.0.269",
+    "chalk": "^5.6.2",
     "eslint": "^9.36.0",
+    "execa": "^9.6.0",
     "rimraf": "^6.0.1",
     "rollup": "^4.52.0",
     "rollup-plugin-zip": "^1.0.3",
+    "semver": "^7.7.2",
+    "ts-node": "^10.9.2",
     "tslib": "^2.8.1",
     "typescript": "^5.9.2",
     "vite": "^7.1.6",
