@@ -6,10 +6,12 @@ import {
   logError,
 } from "./error";
 import {
+  getPitch,
   getRate,
   getStorageOptions,
   getVoiceName,
   storeDefaultOptions,
+  storePitch,
   storeRate,
   storeVoice,
 } from "./storage";
@@ -24,6 +26,8 @@ const SPEED_MENU_ID = `ReadAloudSpeedMenu-${UNIQUE_STAMP}`;
 const SPEED_SUBMENU_ID_KEY = keyFromId(SPEED_MENU_ID);
 const VOICES_MENU_ID = `ReadAloudVoicesMenu-${UNIQUE_STAMP}`;
 const VOICES_SUBMENU_ID_KEY = keyFromId(VOICES_MENU_ID);
+const PITCH_MENU_ID = `ReadAloudPitchMenu-${UNIQUE_STAMP}`;
+const PITCH_SUBMENU_ID_KEY = keyFromId(PITCH_MENU_ID);
 const READ_ALOUD_ROOT_MENU_ID = `ReadAloudMenu-${UNIQUE_STAMP}`;
 const RESET_DEFAULT_MENU_ID = `ReadAloudResetDefaultMenu-${UNIQUE_STAMP}`;
 
@@ -43,6 +47,12 @@ const TOP_LEVEL_MENU_INFO = [
   },
   {
     contexts: CONTEXTS,
+    id: PITCH_MENU_ID,
+    parentId: READ_ALOUD_ROOT_MENU_ID,
+    title: "Pitch",
+  },
+  {
+    contexts: CONTEXTS,
     id: RESET_DEFAULT_MENU_ID,
     parentId: READ_ALOUD_ROOT_MENU_ID,
     title: "Reset to Default",
@@ -51,6 +61,8 @@ const TOP_LEVEL_MENU_INFO = [
 
 // eslint-disable-next-line no-magic-numbers
 const SPEED_OPTIONS = [1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2];
+// eslint-disable-next-line no-magic-numbers
+const PITCH_OPTIONS = [0.8, 0.9, 1, 1.1, 1.2];
 
 chrome.storage.onChanged.addListener(
   (_changes: chrome.storage.StorageChange, _areaName: string) => {
@@ -101,6 +113,9 @@ function createRadioMenuItems(menu: {
     case VOICES_MENU_ID:
       createVoicesRadioMenuItems(menu).catch(logError);
       break;
+    case PITCH_MENU_ID:
+      createPitchRadioMenuItems(menu).catch(logError);
+      break;
     default:
   }
 }
@@ -148,6 +163,27 @@ async function createVoicesRadioMenuItems(menu: {
     );
 }
 
+async function createPitchRadioMenuItems(menu: {
+  id: string;
+  title: string;
+  parentId: string;
+  contexts: ["all"];
+}): Promise<void> {
+  const pitch = await getPitch();
+  for (const pitchValue of PITCH_OPTIONS)
+    chrome.contextMenus.create(
+      {
+        checked: pitch === Number(pitchValue),
+        contexts: menu.contexts,
+        id: `${PITCH_SUBMENU_ID_KEY}${pitchValue}`,
+        parentId: menu.id,
+        title: `${pitchValue}`,
+        type: "radio",
+      },
+      logChromeErrorMessage,
+    );
+}
+
 export async function addListenersToContextMenus(
   info: chrome.contextMenus.OnClickData,
 ) {
@@ -162,6 +198,9 @@ function onRadioMenuItemClick(info: chrome.contextMenus.OnClickData): void {
       break;
     case SPEED_MENU_ID:
       storeRate(numberValueFrom(info.menuItemId)).catch(logError);
+      break;
+    case PITCH_MENU_ID:
+      storePitch(numberValueFrom(info.menuItemId)).catch(logError);
       break;
     default:
       logError("ERROR: Invalid menu item parameter");
@@ -182,10 +221,15 @@ export function resolveStorageConfigurations(): void {
   getStorageOptions().then(updateSubMenus).catch(doNothing);
 }
 
-function updateSubMenus(result: { rate: number; voiceName: string }): void {
+function updateSubMenus(result: {
+  rate: number;
+  voiceName: string;
+  pitch: number;
+}): void {
   const MENU_IDS = [
     `${VOICES_SUBMENU_ID_KEY}${result.voiceName}`,
     `${SPEED_SUBMENU_ID_KEY}${result.rate}`,
+    `${PITCH_SUBMENU_ID_KEY}${result.pitch}`,
   ];
   for (const id of MENU_IDS)
     chrome.contextMenus.update(id, { checked: true }, logChromeErrorMessage);
