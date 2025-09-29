@@ -18,7 +18,9 @@
     "watch": "vite",
     "preview": "vite preview",
     "prerelease": "npm run build",
-    "release": "ts-node-esm scripts/release.ts"
+    "release": "ts-node-esm scripts/release.ts",
+    "predeploy": "npm run build",
+    "deploy": "ts-node-esm scripts/deploy.ts"
   },
   "dependencies": {
     "@extend-chrome/messages": "^1.2.2",
@@ -32,6 +34,7 @@
     "@types/node": "^24.5.2",
     "@types/web": "^0.0.269",
     "chalk": "^5.6.2",
+    "chrome-webstore-upload": "^3.2.0",
     "eslint": "^9.36.0",
     "execa": "^9.6.0",
     "rimraf": "^6.0.1",
