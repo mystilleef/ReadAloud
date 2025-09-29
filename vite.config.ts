@@ -4,8 +4,15 @@ import biomePlugin from "vite-plugin-biome";
 import { viteStaticCopy } from "vite-plugin-static-copy";
 import zipPack from "vite-plugin-zip-pack";
 import manifest from "./manifest.json";
+import { version } from "./package.json";
 
-const PACKAGE_NAME = `readaloud-${manifest.version}.zip`;
+// Create a new manifest object with the correct version
+const manifestWithVersion = {
+  ...manifest,
+  version,
+};
+
+const PACKAGE_NAME = `readaloud-${version}.zip`;
 
 export default defineConfig({
   plugins: [
@@ -14,7 +21,7 @@ export default defineConfig({
       applyFixes: true,
       failOnError: true,
     }),
-    crx({ manifest }),
+    crx({ manifest: manifestWithVersion }),
     viteStaticCopy({
       targets: [
         { dest: "images", src: "images/default.png" },
