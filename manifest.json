@@ -22,6 +22,7 @@
       "128": "images/default128.png"
     }
   },
+  "options_page": "options.html",
   "commands": {
     "read_aloud_selected_text": {
       "description": "Read aloud selected text",

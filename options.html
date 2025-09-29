@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Read Aloud Options</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 1em;
+      max-width: 400px;
+      margin: 0 auto;
+      background-color: #1a1a1a;
+      color: #f0f0f0;
+    }
+    .option { margin-bottom: 1.5em; }
+    label { display: block; margin-bottom: 0.5em; font-weight: bold; }
+    input[type="range"] {
+      width: 100%;
+      -webkit-appearance: none;
+      height: 8px;
+      background: #555;
+      border-radius: 5px;
+      outline: none;
+      opacity: 0.7;
+      transition: opacity .2s;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #007bff;
+      cursor: pointer;
+    }
+    input[type="range"]::-moz-range-thumb {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #007bff;
+      cursor: pointer;
+    }
+    select {
+      width: 100%;
+      padding: 0.5em;
+      background-color: #333;
+      color: #f0f0f0;
+      border: 1px solid #555;
+      border-radius: 4px;
+    }
+    button {
+      padding: 0.75em 1.5em;
+      border: none;
+      background-color: #007bff;
+      color: white;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    button:hover { background-color: #0056b3; }
+    #rate-value, #pitch-value { font-weight: normal; margin-left: 0.5em; }
+  </style>
+</head>
+<body>
+  <h1>Read Aloud Options</h1>
+
+  <div class="option">
+    <label for="rate">Rate: <span id="rate-value">1</span></label>
+    <input type="range" id="rate" min="0.1" max="2" step="0.1">
+  </div>
+
+  <div class="option">
+    <label for="pitch">Pitch: <span id="pitch-value">1</span></label>
+    <input type="range" id="pitch" min="0.1" max="2" step="0.1">
+  </div>
+
+  <div class="option">
+    <label for="voice">Voice</label>
+    <select id="voice"></select>
+  </div>
+
+  <button id="reset">Reset to Defaults</button>
+
+  <script type="module" src="/src/options.ts"></script>
+</body>
+</html>
