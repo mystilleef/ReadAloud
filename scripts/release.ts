@@ -105,8 +105,8 @@ async function run() {
     console.log(chalk.green("  - Extension built successfully"));
 
     // Git commands
-    await execa("git", ["add", "package.json"]);
-    console.log(chalk.green("  - Staged package.json"));
+    await execa("git", ["add", "package.json", "package-lock.json"]);
+    console.log(chalk.green("  - Staged package.json and package-lock.json"));
 
     await execa("git", [
       "commit",
