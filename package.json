@@ -17,6 +17,7 @@
     "build": "tsc -b && vite build",
     "watch": "vite",
     "preview": "vite preview",
+    "prerelease": "npm run build",
     "release": "ts-node-esm scripts/release.ts"
   },
   "dependencies": {
