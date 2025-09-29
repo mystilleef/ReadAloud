@@ -88,3 +88,6 @@ build/
 dist/
 releases/
 .claude/
+
+.gemini/
+gha-creds-*.json
