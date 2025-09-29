@@ -1,0 +1,41 @@
+# .github/workflows/deploy.yml
+
+name: Deploy to Chrome Web Store
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build and Package Extension
+        run: npm run build
+
+      - name: Get Package Version
+        id: package_version
+        run: |
+          version=$(node -p "require('./package.json').version")
+          echo "version=$version" >> $GITHUB_OUTPUT
+
+      - name: Upload and Publish to Chrome Web Store
+        uses: mobilefirstllc/cws-publish@latest
+        with:
+          extension_id: ${{ secrets.CHROME_EXTENSION_ID }}
+          client_id: ${{ secrets.CHROME_CLIENT_ID }}
+          client_secret: ${{ secrets.CHROME_CLIENT_SECRET }}
+          refresh_token: ${{ secrets.CHROME_REFRESH_TOKEN }}
+          zip_file: releases/readaloud-${{ steps.package_version.outputs.version }}.zip
+          action: 'publish'
