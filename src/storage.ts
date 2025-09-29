@@ -38,10 +38,6 @@ async function storeRate(rate: number) {
   await storage.sync.set({ rate });
 }
 
-async function storePitch(pitch: number) {
-  await storage.sync.set({ pitch });
-}
-
 export async function getSpeakOptions(): Promise<chrome.tts.TtsOptions> {
   const { rate, voiceName } = await getStorageOptions();
   return {
@@ -57,7 +53,6 @@ export {
   getRate,
   getStorageOptions,
   storeVoice,
-  storePitch,
   storeRate,
   storeDefaultOptions,
 };

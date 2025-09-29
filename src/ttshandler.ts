@@ -52,8 +52,6 @@ async function onError(message: string): Promise<void> {
   await error(message);
 }
 
-async function error(message: string): Promise<void> {
-  return new Promise(() => {
-    logError(message);
-  });
+function error(message: string): void {
+  logError(message);
 }

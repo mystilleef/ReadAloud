@@ -12,8 +12,8 @@ import {
 const SELECTION_TIMEOUT = 500;
 const REFRESH_TTS_TIMEOUT = 5000;
 
-let REFRESH_TTS_TIMEOUT_ID = 0;
-let SELECTION_TIMEOUT_ID = 0;
+let REFRESH_TTS_TIMEOUT_ID: number | undefined;
+let SELECTION_TIMEOUT_ID: number | undefined;
 
 startedSpeakingStream.subscribe(([_data, sender]) => {
   if (sender.id !== EXTENSION_ID) return;
@@ -34,11 +34,17 @@ endedSpeakingStream.subscribe(([_data, sender]) => {
 });
 
 function stopRefreshTimer() {
-  window.clearTimeout(REFRESH_TTS_TIMEOUT_ID);
+  if (REFRESH_TTS_TIMEOUT_ID) {
+    window.clearTimeout(REFRESH_TTS_TIMEOUT_ID);
+    REFRESH_TTS_TIMEOUT_ID = undefined;
+  }
 }
 
 document.onselectionchange = () => {
-  window.clearTimeout(SELECTION_TIMEOUT_ID);
+  if (SELECTION_TIMEOUT_ID) {
+    window.clearTimeout(SELECTION_TIMEOUT_ID);
+    SELECTION_TIMEOUT_ID = undefined;
+  }
   SELECTION_TIMEOUT_ID = window.setTimeout(
     sendSelectedTextMessage,
     SELECTION_TIMEOUT,

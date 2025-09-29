@@ -16,51 +16,60 @@ async function isSpeaking(): Promise<boolean> {
   });
 }
 
-export async function speak(
+export function speak(
   phrase: string,
   options: chrome.tts.TtsOptions,
 ): Promise<void> {
-  await new Promise<void>(() => {
-    chrome.tts.speak(phrase, options, logChromeErrorMessage);
+  return new Promise((resolve) => {
+    chrome.tts.speak(phrase, options, () => {
+      logChromeErrorMessage();
+      resolve();
+    });
   });
 }
 
-export async function resume(): Promise<void> {
-  return new Promise(() => {
+export function resume(): Promise<void> {
+  return new Promise((resolve) => {
     chrome.tts.resume();
+    resolve();
   });
 }
 
-export async function stop(): Promise<void> {
-  return new Promise(() => {
+export function stop(): Promise<void> {
+  return new Promise((resolve) => {
     chrome.tts.stop();
+    resolve();
   });
 }
 
-export async function pause(): Promise<void> {
-  return new Promise(() => {
+export function pause(): Promise<void> {
+  return new Promise((resolve) => {
     chrome.tts.pause();
+    resolve();
   });
 }
 
-export async function refresh(): Promise<void> {
-  return new Promise(() => {
+export function refresh(): Promise<void> {
+  return new Promise((resolve) => {
     chrome.tts.pause();
     chrome.tts.resume();
+    resolve();
   });
 }
 
-export async function messageToContentScript(
+export function messageToContentScript(
   func: (_arg0: EmptyData, _arg1: { tabId: number }) => Promise<void>,
   data: EmptyData,
 ): Promise<void> {
-  return new Promise(() => {
+  return new Promise((resolve) => {
     chrome.tabs.query(
       { active: true, currentWindow: true },
       (tabs: chrome.tabs.Tab[]): void => {
-        if (!tabs || !tabs[0]) return;
-        const tabid = tabs[0].id || -1;
-        if (tabid) func(data, { tabId: tabid }).catch(logError);
+        if (tabs?.[0]?.id) {
+          const tabid = tabs[0].id;
+          func(data, { tabId: tabid }).catch(logError);
+        }
+        resolve();
       },
     );
   });
