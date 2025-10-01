@@ -1,8 +1,25 @@
-import { getSpeakOptions } from "./storage";
-import { readTts, refreshTts as refresh, stopTts as stop } from "./ttshandler";
+import {
+  onTtsEvent,
+  refreshTts as refresh,
+  stopTts as stop,
+} from "./ttshandler";
+import { speak } from "./utils";
 
-async function read(utterances: string): Promise<void> {
-  await readTts(utterances, await getSpeakOptions());
+async function read(
+  phrase: string,
+  options: chrome.tts.TtsOptions,
+): Promise<void> {
+  const ttsoptions = { ...options, onEvent: onTtsEvent };
+  await speak(phrase, ttsoptions);
 }
 
-export { read, stop, refresh };
+async function readPhrases(
+  phrases: string[],
+  options: chrome.tts.TtsOptions,
+): Promise<void> {
+  for (const phrase of phrases) {
+    await read(phrase, options);
+  }
+}
+
+export { read, readPhrases, stop, refresh };

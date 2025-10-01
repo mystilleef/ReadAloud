@@ -76,3 +76,16 @@ export function messageToContentScript(
 }
 
 export { getTtsVoices, isSpeaking };
+
+export async function splitPhrases(selection: string): Promise<string[]> {
+  // Use a smaller chunk size for the chrome.tts engine, which can be sensitive.
+  const chunkSize = 640;
+  const whitespaceChunkSize = 2;
+  const regex = new RegExp(
+    String.raw`\S(?:.{0,${chunkSize - whitespaceChunkSize}}\S)?(?= |$)`,
+    "gm",
+  );
+
+  const compressed = selection.replace(/\s+/gm, " ").trim();
+  return Promise.resolve(compressed.match(regex) ?? []);
+}

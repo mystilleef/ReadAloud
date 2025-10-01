@@ -9,9 +9,9 @@ import {
   refreshTtsStream,
   sendSelectedText,
 } from "./message";
-import { read, refresh, stop } from "./reader";
-import { storeDefaultOptions } from "./storage";
-import { isSpeaking, messageToContentScript } from "./utils";
+import { readPhrases, refresh, stop } from "./reader";
+import { getSpeakOptions, storeDefaultOptions } from "./storage";
+import { isSpeaking, messageToContentScript, splitPhrases } from "./utils";
 
 const COMMAND = READ_ALOUD_COMMAND_STRING;
 const END_TIMEOUT = 500;
@@ -21,10 +21,13 @@ const REFRESH_TIMEOUT = 7000;
 readStream
   .pipe(throttleTime(READ_TIMEOUT))
   .pipe(debounceTime(READ_TIMEOUT))
-  .subscribe(([selectedText, sender]) => {
+  .subscribe(async ([selectedText, sender]) => {
     if (sender.id !== EXTENSION_ID) return;
-    read(selectedText).catch(logError);
-    badgeCounter.increment().catch(logError);
+
+    const phrases = await splitPhrases(selectedText);
+    badgeCounter.increment(phrases.length).catch(logError);
+    const options = await getSpeakOptions();
+    readPhrases(phrases, options).catch(logError);
   });
 
 refreshTtsStream

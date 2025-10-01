@@ -3,8 +3,8 @@ import updateBrowserIcon from "./icon";
 class BadgeCounter {
   private counter = 0;
 
-  public async increment(): Promise<void> {
-    this.counter += 1;
+  public async increment(count = 1): Promise<void> {
+    this.counter += count;
     await this.update();
   }
 

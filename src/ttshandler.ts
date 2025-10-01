@@ -4,14 +4,23 @@ import {
   sendFinishedSpeaking,
   sendStartedSpeaking,
 } from "./message";
-import { messageToContentScript, refresh, speak, stop } from "./utils";
+import {
+  messageToContentScript,
+  refresh,
+  speak,
+  splitPhrases,
+  stop,
+} from "./utils";
 
 export async function readTts(
   utterances: string,
   options: chrome.tts.TtsOptions,
 ): Promise<void> {
-  const ttsoptions = { ...options, onEvent: onTtsEvent };
-  await speak(utterances, ttsoptions);
+  const phrases = await splitPhrases(utterances);
+  for (const phrase of phrases) {
+    const ttsoptions = { ...options, onEvent: onTtsEvent };
+    await speak(phrase, ttsoptions);
+  }
 }
 
 export async function refreshTts(): Promise<void> {
@@ -23,7 +32,7 @@ export async function stopTts(): Promise<void> {
   await messageToContentScript(sendFinishedSpeaking, {});
 }
 
-function onTtsEvent(event: chrome.tts.TtsEvent): void {
+export function onTtsEvent(event: chrome.tts.TtsEvent): void {
   onTts(event).catch(logError);
 }
 
