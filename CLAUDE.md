@@ -4,85 +4,129 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-ReadAloud is a Chrome extension that provides text-to-speech functionality for selected text on web pages. Built with TypeScript and uses Vite as the build system with Chrome Extensions Manifest V3.
+ReadAloud is a Chrome Manifest V3 extension that provides text-to-speech functionality for selected text on web pages. Users can trigger reading via triple-click, manual text selection, toolbar button, or keyboard shortcut (Ctrl+Shift+Space). The extension uses Chrome's built-in TTS API with customizable voice, rate, and pitch settings accessible through context menus.
 
 ## Development Commands
 
-- `npm run build` - Build the extension for production (TypeScript compile + Vite build)
-- `npm run watch` - Development mode with hot reload
-- `npm run clean` - Clean build artifacts
-- `npm run preview` - Preview the built extension
+### Building and Development
+```bash
+npm run build          # TypeScript compilation + Vite build → dist/
+npm run watch          # Development mode with auto-rebuild
+npm run clean          # Remove dist/ and build artifacts
+```
 
-## Code Quality & Linting
+### Deployment
+```bash
+npm run release        # Bump version and create release
+npm run deploy         # Deploy to Chrome Web Store (requires service account)
+npm run test-auth      # Verify service account credentials
+```
 
-- Uses **Biome** for linting and formatting (not ESLint/Prettier)
-- Configuration in `biome.jsonc`
-- Biome is integrated into Vite build process with `failOnError: true`
-- Formatting: 2 spaces, multiline attributes
-- Run via Vite plugin during build/watch
+### Code Quality
+The project uses **Biome** (not ESLint) for linting and formatting. ESLint is explicitly disabled via `eslint.config.js`. Biome runs automatically during the build process via the `vite-plugin-biome` plugin with `applyFixes: true` and `failOnError: true`.
 
 ## Architecture
 
-### Extension Structure
-- **Background Script** (`background.ts`): Service worker handling extension lifecycle, context menus, commands, and TTS coordination
-- **Content Script** (`content.ts`): Injected into web pages, handles text selection and communicates with background
-- **Message System** (`message.ts`): Uses `@extend-chrome/messages` for type-safe communication between background and content scripts
+### Core Components
 
-### Key Components
-- **TTS Handler** (`ttshandler.ts`): Manages Chrome TTS API, event handling, and speech lifecycle
-- **Reader** (`reader.ts`): High-level TTS interface wrapping the TTS handler
-- **Storage** (`storage.ts`): Manages extension settings (voice, rate, pitch) via `@extend-chrome/storage`
-- **Context Menu** (`context.ts`): Dynamically creates right-click context menus for voice/speed/pitch selection
+**Background Service Worker (`src/background.ts`)**
+- Orchestrates extension lifecycle and command handling
+- Uses RxJS streams with throttle/debounce for event management:
+  - `readStream`: Handles incoming text selections (750ms throttle+debounce)
+  - `refreshTtsStream`: Keeps TTS alive (7s throttle+debounce)
+  - `gotEndSpeakingStream`: Cleanup on speech end (500ms throttle+debounce)
+- Manages badge counter showing queued phrases
+- Coordinates between content scripts and TTS engine
+
+**Content Script (`src/content.ts`)**
+- Injected into all frames via `manifest.json`
+- Monitors `document.onselectionchange` (500ms debounce)
+- Implements TTS refresh timer (5s intervals during speaking) to prevent Chrome's TTS engine from timing out
+- Sends messages to background script for text processing
+
+**Message System (`src/message.ts`)**
+- Built on `@extend-chrome/messages` library
+- Defines typed message streams (e.g., `READ`, `STARTED_SPEAKING`, `ENDED_SPEAKING`)
+- All messages follow the pattern: `[sendFn, streamObservable, ?waitFn]`
+
+**TTS Pipeline**
+1. Text selection → `content.ts` sends to background
+2. `background.ts` splits text into phrases via `splitPhrases()` (640 char chunks)
+3. `reader.ts` enqueues phrases with options
+4. `ttshandler.ts` processes TTS events (start/end/error/interrupted)
+5. Badge counter updates to show progress
+
+**Storage (`src/storage.ts`)**
+- Uses `@extend-chrome/storage` wrapper around `chrome.storage.sync`
+- Stores: `voiceName` (default: "Google US English"), `rate` (1-2x), `pitch` (0.8-1.2)
+- Changes trigger context menu updates via `chrome.storage.onChanged`
+
+**Context Menus (`src/context.ts`)**
+- Dynamic radio menus for Voice/Speed/Pitch selection
+- Menu IDs include extension ID to avoid conflicts
+- Speed options: 1.0x - 2.0x (0.1x increments)
+- Pitch options: 0.8 - 1.2 (0.1 increments)
+
+### Build System
+
+**Vite Configuration (`vite.config.ts`)**
+- `@crxjs/vite-plugin`: Handles Chrome extension bundling and manifest processing
+- Injects `version` from `package.json` into `manifest.json` at build time
+- `vite-plugin-biome`: Runs Biome checks during build
+- `vite-plugin-static-copy`: Copies icon assets to `dist/images/`
+- `vite-plugin-zip-pack`: Creates `releases/readaloud-{version}.zip` for distribution
+
+**TypeScript (`tsconfig.json`)**
+- Strict mode enabled with all safety flags
+- Target: ESNext with ESM modules
+- Uses composite builds with incremental compilation
+- Types: `@types/chrome`, `@types/web`, `@types/node`
+- Key flags: `exactOptionalPropertyTypes`, `noUnusedLocals`, `noImplicitReturns`
+
+### Deployment
+
+**Automated Deployment**
+- Triggered on GitHub release publication (`.github/workflows/deploy.yml`)
+- Uses service account authentication (not OAuth)
+- Secrets required: `SERVICE_ACCOUNT_KEY`, `CHROME_PUBLISHER_ID`, `CHROME_EXTENSION_ID`
+- Build artifacts stored in `releases/` directory
+
+**Manual Deployment**
+1. Run `npm run build` to create zip in `releases/`
+2. Ensure `secrets/service-account-config.json` and `secrets/service-account-key.json` exist
+3. Run `npm run deploy` (or `npm run deploy -- --dry-run` to skip publish)
+
+**Service Account Files** (stored in `secrets/`, encrypted with git-crypt):
+- `service-account-config.json`: Contains `publisherId`, `extensionId`, `serviceAccountKeyPath`
+- `service-account-key.json`: Google service account private key
+
+## Important Patterns
 
 ### Message Flow
-1. User selects text → Content script detects selection change
-2. Content script sends "READ" message to background
-3. Background script calls TTS API with stored options
-4. TTS events flow back through content script for UI updates
-5. Background manages speech state and badge counter
+All extension-internal messages check sender ID to prevent external interference:
+```typescript
+if (sender.id !== EXTENSION_ID) return;
+```
 
-### State Management
-- Uses RxJS streams for message handling with throttling/debouncing
-- Chrome storage for persistent settings (voice, rate, pitch)
-- Badge counter tracks active speech instances
+### Error Handling
+Use `logError()` from `src/error.ts` for consistent error logging. Chrome API callbacks use `logChromeErrorMessage()` to check for runtime errors.
 
-## Build System
+### Text Splitting
+The `splitPhrases()` function in `src/utils.ts` chunks text into 640-character segments to avoid Chrome TTS engine limitations. It preserves word boundaries using a regex pattern.
 
-- **Vite** with `@crxjs/vite-plugin` for Chrome extension development
-- **Static assets** copied to `images/` folder (icons for different states)
-- **ZIP packaging** via `vite-plugin-zip-pack` to `releases/` folder
-- Build outputs extension files to `dist/` directory
+### TTS Keep-Alive
+Content script sends periodic refresh messages every 5 seconds while speaking to prevent Chrome from stopping the TTS engine during long reads.
 
-## Key Dependencies
+## File Organization
 
-- `@extend-chrome/messages` - Type-safe extension messaging
-- `@extend-chrome/storage` - Chrome storage API wrapper
-- `rxjs` - Reactive streams for message handling
-- `@crxjs/vite-plugin` - Vite Chrome extension plugin
+- `src/`: TypeScript source files
+- `dist/`: Build output (git-ignored)
+- `releases/`: Versioned zip files (git-ignored)
+- `images/`: Extension icons and assets
+- `scripts/`: Deployment and release automation
+- `secrets/`: Service account credentials (git-crypted)
+- `docs/`: Deployment and setup documentation
 
-## Commit Message Standards
+## Chrome Extension Loading
 
-Follow the [Conventional Commits](https://www.conventionalcommits.org/) standard for all commit messages:
-
-**Format**: `<type>[optional scope]: <description>`
-- Keep the entire commit message under 80 characters
-- Use present tense, imperative mood ("add" not "added")
-- No period at the end of the description
-
-**Types**:
-- `feat` - New feature
-- `fix` - Bug fix
-- `docs` - Documentation changes
-- `style` - Code formatting (no logic changes)
-- `refactor` - Code refactoring (no new features or bug fixes)
-- `perf` - Performance improvements
-- `test` - Adding or updating tests
-- `build` - Build system changes
-- `ci` - CI/CD changes
-- `chore` - Maintenance tasks
-
-**Examples**:
-- `feat(tts): add voice pitch control`
-- `fix(context): resolve menu type errors`
-- `docs: update README installation steps`
-- `refactor(storage): simplify options handling`
+After `npm run build`, load the unpacked extension from the `dist/` directory in Chrome at `chrome://extensions` with Developer Mode enabled.
