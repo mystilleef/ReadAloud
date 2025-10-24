@@ -21,21 +21,30 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Build and Package Extension
+      - name: Build Extension
         run: npm run build
 
-      - name: Get Package Version
-        id: package_version
-        run: |
-          version=$(node -p "require('./package.json').version")
-          echo "version=$version" >> $GITHUB_OUTPUT
+      - name: Create secrets directory
+        run: mkdir -p secrets
 
-      - name: Upload and Publish to Chrome Web Store
-        uses: mobilefirstllc/cws-publish@latest
-        with:
-          extension_id: ${{ secrets.CHROME_EXTENSION_ID }}
-          client_id: ${{ secrets.CHROME_CLIENT_ID }}
-          client_secret: ${{ secrets.CHROME_CLIENT_SECRET }}
-          refresh_token: ${{ secrets.CHROME_REFRESH_TOKEN }}
-          zip_file: releases/readaloud-${{ steps.package_version.outputs.version }}.zip
-          action: 'publish'
+      - name: Create service account key file
+        run: echo '${{ secrets.SERVICE_ACCOUNT_KEY }}' > secrets/service-account-key.json
+
+      - name: Create service account config
+        run: |
+          cat > secrets/service-account-config.json <<EOF
+          {
+            "type": "service_account",
+            "publisherId": "${{ secrets.CHROME_PUBLISHER_ID }}",
+            "extensionId": "${{ secrets.CHROME_EXTENSION_ID }}",
+            "serviceAccountKeyPath": "./secrets/service-account-key.json"
+          }
+          EOF
+
+      - name: Deploy to Chrome Web Store
+        run: npm run deploy
+
+      - name: Clean up secrets
+        if: always()
+        run: |
+          rm -rf secrets/

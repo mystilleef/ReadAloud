@@ -20,7 +20,8 @@
     "prerelease": "npm run build",
     "release": "ts-node-esm scripts/release.ts",
     "predeploy": "npm run build",
-    "deploy": "ts-node-esm scripts/deploy.ts"
+    "deploy": "ts-node-esm scripts/deploy.ts",
+    "test-auth": "ts-node-esm scripts/service-account-auth.ts"
   },
   "dependencies": {
     "@extend-chrome/messages": "^1.2.2",
@@ -37,6 +38,7 @@
     "chrome-webstore-upload": "^4.0.3",
     "eslint": "^9.38.0",
     "execa": "^9.6.0",
+    "google-auth-library": "^9.0.0",
     "rimraf": "^6.0.1",
     "rollup": "^4.52.5",
     "rollup-plugin-zip": "^1.0.3",
