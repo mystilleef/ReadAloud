@@ -4,7 +4,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-ReadAloud is a Chrome Manifest V3 extension that provides text-to-speech functionality for selected text on web pages. Users can trigger reading via triple-click, manual text selection, toolbar button, or keyboard shortcut (Ctrl+Shift+Space). The extension uses Chrome's built-in TTS API with customizable voice, rate, and pitch settings accessible through context menus.
+ReadAloud is a Chrome Manifest V3 extension that provides text-to-speech functionality for selected text on web pages. Users can trigger reading via:
+- Triple-click to select a paragraph
+- Manual text selection
+- Toolbar button (click to start/stop)
+- Keyboard shortcut: `Ctrl+Shift+Space` (configured in `manifest.json` under `commands`)
+
+The extension uses Chrome's built-in TTS API with customizable voice, rate, and pitch settings accessible through context menus.
 
 ## Development Commands
 
@@ -15,6 +21,12 @@ npm run watch          # Development mode with auto-rebuild
 npm run clean          # Remove dist/ and build artifacts
 ```
 
+### Testing
+```bash
+npm test               # Run all tests with Vitest
+npm run coverage       # Generate test coverage report
+```
+
 ### Deployment
 ```bash
 npm run release        # Bump version and create release
@@ -23,7 +35,7 @@ npm run test-auth      # Verify service account credentials
 ```
 
 ### Code Quality
-The project uses **Biome** (not ESLint) for linting and formatting. ESLint is explicitly disabled via `eslint.config.js`. Biome runs automatically during the build process via the `vite-plugin-biome` plugin with `applyFixes: true` and `failOnError: true`.
+The project uses **Biome** (not ESLint) for linting and formatting. ESLint is explicitly disabled via `eslint.config.js`. Biome configuration is in `biome.jsonc` and runs automatically during the build process via the `vite-plugin-biome` plugin with `applyFixes: true` and `failOnError: true`.
 
 ## Architecture
 
@@ -75,6 +87,7 @@ The project uses **Biome** (not ESLint) for linting and formatting. ESLint is ex
 - `vite-plugin-biome`: Runs Biome checks during build
 - `vite-plugin-static-copy`: Copies icon assets to `dist/images/`
 - `vite-plugin-zip-pack`: Creates `releases/readaloud-{version}.zip` for distribution
+- Configures Vitest with jsdom environment, test globals, and coverage reporting
 
 **TypeScript (`tsconfig.json`)**
 - Strict mode enabled with all safety flags
@@ -117,9 +130,19 @@ The `splitPhrases()` function in `src/utils.ts` chunks text into 640-character s
 ### TTS Keep-Alive
 Content script sends periodic refresh messages every 5 seconds while speaking to prevent Chrome from stopping the TTS engine during long reads.
 
+### Testing
+
+**Test Setup (`src/__tests__/`)**
+- Uses Vitest with jsdom environment for DOM testing
+- Test files located in `src/__tests__/` directory
+- Setup file: `src/__tests__/setup.ts` provides global test configuration
+- Coverage configured to include all `src/**/*.ts` files (excluding tests)
+- Tests validate core functionality: message passing, TTS handling, content scripts, storage, and utilities
+
 ## File Organization
 
 - `src/`: TypeScript source files
+- `src/__tests__/`: Vitest test files
 - `dist/`: Build output (git-ignored)
 - `releases/`: Versioned zip files (git-ignored)
 - `images/`: Extension icons and assets
