@@ -1,4 +1,4 @@
-import { logError } from "./error";
+import * as errorModule from "./error";
 import {
   sendEndedSpeaking,
   sendFinishedSpeaking,
@@ -33,7 +33,7 @@ export async function stopTts(): Promise<void> {
 }
 
 export function onTtsEvent(event: chrome.tts.TtsEvent): void {
-  onTts(event).catch(logError);
+  onTts(event).catch(errorModule.logError);
 }
 
 async function onTts(event: chrome.tts.TtsEvent): Promise<void> {
@@ -58,9 +58,5 @@ async function onEnd(): Promise<void> {
 
 async function onError(message: string): Promise<void> {
   await stopTts();
-  await error(message);
-}
-
-function error(message: string): void {
-  logError(message);
+  errorModule.logError(message);
 }

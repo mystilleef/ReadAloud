@@ -4,12 +4,13 @@
 - **Build**: `npm run build` (runs tsc + vite, Biome auto-fixes during build)
 - **Watch**: `npm run watch` (dev mode with auto-rebuild)
 - **Clean**: `npm run clean` (remove dist/ and build artifacts)
-- **No test suite**: This project has no automated tests. Manual testing via loading unpacked extension from `dist/` at `chrome://extensions`
+- **Test**: `npm run test` (runs Vitest tests) or `npm run test src/__tests__/filename.test.ts` for single test
+- **Coverage**: `npm run coverage` (generates coverage report in coverage/)
 
 ## Code Style
 - **Linter**: Use Biome (NOT ESLint). Config in `biome.jsonc`. Biome runs automatically during build with `applyFixes: true`
 - **Imports**: Biome auto-organizes imports. Import from `./constants`, `./utils`, `./error` before external deps like `rxjs`
-- **Formatting**: 2-space indentation (Biome + .editorconfig), Unix LF line endings
+- **Formatting**: 2-space indentation (Biome + .editorconfig), Unix LF line endings, 80 char max line length
 - **Types**: Strict TypeScript with all safety flags. Use explicit types, avoid `any`. Chrome API types from `@types/chrome`
 - **Naming**: camelCase for variables/functions, PascalCase for types/interfaces, UPPER_CASE for constants
 - **Error Handling**: Always use `logError()` from `src/error.ts`. Add `.catch(logError)` to all promises. Use `logChromeErrorMessage()` for Chrome API callbacks
@@ -21,3 +22,5 @@
 - Text splitting: Use `splitPhrases()` from `utils.ts` (640 char chunks) before TTS
 - Message flow: All messages via `@extend-chrome/messages` streams (see `message.ts`)
 - Version management: Version in `package.json` auto-injected into `manifest.json` during build
+- Security: Always validate `sender.id === EXTENSION_ID` in message handlers
+- Testing: Use Vitest with vi.mock() for Chrome API mocking (see `src/__tests__/*.test.ts`)

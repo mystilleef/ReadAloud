@@ -3,7 +3,7 @@
   "display": "Google Chrome Extension",
   "compileOnSave": true,
   "include": ["src", "vite.config.ts", "manifest.json"],
-  "exclude": ["node_modules", "releases", "images", "dist"],
+  "exclude": ["node_modules", "releases", "images", "dist", "src/__tests__"],
   "compilerOptions": {
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
@@ -11,6 +11,7 @@
     "allowUnusedLabels": false,
     "checkJs": true,
     "composite": true,
+
     "disableSizeLimit": true,
     "downlevelIteration": true,
     "esModuleInterop": true,
@@ -37,7 +38,14 @@
     "strict": true,
     "stripInternal": true,
     "target": "esnext",
-    "types": ["@types/chrome", "@types/web", "@types/node"],
+    "types": [
+      "@types/chrome",
+      "@types/web",
+      "@types/node",
+      "vitest",
+      "vitest/globals"
+    ],
+
     "useDefineForClassFields": true
   }
 }

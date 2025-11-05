@@ -21,7 +21,9 @@
     "release": "ts-node-esm scripts/release.ts",
     "predeploy": "npm run build",
     "deploy": "ts-node-esm scripts/deploy.ts",
-    "test-auth": "ts-node-esm scripts/service-account-auth.ts"
+    "test-auth": "ts-node-esm scripts/service-account-auth.ts",
+    "test": "vitest run",
+    "coverage": "vitest run --coverage"
   },
   "dependencies": {
     "@extend-chrome/messages": "^1.2.2",
@@ -49,7 +51,11 @@
     "vite": "^7.1.12",
     "vite-plugin-biome": "^1.0.12",
     "vite-plugin-static-copy": "^3.1.4",
-    "vite-plugin-zip-pack": "^1.2.4"
+    "vite-plugin-zip-pack": "^1.2.4",
+    "@vitest/coverage-v8": "^4.0.6",
+    "@types/jsdom": "^27.0.0",
+    "jsdom": "^27.0.1",
+    "vitest": "^4.0.1"
   },
   "overrides": {
     "vite-plugin-biome": {

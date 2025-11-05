@@ -57,7 +57,7 @@ selectedTextStream.subscribe(([_data, sender]) => {
 });
 
 function sendSelectedTextMessage(): void {
-  const selectedText = window.getSelection()?.toString();
+  const selectedText = window.getSelection()?.toString().trim();
   if (!selectedText) return;
   sendRead(selectedText).catch(logError);
 }
