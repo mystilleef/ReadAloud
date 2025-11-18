@@ -60,6 +60,9 @@ watch: ## Run vite in watch mode
 fix: ## Run Biome linting and apply safe fixes
 	npx biome check --write .
 
+migrate: ## Update Biome configuration
+	npx @biomejs/biome migrate --write
+
 all: clean install build ## Clean, install dependencies, and build
 
 zip: build ## Build and create distribution zip (already handled by build)
