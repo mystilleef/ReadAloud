@@ -23,7 +23,6 @@ readStream
   .pipe(debounceTime(READ_TIMEOUT))
   .subscribe(async ([selectedText, sender]) => {
     if (sender.id !== EXTENSION_ID) return;
-
     const phrases = await splitPhrases(selectedText);
     badgeCounter.increment(phrases.length).catch(logError);
     const options = await getSpeakOptions();
