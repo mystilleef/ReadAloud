@@ -5,6 +5,12 @@ const DEFAULT_RATE = 1;
 const DEFAULT_VOICENAME = "Google US English";
 const DEFAULT_PITCH = 1;
 
+interface SyncStorage {
+  voiceName?: string | null;
+  rate?: number | null;
+  pitch?: number | null;
+}
+
 async function getStorageOptions() {
   const rate = await getRate();
   const voiceName = await getVoiceName();
@@ -13,20 +19,20 @@ async function getStorageOptions() {
 }
 
 async function getVoiceName(): Promise<string> {
-  const voice = await storage.sync.get(VOICENAME);
-  if (voice?.[VOICENAME]) return voice[VOICENAME] as string;
+  const stored = (await storage.sync.get(VOICENAME)) as SyncStorage;
+  if (stored.voiceName) return stored.voiceName;
   return DEFAULT_VOICENAME;
 }
 
 async function getRate(): Promise<number> {
-  const rate = await storage.sync.get(RATE);
-  if (rate && rate[RATE] > 0) return Number(rate[RATE]);
+  const stored = (await storage.sync.get(RATE)) as SyncStorage;
+  if (stored.rate != null && stored.rate > 0) return Number(stored.rate);
   return DEFAULT_RATE;
 }
 
 async function getPitch(): Promise<number> {
-  const pitch = await storage.sync.get(PITCH);
-  if (pitch && pitch[PITCH] > 0) return Number(pitch[PITCH]);
+  const stored = (await storage.sync.get(PITCH)) as SyncStorage;
+  if (stored.pitch != null && stored.pitch > 0) return Number(stored.pitch);
   return DEFAULT_PITCH;
 }
 

@@ -1,3 +1,4 @@
+import { logError } from "./error";
 import updateBrowserIcon from "./icon";
 
 class BadgeCounter {
@@ -20,8 +21,12 @@ class BadgeCounter {
   }
 
   public async update(): Promise<void> {
-    await this.updateText();
-    await updateBrowserIcon(this.counter);
+    try {
+      await this.updateText();
+      await updateBrowserIcon(this.counter);
+    } catch (error) {
+      logError(String(error));
+    }
   }
 
   private async updateText(): Promise<void> {
