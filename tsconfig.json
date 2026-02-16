@@ -1,51 +1,44 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
   "display": "Google Chrome Extension",
-  "compileOnSave": true,
   "include": ["src", "vite.config.ts", "manifest.json"],
-  "exclude": ["node_modules", "releases", "images", "dist", "src/__tests__"],
+  "exclude": ["node_modules", "releases", "images", "dist"],
   "compilerOptions": {
-    "allowJs": true,
-    "allowSyntheticDefaultImports": true,
-    "allowUnreachableCode": false,
-    "allowUnusedLabels": false,
-    "checkJs": true,
-    "composite": true,
+    /* Base Options */
+    "target": "ESNext",
+    "module": "ESNext",
+    "lib": ["ESNext", "DOM", "DOM.Iterable", "WebWorker"],
+    "moduleResolution": "Bundler",
+    "moduleDetection": "force",
+    "verbatimModuleSyntax": true,
 
-    "disableSizeLimit": true,
-    "downlevelIteration": true,
-    "esModuleInterop": true,
+    /* Strictness */
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noPropertyAccessFromIndexSignature": true,
     "exactOptionalPropertyTypes": true,
-    "forceConsistentCasingInFileNames": true,
-    "importHelpers": true,
-    "incremental": true,
-    "isolatedModules": true,
-    "lib": ["esnext", "webworker", "dom"],
-    "module": "esnext",
-    "moduleResolution": "node",
-    "newLine": "lf",
-    "noEmit": true,
-    "noEmitHelpers": true,
-    "noEmitOnError": true,
-    "noFallthroughCasesInSwitch": true,
     "noImplicitOverride": true,
     "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "removeComments": true,
-    "resolveJsonModule": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "stripInternal": true,
-    "target": "esnext",
-    "types": [
-      "@types/chrome",
-      "@types/web",
-      "@types/node",
-      "vitest",
-      "vitest/globals"
-    ],
 
-    "useDefineForClassFields": true
+    /* Build Performance */
+    "noEmit": true,
+    "incremental": true,
+    "composite": true,
+    "skipLibCheck": true,
+
+    /* Interop & Compatibility */
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "useDefineForClassFields": true,
+    "isolatedModules": true,
+    "allowJs": true,
+    "checkJs": true,
+    "newLine": "lf",
+
+    "types": ["vitest/globals"]
   }
 }
