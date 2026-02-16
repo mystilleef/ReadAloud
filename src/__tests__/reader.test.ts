@@ -11,7 +11,7 @@ vi.mock("../ttshandler");
 describe("reader", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    (speak as vi.Mock).mockResolvedValue(undefined);
+    vi.mocked(speak).mockResolvedValue(undefined);
   });
 
   describe("readPhrases", () => {

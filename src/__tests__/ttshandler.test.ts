@@ -27,14 +27,14 @@ describe("ttshandler", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     logErrorSpy.mockImplementation(() => undefined);
-    (message.sendEndedSpeaking as vi.Mock).mockResolvedValue(undefined);
-    (message.sendFinishedSpeaking as vi.Mock).mockResolvedValue(undefined);
-    (message.sendStartedSpeaking as vi.Mock).mockResolvedValue(undefined);
-    (utils.messageToContentScript as vi.Mock).mockResolvedValue(undefined);
-    (utils.refresh as vi.Mock).mockResolvedValue(undefined);
-    (utils.speak as vi.Mock).mockResolvedValue(undefined);
-    (utils.splitPhrases as vi.Mock).mockResolvedValue([]);
-    (utils.stop as vi.Mock).mockResolvedValue(undefined);
+    vi.mocked(message.sendEndedSpeaking).mockResolvedValue(undefined);
+    vi.mocked(message.sendFinishedSpeaking).mockResolvedValue(undefined);
+    vi.mocked(message.sendStartedSpeaking).mockResolvedValue(undefined);
+    vi.mocked(utils.messageToContentScript).mockResolvedValue(undefined);
+    vi.mocked(utils.refresh).mockResolvedValue(undefined);
+    vi.mocked(utils.speak).mockResolvedValue(undefined);
+    vi.mocked(utils.splitPhrases).mockResolvedValue([]);
+    vi.mocked(utils.stop).mockResolvedValue(undefined);
   });
 
   describe("readTts", () => {
@@ -42,7 +42,7 @@ describe("ttshandler", () => {
       const utterances = "hello world";
       const phrases = ["hello", "world"];
       const options = { voiceName: "test" };
-      (utils.splitPhrases as vi.Mock).mockResolvedValue(phrases);
+      vi.mocked(utils.splitPhrases).mockResolvedValue(phrases);
 
       await readTts(utterances, options);
 
@@ -59,7 +59,7 @@ describe("ttshandler", () => {
     });
 
     it("should not call speak for empty utterances", async () => {
-      (utils.splitPhrases as vi.Mock).mockResolvedValue([]);
+      vi.mocked(utils.splitPhrases).mockResolvedValue([]);
       await readTts("", { voiceName: "test" });
       expect(utils.speak).not.toHaveBeenCalled();
     });
@@ -86,7 +86,7 @@ describe("ttshandler", () => {
   describe("onTtsEvent", () => {
     it("should call onTts and catch errors", async () => {
       const err = new Error("stop failed");
-      (utils.stop as vi.Mock).mockRejectedValue(err); // Make utils.stop reject
+      vi.mocked(utils.stop).mockRejectedValue(err); // Make utils.stop reject
 
       const mockEvent: chrome.tts.TtsEvent = {
         type: "error",
@@ -158,7 +158,7 @@ describe("ttshandler", () => {
     });
 
     it("should handle unknown event types gracefully", async () => {
-      const mockEvent = { type: "unknown" } as chrome.tts.TtsEvent;
+      const mockEvent = { type: "unknown" } as unknown as chrome.tts.TtsEvent;
       onTtsEvent(mockEvent);
       await flushPromises();
       // Should not call any message handlers for unknown event types

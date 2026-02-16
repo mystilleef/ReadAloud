@@ -10,8 +10,8 @@ vi.mock("@extend-chrome/storage", () => {
     storage: {
       sync: {
         get: vi.fn(),
-        set: vi.fn(),
-        clear: vi.fn(),
+        set: vi.fn(() => Promise.resolve({})),
+        clear: vi.fn(() => Promise.resolve()),
       },
     },
   };
@@ -29,7 +29,7 @@ describe("storage", () => {
   describe("getVoiceName", () => {
     it("should return voice name from sync storage if it exists", async () => {
       const mockStorage = { [VOICENAME]: "Test Voice" };
-      (chromeStorage.sync.get as vi.Mock).mockResolvedValue(mockStorage);
+      vi.mocked(chromeStorage.sync.get).mockResolvedValue(mockStorage);
 
       const voiceName = await storage.getVoiceName();
 
@@ -38,7 +38,7 @@ describe("storage", () => {
     });
 
     it("should return default voice name if sync storage is empty", async () => {
-      (chromeStorage.sync.get as vi.Mock).mockResolvedValue({});
+      vi.mocked(chromeStorage.sync.get).mockResolvedValue({});
       const voiceName = await storage.getVoiceName();
       expect(voiceName).toEqual(DEFAULT_VOICENAME);
     });
@@ -47,7 +47,7 @@ describe("storage", () => {
   describe("getRate", () => {
     it("should return rate from sync storage if it exists", async () => {
       const mockStorage = { [RATE]: 1.5 };
-      (chromeStorage.sync.get as vi.Mock).mockResolvedValue(mockStorage);
+      vi.mocked(chromeStorage.sync.get).mockResolvedValue(mockStorage);
 
       const rate = await storage.getRate();
 
@@ -56,14 +56,14 @@ describe("storage", () => {
     });
 
     it("should return default rate if sync storage is empty", async () => {
-      (chromeStorage.sync.get as vi.Mock).mockResolvedValue({});
+      vi.mocked(chromeStorage.sync.get).mockResolvedValue({});
       const rate = await storage.getRate();
       expect(rate).toEqual(DEFAULT_RATE);
     });
 
     it("should return default rate if stored rate is 0", async () => {
       const mockStorage = { [RATE]: 0 };
-      (chromeStorage.sync.get as vi.Mock).mockResolvedValue(mockStorage);
+      vi.mocked(chromeStorage.sync.get).mockResolvedValue(mockStorage);
       const rate = await storage.getRate();
       expect(rate).toEqual(DEFAULT_RATE);
     });
@@ -72,7 +72,7 @@ describe("storage", () => {
   describe("getPitch", () => {
     it("should return pitch from sync storage if it exists", async () => {
       const mockStorage = { [PITCH]: 1.2 };
-      (chromeStorage.sync.get as vi.Mock).mockResolvedValue(mockStorage);
+      vi.mocked(chromeStorage.sync.get).mockResolvedValue(mockStorage);
 
       const pitch = await storage.getPitch();
 
@@ -81,14 +81,14 @@ describe("storage", () => {
     });
 
     it("should return default pitch if sync storage is empty", async () => {
-      (chromeStorage.sync.get as vi.Mock).mockResolvedValue({});
+      vi.mocked(chromeStorage.sync.get).mockResolvedValue({});
       const pitch = await storage.getPitch();
       expect(pitch).toEqual(DEFAULT_PITCH);
     });
 
     it("should return default pitch if stored pitch is 0", async () => {
       const mockStorage = { [PITCH]: 0 };
-      (chromeStorage.sync.get as vi.Mock).mockResolvedValue(mockStorage);
+      vi.mocked(chromeStorage.sync.get).mockResolvedValue(mockStorage);
       const pitch = await storage.getPitch();
       expect(pitch).toEqual(DEFAULT_PITCH);
     });
@@ -96,12 +96,14 @@ describe("storage", () => {
 
   describe("getStorageOptions", () => {
     it("should return all options from storage", async () => {
-      (chromeStorage.sync.get as vi.Mock).mockImplementation(async (key) => {
-        if (key === RATE) return { [RATE]: 1.5 };
-        if (key === VOICENAME) return { [VOICENAME]: "Test Voice" };
-        if (key === PITCH) return { [PITCH]: 1.2 };
-        return {};
-      });
+      vi.mocked(chromeStorage.sync.get).mockImplementation(
+        async (key: string | string[] | Record<string, unknown> | null) => {
+          if (key === RATE) return { [RATE]: 1.5 };
+          if (key === VOICENAME) return { [VOICENAME]: "Test Voice" };
+          if (key === PITCH) return { [PITCH]: 1.2 };
+          return {};
+        },
+      );
 
       const options = await storage.getStorageOptions();
 
@@ -115,8 +117,8 @@ describe("storage", () => {
 
   describe("storeDefaultOptions", () => {
     it("should clear sync storage and set default options", async () => {
-      (chromeStorage.sync.clear as vi.Mock).mockResolvedValue(undefined);
-      (chromeStorage.sync.set as vi.Mock).mockResolvedValue(undefined);
+      vi.mocked(chromeStorage.sync.clear).mockResolvedValue(undefined);
+      vi.mocked(chromeStorage.sync.set).mockResolvedValue({});
 
       await storage.storeDefaultOptions();
 
@@ -131,7 +133,7 @@ describe("storage", () => {
 
   describe("storeVoice", () => {
     it("should store the voice name", async () => {
-      (chromeStorage.sync.set as vi.Mock).mockResolvedValue(undefined);
+      vi.mocked(chromeStorage.sync.set).mockResolvedValue({});
       await storage.storeVoice("New Voice");
       expect(chromeStorage.sync.set).toHaveBeenCalledWith({
         voiceName: "New Voice",
@@ -141,7 +143,7 @@ describe("storage", () => {
 
   describe("storeRate", () => {
     it("should store the rate", async () => {
-      (chromeStorage.sync.set as vi.Mock).mockResolvedValue(undefined);
+      vi.mocked(chromeStorage.sync.set).mockResolvedValue({});
       await storage.storeRate(2.0);
       expect(chromeStorage.sync.set).toHaveBeenCalledWith({ rate: 2.0 });
     });
@@ -149,7 +151,7 @@ describe("storage", () => {
 
   describe("storePitch", () => {
     it("should store the pitch", async () => {
-      (chromeStorage.sync.set as vi.Mock).mockResolvedValue(undefined);
+      vi.mocked(chromeStorage.sync.set).mockResolvedValue({});
       await storage.storePitch(0.8);
       expect(chromeStorage.sync.set).toHaveBeenCalledWith({ pitch: 0.8 });
     });
@@ -157,12 +159,14 @@ describe("storage", () => {
 
   describe("getSpeakOptions", () => {
     it("should return speak options with values from storage", async () => {
-      (chromeStorage.sync.get as vi.Mock).mockImplementation(async (key) => {
-        if (key === RATE) return { [RATE]: 1.5 };
-        if (key === VOICENAME) return { [VOICENAME]: "Test Voice" };
-        if (key === PITCH) return { [PITCH]: 1.2 };
-        return {};
-      });
+      vi.mocked(chromeStorage.sync.get).mockImplementation(
+        async (key: string | string[] | Record<string, unknown> | null) => {
+          if (key === RATE) return { [RATE]: 1.5 };
+          if (key === VOICENAME) return { [VOICENAME]: "Test Voice" };
+          if (key === PITCH) return { [PITCH]: 1.2 };
+          return {};
+        },
+      );
 
       const speakOptions = await storage.getSpeakOptions();
 

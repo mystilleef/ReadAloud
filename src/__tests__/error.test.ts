@@ -6,6 +6,10 @@ import {
   logError,
 } from "../error";
 
+interface MockRuntime {
+  lastError: chrome.runtime.LastError | undefined;
+}
+
 describe("error", () => {
   let consoleErrorSpy: ReturnType<typeof vi.spyOn>;
 
@@ -51,7 +55,9 @@ describe("error", () => {
   describe("logChromeErrorMessage", () => {
     it("should log error message when chrome.runtime.lastError exists", () => {
       const errorMessage = "Chrome runtime error";
-      global.chrome.runtime.lastError = { message: errorMessage };
+      (global.chrome.runtime as unknown as MockRuntime).lastError = {
+        message: errorMessage,
+      };
 
       logChromeErrorMessage();
 
@@ -60,7 +66,7 @@ describe("error", () => {
     });
 
     it("should not log anything when chrome.runtime.lastError is undefined", () => {
-      global.chrome.runtime.lastError = undefined;
+      (global.chrome.runtime as unknown as MockRuntime).lastError = undefined;
 
       logChromeErrorMessage();
 
@@ -68,9 +74,8 @@ describe("error", () => {
     });
 
     it("should not log anything when chrome.runtime.lastError is null", () => {
-      global.chrome.runtime.lastError = null as unknown as
-        | chrome.runtime.LastError
-        | undefined;
+      (global.chrome.runtime as unknown as MockRuntime).lastError =
+        null as unknown as chrome.runtime.LastError | undefined;
 
       logChromeErrorMessage();
 
@@ -78,7 +83,9 @@ describe("error", () => {
     });
 
     it("should handle empty error message from chrome.runtime.lastError", () => {
-      global.chrome.runtime.lastError = { message: "" };
+      (global.chrome.runtime as unknown as MockRuntime).lastError = {
+        message: "",
+      };
 
       logChromeErrorMessage();
 
@@ -88,7 +95,9 @@ describe("error", () => {
 
     it("should handle error messages with special characters", () => {
       const errorMessage = "Error: Invalid input <script>alert('xss')</script>";
-      global.chrome.runtime.lastError = { message: errorMessage };
+      (global.chrome.runtime as unknown as MockRuntime).lastError = {
+        message: errorMessage,
+      };
 
       logChromeErrorMessage();
 
@@ -97,13 +106,17 @@ describe("error", () => {
     });
 
     it("should handle multiple consecutive calls", () => {
-      global.chrome.runtime.lastError = { message: "Error 1" };
+      (global.chrome.runtime as unknown as MockRuntime).lastError = {
+        message: "Error 1",
+      };
       logChromeErrorMessage();
 
-      global.chrome.runtime.lastError = { message: "Error 2" };
+      (global.chrome.runtime as unknown as MockRuntime).lastError = {
+        message: "Error 2",
+      };
       logChromeErrorMessage();
 
-      global.chrome.runtime.lastError = undefined;
+      (global.chrome.runtime as unknown as MockRuntime).lastError = undefined;
       logChromeErrorMessage();
 
       expect(consoleErrorSpy).toHaveBeenCalledTimes(2);
@@ -114,7 +127,9 @@ describe("error", () => {
 
   describe("chromeRuntimeError", () => {
     it("should return true when chrome.runtime.lastError exists with message", () => {
-      global.chrome.runtime.lastError = { message: "Some error" };
+      (global.chrome.runtime as unknown as MockRuntime).lastError = {
+        message: "Some error",
+      };
 
       const result = chromeRuntimeError();
 
@@ -122,7 +137,9 @@ describe("error", () => {
     });
 
     it("should return true when chrome.runtime.lastError exists with empty message", () => {
-      global.chrome.runtime.lastError = { message: "" };
+      (global.chrome.runtime as unknown as MockRuntime).lastError = {
+        message: "",
+      };
 
       const result = chromeRuntimeError();
 
@@ -130,7 +147,7 @@ describe("error", () => {
     });
 
     it("should return false when chrome.runtime.lastError is undefined", () => {
-      global.chrome.runtime.lastError = undefined;
+      (global.chrome.runtime as unknown as MockRuntime).lastError = undefined;
 
       const result = chromeRuntimeError();
 
@@ -138,9 +155,8 @@ describe("error", () => {
     });
 
     it("should return false when chrome.runtime.lastError is null", () => {
-      global.chrome.runtime.lastError = null as unknown as
-        | chrome.runtime.LastError
-        | undefined;
+      (global.chrome.runtime as unknown as MockRuntime).lastError =
+        null as unknown as chrome.runtime.LastError | undefined;
 
       const result = chromeRuntimeError();
 
@@ -148,7 +164,9 @@ describe("error", () => {
     });
 
     it("should return consistent results for multiple calls with same state", () => {
-      global.chrome.runtime.lastError = { message: "Error" };
+      (global.chrome.runtime as unknown as MockRuntime).lastError = {
+        message: "Error",
+      };
 
       expect(chromeRuntimeError()).toBe(true);
       expect(chromeRuntimeError()).toBe(true);
@@ -156,24 +174,26 @@ describe("error", () => {
     });
 
     it("should reflect changes in chrome.runtime.lastError state", () => {
-      global.chrome.runtime.lastError = undefined;
+      (global.chrome.runtime as unknown as MockRuntime).lastError = undefined;
       expect(chromeRuntimeError()).toBe(false);
 
-      global.chrome.runtime.lastError = { message: "Error" };
+      (global.chrome.runtime as unknown as MockRuntime).lastError = {
+        message: "Error",
+      };
       expect(chromeRuntimeError()).toBe(true);
 
-      global.chrome.runtime.lastError = undefined;
+      (global.chrome.runtime as unknown as MockRuntime).lastError = undefined;
       expect(chromeRuntimeError()).toBe(false);
     });
 
     it("should not modify chrome.runtime.lastError", () => {
       const errorObj = { message: "Test error" };
-      global.chrome.runtime.lastError = errorObj;
+      (global.chrome.runtime as unknown as MockRuntime).lastError = errorObj;
 
       chromeRuntimeError();
 
       expect(global.chrome.runtime.lastError).toBe(errorObj);
-      expect(global.chrome.runtime.lastError.message).toBe("Test error");
+      expect(global.chrome.runtime.lastError?.message).toBe("Test error");
     });
   });
 
@@ -248,7 +268,9 @@ describe("error", () => {
 
   describe("integration scenarios", () => {
     it("should handle typical error flow: check error, log if exists", () => {
-      global.chrome.runtime.lastError = { message: "API call failed" };
+      (global.chrome.runtime as unknown as MockRuntime).lastError = {
+        message: "API call failed",
+      };
 
       if (chromeRuntimeError()) {
         logChromeErrorMessage();
@@ -259,7 +281,7 @@ describe("error", () => {
     });
 
     it("should handle typical success flow: check error, no log if absent", () => {
-      global.chrome.runtime.lastError = undefined;
+      (global.chrome.runtime as unknown as MockRuntime).lastError = undefined;
 
       if (chromeRuntimeError()) {
         logChromeErrorMessage();
@@ -278,13 +300,15 @@ describe("error", () => {
       };
 
       // Simulate error case
-      global.chrome.runtime.lastError = { message: "Callback error" };
+      (global.chrome.runtime as unknown as MockRuntime).lastError = {
+        message: "Callback error",
+      };
       callback();
       expect(consoleErrorSpy).toHaveBeenCalledWith("Callback error");
 
       // Simulate success case
       consoleErrorSpy.mockClear();
-      global.chrome.runtime.lastError = undefined;
+      (global.chrome.runtime as unknown as MockRuntime).lastError = undefined;
       callback();
       expect(consoleErrorSpy).not.toHaveBeenCalled();
     });

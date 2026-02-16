@@ -52,13 +52,13 @@ const contextMenusCreateMock = vi.fn<
 const contextMenusUpdateMock = vi.fn<
   (
     id: string | number,
-    updateProperties: chrome.contextMenus.UpdateProperties,
+    updateProperties: Omit<chrome.contextMenus.CreateProperties, "id">,
     callback?: () => void,
   ) => void
 >(
   (
     _id: string | number,
-    _updateProperties: chrome.contextMenus.UpdateProperties,
+    _updateProperties: Omit<chrome.contextMenus.CreateProperties, "id">,
     callback?: () => void,
   ) => {
     callback?.();
@@ -67,7 +67,10 @@ const contextMenusUpdateMock = vi.fn<
 
 // Store the event listener callbacks
 let storageChangeListener:
-  | ((changes: chrome.storage.StorageChange, areaName: string) => void)
+  | ((
+      changes: { [key: string]: chrome.storage.StorageChange },
+      areaName: chrome.storage.AreaName,
+    ) => void)
   | undefined;
 let contextMenuClickListener:
   | ((info: chrome.contextMenus.OnClickData, tab?: chrome.tabs.Tab) => void)
@@ -75,7 +78,10 @@ let contextMenuClickListener:
 
 const storageOnChangedAddListenerMock = vi.fn<
   (
-    callback: (changes: chrome.storage.StorageChange, areaName: string) => void,
+    callback: (
+      changes: { [key: string]: chrome.storage.StorageChange },
+      areaName: chrome.storage.AreaName,
+    ) => void,
   ) => void
 >((callback) => {
   storageChangeListener = callback;
@@ -486,7 +492,9 @@ describe("context", () => {
 
   describe("edge cases", () => {
     it("should handle empty voice name", async () => {
-      const mockVoices = [{ voiceName: undefined }] as chrome.tts.TtsVoice[];
+      const mockVoices = [
+        { voiceName: undefined },
+      ] as unknown as chrome.tts.TtsVoice[];
       vi.mocked(utils.getTtsVoices).mockResolvedValue(mockVoices);
 
       context.createContextMenu();
@@ -567,7 +575,7 @@ describe("context", () => {
       // Only Voice B should be checked
       const checkedCalls = voiceMenuCalls.filter((call) => call[0].checked);
       expect(checkedCalls.length).toBe(1);
-      expect(String(checkedCalls[0][0].id)).toContain("Voice B");
+      expect(String(checkedCalls[0]?.[0].id)).toContain("Voice B");
     });
   });
 
@@ -581,7 +589,7 @@ describe("context", () => {
 
       // Trigger the storage change listener
       if (storageChangeListener) {
-        storageChangeListener({} as chrome.storage.StorageChange, "sync");
+        storageChangeListener({}, "sync");
         await new Promise((resolve) => setTimeout(resolve, 0));
         expect(storage.getStorageOptions).toHaveBeenCalled();
       }

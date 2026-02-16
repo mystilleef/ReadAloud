@@ -69,6 +69,10 @@ vi.mock("../utils", () => ({
   splitPhrases: mockSplitPhrases,
 }));
 
+interface MockEvent {
+  dispatch: (...args: unknown[]) => Promise<void>;
+}
+
 describe("background", () => {
   beforeEach(async () => {
     vi.clearAllMocks();
@@ -93,8 +97,7 @@ describe("background", () => {
 
   describe("chrome event listeners", () => {
     it("should setup context menu on install", async () => {
-      // biome-ignore lint/suspicious/noExplicitAny: Mock event type requires any for dispatch
-      await (chrome.runtime.onInstalled as any).dispatch({
+      await (chrome.runtime.onInstalled as unknown as MockEvent).dispatch({
         reason: "install",
       });
 
@@ -102,8 +105,7 @@ describe("background", () => {
     });
 
     it("should store default options on install", async () => {
-      // biome-ignore lint/suspicious/noExplicitAny: Mock event type requires any for dispatch
-      await (chrome.runtime.onInstalled as any).dispatch({
+      await (chrome.runtime.onInstalled as unknown as MockEvent).dispatch({
         reason: "install",
       });
 
@@ -111,8 +113,7 @@ describe("background", () => {
     });
 
     it("should not store default options on update", async () => {
-      // biome-ignore lint/suspicious/noExplicitAny: Mock event type requires any for dispatch
-      await (chrome.runtime.onInstalled as any).dispatch({
+      await (chrome.runtime.onInstalled as unknown as MockEvent).dispatch({
         reason: "update",
       });
 
@@ -120,8 +121,7 @@ describe("background", () => {
     });
 
     it("should send read selection message on command", async () => {
-      // biome-ignore lint/suspicious/noExplicitAny: Mock event type requires any for dispatch
-      await (chrome.commands.onCommand as any).dispatch(
+      await (chrome.commands.onCommand as unknown as MockEvent).dispatch(
         "read_aloud_selected_text",
       );
 
@@ -132,16 +132,16 @@ describe("background", () => {
     });
 
     it("should not send read selection message for other commands", async () => {
-      // biome-ignore lint/suspicious/noExplicitAny: Mock event type requires any for dispatch
-      await (chrome.commands.onCommand as any).dispatch("other-command");
+      await (chrome.commands.onCommand as unknown as MockEvent).dispatch(
+        "other-command",
+      );
 
       expect(mockMessageToContentScript).not.toHaveBeenCalled();
     });
 
     it("should select text from content when not speaking on action click", async () => {
       mockIsSpeaking.mockResolvedValue(false);
-      // biome-ignore lint/suspicious/noExplicitAny: Mock event type requires any for dispatch
-      await (chrome.action.onClicked as any).dispatch({});
+      await (chrome.action.onClicked as unknown as MockEvent).dispatch({});
 
       expect(mockIsSpeaking).toHaveBeenCalled();
       expect(mockMessageToContentScript).toHaveBeenCalledWith(
@@ -154,8 +154,7 @@ describe("background", () => {
 
     it("should stop speaking when speaking on action click", async () => {
       mockIsSpeaking.mockResolvedValue(true);
-      // biome-ignore lint/suspicious/noExplicitAny: Mock event type requires any for dispatch
-      await (chrome.action.onClicked as any).dispatch({});
+      await (chrome.action.onClicked as unknown as MockEvent).dispatch({});
 
       expect(mockIsSpeaking).toHaveBeenCalled();
       expect(mockStop).toHaveBeenCalled();
@@ -166,7 +165,7 @@ describe("background", () => {
 
   describe("message stream subscriptions", () => {
     it("should read phrases from readStream", async () => {
-      const listener = mockReadStreamSubscribe.mock.calls[0][0];
+      const listener = mockReadStreamSubscribe.mock.calls[0]?.[0];
       await listener(["test text", { id: "read-aloud-extension-id" }]);
 
       expect(mockSplitPhrases).toHaveBeenCalledWith("test text");
@@ -176,14 +175,14 @@ describe("background", () => {
     });
 
     it("should not read phrases from readStream if not from extension", async () => {
-      const listener = mockReadStreamSubscribe.mock.calls[0][0];
+      const listener = mockReadStreamSubscribe.mock.calls[0]?.[0];
       await listener(["test text", { id: "other-extension-id" }]);
 
       expect(mockReadPhrases).not.toHaveBeenCalled();
     });
 
     it("should refresh tts from refreshTtsStream", async () => {
-      const listener = mockRefreshTtsStreamSubscribe.mock.calls[0][0];
+      const listener = mockRefreshTtsStreamSubscribe.mock.calls[0]?.[0];
       await listener([null, { id: "read-aloud-extension-id" }]);
 
       expect(mockRefresh).toHaveBeenCalled();
@@ -191,21 +190,21 @@ describe("background", () => {
     });
 
     it("should not refresh tts from refreshTtsStream if not from extension", async () => {
-      const listener = mockRefreshTtsStreamSubscribe.mock.calls[0][0];
+      const listener = mockRefreshTtsStreamSubscribe.mock.calls[0]?.[0];
       await listener([null, { id: "other-extension-id" }]);
 
       expect(mockRefresh).not.toHaveBeenCalled();
     });
 
     it("should decrement badge counter on gotEndSpeakingStream", async () => {
-      const listener = mockGotEndSpeakingStreamSubscribe.mock.calls[0][0];
+      const listener = mockGotEndSpeakingStreamSubscribe.mock.calls[0]?.[0];
       await listener([null, { id: "read-aloud-extension-id" }]);
 
       expect(mockBadgeCounter.decrement).toHaveBeenCalled();
     });
 
     it("should not decrement badge counter on gotEndSpeakingStream if not from extension", async () => {
-      const listener = mockGotEndSpeakingStreamSubscribe.mock.calls[0][0];
+      const listener = mockGotEndSpeakingStreamSubscribe.mock.calls[0]?.[0];
       await listener([null, { id: "other-extension-id" }]);
 
       expect(mockBadgeCounter.decrement).not.toHaveBeenCalled();
