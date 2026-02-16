@@ -92,3 +92,4 @@ releases/
 .gemini/
 gha-creds-*.json
 .gemini_tasks.md
+.beads/last-touched
