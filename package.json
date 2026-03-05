@@ -60,6 +60,9 @@
   "overrides": {
     "vite-plugin-biome": {
       "@biomejs/biome": "$@biomejs/biome"
+    },
+    "@crxjs/vite-plugin": {
+      "rollup": "2.80.0"
     }
   }
 }
