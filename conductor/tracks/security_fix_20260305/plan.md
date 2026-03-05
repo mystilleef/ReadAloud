@@ -12,7 +12,7 @@
     - [x] Run `npm audit` to confirm high/critical issues are resolved.
 - [x] Task: Conductor - User Manual Verification 'Remediation' (Protocol in workflow.md)
 
-## Phase 3: Verification
+## Phase 3: Verification [checkpoint: ebdca44]
 - [x] Task: Build verification
     - [x] Run `make` to ensure the build process completes successfully.
 - [x] Task: Test verification
