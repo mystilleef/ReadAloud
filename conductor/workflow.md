@@ -20,24 +20,18 @@
 | **5. Refactor** | Improve code/test clarity | Rerun tests |
 | **6. Coverage** | Run coverage reports | Target >80% |
 | **7. Deviations** | Update `tech-stack.md` if design changes | Stop and document |
-| **8. Commit** | Stage and commit code changes | Follow `kbase/git-commit-guide.md` |
-| **9. Note** | Attach summary via `git notes` | Include "why" and file list |
-| **10. Record** | Update `plan.md` with `[x]` and `<sha7>` | Use first 7 characters |
-| **11. Finalize** | Commit `plan.md` update | Use `chore(plan):` type |
+| **8. Record** | Update `plan.md` with `[x]` | Mark completion |
 
 ## Phase Completion Protocol
 
 Execute this protocol immediately after completing a phase in `plan.md`.
 
-1.  **Identify Scope**: Find the previous checkpoint SHA in `plan.md`. List changed code files via `git diff --name-only <prev_sha> HEAD`.
+1.  **Identify Scope**: List all code files modified during the phase.
 2.  **Verify Tests**: Ensure a corresponding test file exists for every modified code file. Create missing tests that validate phase functionality.
 3.  **Execute Suite**: Run the full test suite (for example, `CI=true npm test`). Debug failures (maximum two attempts) before seeking user guidance.
 4.  **Manual Verification**: Analyze `product.md` and `plan.md` to draft a step-by-step manual verification plan. Present this plan to the user.
 5.  **User Approval**: Await explicit user confirmation ("yes" or feedback) before proceeding.
-6.  **Checkpoint Commit**: Create a checkpoint commit (for example, `chore(checkpoint): end of Phase X`).
-7.  **Verification Report**: Attach the test command, manual steps, and user confirmation to the checkpoint commit via `git notes`.
-8.  **Update Plan**: Record the checkpoint SHA in the phase heading of `plan.md` (format: `[checkpoint: <sha7>]`).
-9.  **Commit Plan**: Stage and commit the `plan.md` update.
+6.  **Update Plan**: Mark the phase as complete in `plan.md`.
 
 ## Completion Criteria
 
@@ -52,7 +46,3 @@ Before marking any task or phase complete, verify:
 - [ ] Mobile functionality remains intact (if applicable).
 - [ ] Documentation reflects all changes.
 - [ ] No security vulnerabilities exist.
-
-## Commit Guidelines
-
-Follow the **Conventional Commits v1.0.0** specification as detailed in `kbase/git-commit-guide.md`.

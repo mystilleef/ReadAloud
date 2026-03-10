@@ -4,13 +4,7 @@
 - **Clarity**: Use simple, direct language for all user-facing text.
 - **Conciseness**: Keep instructions and menu labels brief to minimize cognitive load.
 - **Tone**: Maintain a helpful, neutral, and professional tone.
-- **E-Prime**: Avoid "to be" verbs in documentation, user-facing strings, and commit messages to ensure active, precise communication.
-
-## Development Standards
-- **Conventional Commits**: Strictly follow the Conventional Commits v1.0.0 specification for all Git commits.
-- **Imperative Mood**: Use the imperative mood in commit descriptions (e.g., "add," not "added").
-- **Brevity**: Keep commit subject lines ≤ 50 characters.
-- **Plain Text**: Use plain text in commit messages; avoid markdown backticks to prevent shell execution errors.
+- **E-Prime**: Avoid "to be" verbs in documentation and user-facing strings to ensure active, precise communication.
 
 ## User Experience (UX) Principles
 - **Non-Intrusiveness**: The extension remains silent and invisible until the user explicitly triggers it.
