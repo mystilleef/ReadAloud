@@ -70,12 +70,12 @@ export async function getSpeakOptions(): Promise<chrome.tts.TtsOptions> {
 }
 
 export {
-  getVoiceName,
-  getRate,
   getPitch,
+  getRate,
   getStorageOptions,
-  storeVoice,
-  storeRate,
-  storePitch,
+  getVoiceName,
   storeDefaultOptions,
+  storePitch,
+  storeRate,
+  storeVoice,
 };

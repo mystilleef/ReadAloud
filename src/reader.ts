@@ -22,4 +22,4 @@ async function readPhrases(
   }
 }
 
-export { read, readPhrases, stop, refresh };
+export { read, readPhrases, refresh, stop };
