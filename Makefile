@@ -15,8 +15,14 @@ help: ## Show this help message
 	@echo "$(GREEN)Available targets:$(NC)"
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "  $(YELLOW)%%-15s$(NC) %s\n", $$1, $$2}'
 
+ncu: ## Check for outdated dependencies
+	npx npm-check-updates -u
+
 install: ## Install dependencies
 	npm install
+
+update: ## Update dependencies
+	npm update
 
 clean: ## Clean build artifacts and TypeScript cache
 	npm run clean
