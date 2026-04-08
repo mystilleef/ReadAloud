@@ -33,12 +33,12 @@
   "devDependencies": {
     "@biomejs/biome": "2.4.10",
     "@crxjs/vite-plugin": "^2.4.0",
-    "@types/chrome": "^0.1.38",
-    "@types/node": "^25.5.0",
+    "@types/chrome": "^0.1.39",
+    "@types/node": "^25.5.2",
     "@types/web": "^0.0.345",
     "chalk": "^5.6.2",
     "chrome-webstore-upload": "^4.0.3",
-    "eslint": "^10.1.0",
+    "eslint": "^10.2.0",
     "execa": "^9.6.1",
     "google-auth-library": "^10.6.2",
     "rimraf": "^6.1.3",
@@ -48,14 +48,14 @@
     "ts-node": "^10.9.2",
     "tslib": "^2.8.1",
     "typescript": "^6.0.2",
-    "vite": "^8.0.3",
+    "vite": "^8.0.7",
     "vite-plugin-biome": "^1.2.0",
-    "vite-plugin-static-copy": "^4.0.0",
+    "vite-plugin-static-copy": "^4.0.1",
     "vite-plugin-zip-pack": "^1.2.4",
-    "@vitest/coverage-v8": "^4.1.2",
+    "@vitest/coverage-v8": "^4.1.3",
     "@types/jsdom": "^28.0.1",
-    "jsdom": "^29.0.1",
-    "vitest": "^4.1.2"
+    "jsdom": "^29.0.2",
+    "vitest": "^4.1.3"
   },
   "overrides": {
     "vite-plugin-biome": {
