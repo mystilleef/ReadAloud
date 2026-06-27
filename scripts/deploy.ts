@@ -66,7 +66,7 @@ async function deploy() {
     );
     console.log("\n📊 Upload result:", uploadResult);
 
-    if (uploadResult.uploadState === "SUCCESS") {
+    if (uploadResult.uploadState === "SUCCEEDED") {
       console.log("\n✅ Extension uploaded successfully!");
 
       const isDryRun = process.argv.includes("--dry-run");
@@ -79,7 +79,7 @@ async function deploy() {
       console.log("Publishing...");
       const publishResult = await webstore.publish("default", token);
       console.log("\n📊 Publish result:", publishResult);
-      if (publishResult.status[0] === "OK") {
+      if (publishResult.state === "PUBLISHED") {
         console.log(`\n${"=".repeat(50)}`);
         console.log("✅ Extension published successfully!");
         console.log("=".repeat(50), "\n");
