@@ -5,6 +5,7 @@
     "includes": [
       "**",
       "!**/node_modules",
+      "!**/secrets",
       "!**/releases",
       "!**/images",
       "!**/dist",
