@@ -1,7 +1,7 @@
 .PHONY: help clean dev build install check format test coverage deploy release test-auth watch fix all zip
 
 # Default target
-.DEFAULT_GOAL := build
+.DEFAULT_GOAL := verify
 
 # Colors for output
 BLUE := \033[0;34m
@@ -24,26 +24,20 @@ install: ## Install dependencies
 update: ## Update dependencies
 	npm update
 
-clean: ## Clean build artifacts and TypeScript cache
-	npm run clean
-
-dev: ## Start Vite development server
-	npm run watch
-
 build: ## Build the extension for production
 	npm run build
-
-check: ## Run Biome linting checks
-	npx biome check .
-
-format: ## Format code with Biome
-	npx biome format --write .
 
 test: ## Run tests
 	npm run test
 
 coverage: ## Generate test coverage report
 	npm run coverage
+
+verify: ## Run build and comprehensive test suite
+	npm run verify
+
+dev: ## Start Vite development server
+	npm run watch
 
 test-auth: ## Test service account authentication
 	npm run test-auth
@@ -63,13 +57,7 @@ major minor patch:
 watch: ## Run vite in watch mode
 	npm run watch
 
-fix: ## Run Biome linting and apply safe fixes
-	npx biome check --write .
+all: update ncu install verify ## Clean, install dependencies, and build
 
-migrate: ## Update Biome configuration
-	npx @biomejs/biome migrate --write
-
-all: clean install build ## Clean, install dependencies, and build
-
-zip: build ## Build and create distribution zip (already handled by build)
+zip: verify ## Build and create distribution zip (already handled by build)
 	@echo "$(GREEN)Distribution zip created in dist/ directory$(NC)"
