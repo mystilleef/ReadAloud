@@ -40,6 +40,7 @@ async function deploy() {
     // Initialize webstore client
     const webstore = chromeWebstoreUpload({
       extensionId: config.extensionId,
+      publisherId: config.publisherId,
       clientId: "not-used-with-service-account",
       clientSecret: "not-used-with-service-account",
       refreshToken: "not-used-with-service-account",
