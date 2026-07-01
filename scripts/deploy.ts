@@ -83,6 +83,10 @@ async function deploy() {
         console.log(`\n${"=".repeat(50)}`);
         console.log("✅ Extension published successfully!");
         console.log("=".repeat(50), "\n");
+      } else if (publishResult.state === "PENDING_REVIEW") {
+        console.log(`\n${"=".repeat(50)}`);
+        console.log("✅ Extension submitted and is pending manual review!");
+        console.log("=".repeat(50), "\n");
       } else {
         console.error(`\n${"=".repeat(50)}`);
         console.error("❌ Error publishing extension");
