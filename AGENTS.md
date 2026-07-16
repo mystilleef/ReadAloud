@@ -1,26 +1,31 @@
-# Agent Guidelines
+# Agent
 
-## Build/Lint/Test
-- **Build**: `npm run build` (runs tsc + vite, Biome auto-fixes during build)
-- **Watch**: `npm run watch` (dev mode with auto-rebuild)
-- **Clean**: `npm run clean` (remove dist/ and build artifacts)
-- **Test**: `npm run test` (runs Vitest tests) or `npm run test src/__tests__/filename.test.ts` for single test
-- **Coverage**: `npm run coverage` (generates coverage report in coverage/)
+## Commands
 
-## Code Style
-- **Linter**: Use Biome. Config in `biome.jsonc`. Biome runs automatically during build with `applyFixes: true`
-- **Imports**: Biome auto-organizes imports. Import from `./constants`, `./utils`, `./error` before external deps like `rxjs`
-- **Formatting**: 2-space indentation (Biome + .editorconfig), Unix LF line endings, 80 char max line length
-- **Types**: Strict TypeScript with all safety flags. Use explicit types, avoid `any`. Chrome API types from `@types/chrome`
-- **Naming**: camelCase for variables/functions, PascalCase for types/interfaces, UPPER_CASE for constants
-- **Error Handling**: Always use `logError()` from `src/error.ts`. Add `.catch(logError)` to all promises. Use `logChromeErrorMessage()` for Chrome API callbacks
-- **Async**: Prefer async/await over callbacks. All Chrome API message handlers check `sender.id !== EXTENSION_ID` for security
-- **RxJS**: Use `pipe(throttleTime(), debounceTime())` pattern for event streams (see `background.ts`)
-- **Comments**: Avoid comments unless documenting complex logic or non-obvious behavior
+- `make check` — type-check; auto-fix trivial lint
+- `make coverage` — full test suite
+- `make verify` — comprehensive verification
 
-## Key Patterns
-- Text splitting: Use `splitPhrases()` from `utils.ts` (640 char chunks) before TTS
-- Message flow: All messages via `@extend-chrome/messages` streams (see `message.ts`)
-- Version management: Version in `package.json` auto-injected into `manifest.json` during build
-- Security: Always validate `sender.id === EXTENSION_ID` in message handlers
-- Testing: Use Vitest with vi.mock() for Chrome API mocking (see `src/__tests__/*.test.ts`)
+```sh
+# Forbidden — causes freezes
+make test 2>&1 | head -n 10
+make test | tail -n 10
+
+# Approved
+make test > tmp.txt && cat tmp.txt | head -n 10
+make verify
+```
+
+## Workflow
+
+**CI:** `make verify`
+
+## Rules
+
+- Write asynchronous, non-blocking code.
+- After edits: run `make check`.
+- After task completion: run `make verify`.
+
+## Gotchas
+
+- Never commit or track `proposals/`.
