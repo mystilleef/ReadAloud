@@ -8,7 +8,7 @@
 - **Coverage**: `npm run coverage` (generates coverage report in coverage/)
 
 ## Code Style
-- **Linter**: Use Biome (NOT ESLint). Config in `biome.jsonc`. Biome runs automatically during build with `applyFixes: true`
+- **Linter**: Use Biome. Config in `biome.jsonc`. Biome runs automatically during build with `applyFixes: true`
 - **Imports**: Biome auto-organizes imports. Import from `./constants`, `./utils`, `./error` before external deps like `rxjs`
 - **Formatting**: 2-space indentation (Biome + .editorconfig), Unix LF line endings, 80 char max line length
 - **Types**: Strict TypeScript with all safety flags. Use explicit types, avoid `any`. Chrome API types from `@types/chrome`
