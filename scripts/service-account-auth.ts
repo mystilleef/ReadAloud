@@ -136,7 +136,7 @@ export async function verifyServiceAccountAuth(): Promise<boolean> {
   }
 }
 
-// CLI usage: ts-node scripts/service-account-auth.ts
+// CLI usage: tsx scripts/service-account-auth.ts
 if (import.meta.url === `file://${process.argv[1]}`) {
   verifyServiceAccountAuth()
     .then((success) => {

@@ -59,9 +59,7 @@ const TOP_LEVEL_MENU_INFO = [
   },
 ];
 
-// eslint-disable-next-line no-magic-numbers
 const SPEED_OPTIONS = [1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2];
-// eslint-disable-next-line no-magic-numbers
 const PITCH_OPTIONS = [0.8, 0.9, 1, 1.1, 1.2];
 
 chrome.storage.onChanged.addListener(
