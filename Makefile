@@ -24,6 +24,9 @@ install: ## Install dependencies
 update: ## Update dependencies
 	npm update
 
+check: ## Check for outdated dependencies
+	npm run check
+
 build: ## Build the extension for production
 	npm run build
 
