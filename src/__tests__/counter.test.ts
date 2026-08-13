@@ -20,8 +20,11 @@ vi.mock("../icon", () => ({
 }));
 
 describe("badgeCounter", () => {
+  let consoleErrorSpy: ReturnType<typeof vi.spyOn>;
+
   beforeEach(async () => {
     vi.clearAllMocks();
+    consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
     mockSetBadgeText.mockResolvedValue(undefined);
     vi.mocked(updateBrowserIcon).mockResolvedValue(undefined);
 
@@ -148,6 +151,7 @@ describe("badgeCounter", () => {
 
       // Should not throw
       await expect(freshCounter.increment()).resolves.not.toThrow();
+      expect(consoleErrorSpy).toHaveBeenCalledWith("Error: API Error");
     });
 
     it("should handle errors from updateBrowserIcon gracefully", async () => {
@@ -156,6 +160,7 @@ describe("badgeCounter", () => {
 
       // Should not throw
       await expect(freshCounter.increment()).resolves.not.toThrow();
+      expect(consoleErrorSpy).toHaveBeenCalledWith("Error: Icon Error");
     });
   });
 
