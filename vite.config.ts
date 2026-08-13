@@ -4,8 +4,8 @@ import biomePlugin from "vite-plugin-biome";
 import { viteStaticCopy } from "vite-plugin-static-copy";
 import zipPack from "vite-plugin-zip-pack";
 import { defineConfig } from "vitest/config";
-import manifest from "./manifest.json";
-import { version } from "./package.json";
+import manifest from "./manifest.json" with { type: "json" };
+import { version } from "./package.json" with { type: "json" };
 
 // Create a new manifest object with the correct version
 const manifestWithVersion = {
