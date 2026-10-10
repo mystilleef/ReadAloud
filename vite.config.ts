@@ -5,7 +5,9 @@ import { viteStaticCopy } from "vite-plugin-static-copy";
 import zipPack from "vite-plugin-zip-pack";
 import { defineConfig } from "vitest/config";
 import manifest from "./manifest.json" with { type: "json" };
-import { version } from "./package.json" with { type: "json" };
+import pkg from "./package.json" with { type: "json" };
+
+const { version } = pkg;
 
 // Create a new manifest object with the correct version
 const manifestWithVersion = {
