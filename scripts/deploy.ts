@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import chromeWebstoreUpload from "chrome-webstore-upload";
+import { isPendingReview } from "./review-status.ts";
 import {
   getServiceAccountToken,
   loadServiceAccountConfig,
@@ -56,6 +57,17 @@ async function deploy() {
         `\n❌ Error: Extension zip file not found at ${zipFilePath}`,
       );
       console.error("Please run 'npm run build' first.\n");
+      process.exit(1);
+    }
+
+    console.log("\n🔎 Checking review status...");
+    if (isPendingReview(await webstore.get(token))) {
+      console.error(`\n${"=".repeat(50)}`);
+      console.error("❌ A previous submission is still pending review");
+      console.error("=".repeat(50));
+      console.error(
+        "Wait for the review to finish, or cancel it in the developer dashboard, then redeploy.\n",
+      );
       process.exit(1);
     }
 

@@ -1,7 +1,13 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
   "display": "Google Chrome Extension",
-  "include": ["src", "vite.config.ts", "manifest.json"],
+  "include": [
+    "src",
+    "scripts/review-status.ts",
+    "scripts/__tests__/review-status.test.ts",
+    "vite.config.ts",
+    "manifest.json"
+  ],
   "exclude": ["node_modules", "releases", "images", "dist"],
   "compilerOptions": {
     /* Base Options */
