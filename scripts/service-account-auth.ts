@@ -4,12 +4,18 @@
  * This module handles authentication using Google Cloud Service Accounts
  * for Chrome Web Store API access. This approach works with accounts that
  * have Advanced Protection Program enabled.
+ *
+ * Application Default Credentials supply the service account identity
+ * without a stored secret: CI federates GitHub's OIDC token through
+ * Workload Identity Federation, and local runs impersonate the service
+ * account from a gcloud login.
  */
 
 import { readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { GoogleAuth } from "google-auth-library";
+import { createWebstoreClient } from "./webstore.ts";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -21,7 +27,6 @@ interface ServiceAccountConfig {
   type: "service_account";
   publisherId: string;
   extensionId: string;
-  serviceAccountKeyPath: string;
 }
 
 /**
@@ -50,29 +55,19 @@ export function loadServiceAccountConfig(): ServiceAccountConfig {
  * Get an access token using service account authentication
  *
  * This is the main function to use for service account authentication.
- * It uses Google's official auth library to handle JWT creation and token exchange.
+ * Application Default Credentials resolve the identity, so no key file
+ * exists to load, leak, or rotate.
  *
  * @returns Access token for Chrome Web Store API
  */
 export async function getServiceAccountToken(): Promise<string> {
-  const config = loadServiceAccountConfig();
-  const keyPath = resolve(__dirname, "..", config.serviceAccountKeyPath);
+  const token = await new GoogleAuth({ scopes: SCOPES }).getAccessToken();
 
-  // Create auth client using the service account key file
-  const auth = new GoogleAuth({
-    keyFile: keyPath,
-    scopes: SCOPES,
-  });
-
-  // Get the access token
-  const client = await auth.getClient();
-  const tokenResponse = await client.getAccessToken();
-
-  if (!tokenResponse.token) {
+  if (!token) {
     throw new Error("Failed to obtain access token from service account");
   }
 
-  return tokenResponse.token;
+  return token;
 }
 
 /**
@@ -94,6 +89,9 @@ export async function getServiceAccountCredentials() {
 
 /**
  * Verify that service account authentication is working
+ *
+ * Reads the store item after minting the token: only the store proves
+ * the dashboard links the service account, and the read never mutates.
  */
 export async function verifyServiceAccountAuth(): Promise<boolean> {
   try {
@@ -104,7 +102,6 @@ export async function verifyServiceAccountAuth(): Promise<boolean> {
     console.log("\n✅ Configuration loaded:");
     console.log(`   Extension ID: ${config.extensionId}`);
     console.log(`   Publisher ID: ${config.publisherId}`);
-    console.log(`   Key file: ${config.serviceAccountKeyPath}`);
 
     console.log("\n🔄 Requesting access token...");
     const token = await getServiceAccountToken();
@@ -112,6 +109,10 @@ export async function verifyServiceAccountAuth(): Promise<boolean> {
     console.log("\n✅ Successfully obtained access token!");
     console.log(`   Token (first 30 chars): ${token.substring(0, 30)}...`);
     console.log(`   Token length: ${token.length} characters`);
+
+    console.log("\n🔎 Reading store item...");
+    const status = await createWebstoreClient(config).get(token);
+    console.log(`\n✅ Store item readable: ${status.itemId}`);
 
     console.log(`\n${"=".repeat(50)}`);
     console.log("✅ Service account authentication is working!\n");
@@ -123,7 +124,9 @@ export async function verifyServiceAccountAuth(): Promise<boolean> {
     console.error("Error:", error);
     console.error(`\n${"=".repeat(50)}`);
     console.error("\n💡 Troubleshooting steps:");
-    console.error("   1. Verify service account key file exists");
+    console.error(
+      "   1. Verify credentials: gcloud auth application-default login --impersonate-service-account",
+    );
     console.error("   2. Check that Chrome Web Store API is enabled");
     console.error(
       "   3. Ensure service account is linked in Chrome Web Store Dashboard",
