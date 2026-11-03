@@ -1,12 +1,12 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import chromeWebstoreUpload from "chrome-webstore-upload";
 import { isPendingReview } from "./review-status.ts";
 import {
   getServiceAccountToken,
   loadServiceAccountConfig,
 } from "./service-account-auth.ts";
+import { createWebstoreClient } from "./webstore.ts";
 
 // Get __dirname equivalent in ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -38,14 +38,7 @@ async function deploy() {
     const token = await getServiceAccountToken();
     console.log("✅ Successfully authenticated!");
 
-    // Initialize webstore client
-    const webstore = chromeWebstoreUpload({
-      extensionId: config.extensionId,
-      publisherId: config.publisherId,
-      clientId: "not-used-with-service-account",
-      clientSecret: "not-used-with-service-account",
-      refreshToken: "not-used-with-service-account",
-    });
+    const webstore = createWebstoreClient(config);
 
     // Build zip file path
     const PACKAGE_NAME = `readaloud-${packageJson.version}.zip`;
