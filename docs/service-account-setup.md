@@ -1,188 +1,182 @@
-# Service Account Setup for Chrome Web Store API
+# Service account setup for the `Chrome Web Store`
 
-This guide helps you set up **Service Account authentication** for Chrome Web Store deployments, which works with Google accounts that have **Advanced Protection Program** enabled.
+One-time setup for keyless deployments: `GitHub Actions` and local runs
+both act as one service account, so no key file or refresh token needs
+storing or rotating.
 
-## Why Service Accounts?
+## How authentication works
 
-Service accounts are special Google Cloud accounts designed for automated, server-to-server interactions. Benefits:
+- **CI**: [Workload Identity Federation][wif] trades the workflow's
+  `GitHub` `OIDC` token for a short-lived service account token.
+- **Local**: a `gcloud` login impersonates the service account through
+  Application Default Credentials (`ADC`).
+- **Store**: the developer dashboard links the service account, granting
+  it access to every extension of the publisher.
+- Works with Google accounts enrolled in the `Advanced Protection
+  Program`.
 
-- ✅ Works with Advanced Protection Program (APP)
-- ✅ No manual OAuth flow needed for CI/CD
-- ✅ More secure for automated deployments
-- ✅ No expiring refresh tokens to manage
-- ✅ Recommended by Google for enterprise workflows
+## Project values
 
-## Prerequisites
+| Item            | Value                                                                   |
+| :-------------- | :---------------------------------------------------------------------- |
+| Project         | `readaloud-377407` (number `164998752727`)                              |
+| Service account | `speakout-webstore-deployment@readaloud-377407.iam.gserviceaccount.com` |
+| Pool, provider  | `github-pool`, `readaloud`                                              |
+| Repository      | `mystilleef/ReadAloud` (ID `203431873`)                                 |
+| Extension ID    | `jelomlaehalbblopojchlcibdemonfef`                                      |
 
-- Google Cloud Project
-- Chrome Web Store Developer account
-- Extension already published in Chrome Web Store
+- The dashboard links one service account per publisher, so ReadAloud
+  shares the service account with the publisher's other extensions.
 
-## Step-by-Step Setup
+## Setup
 
-### 1. Enable Chrome Web Store API
+Set shell variables for the commands below:
 
-1. Go to [Google Cloud Console](https://console.cloud.google.com/)
-2. Create a new project or select an existing one
-3. In the search bar, type "Chrome Web Store API"
-4. Click on the API and click **Enable**
+```sh
+PROJECT=readaloud-377407
+PROJECT_NUMBER=164998752727
+SA="speakout-webstore-deployment@${PROJECT}.iam.gserviceaccount.com"
+REPO_ID="$(gh api repos/mystilleef/ReadAloud --jq .id)"
+```
 
-### 2. Create a Service Account
+### 1. Enable `APIs`
 
-1. In Google Cloud Console, navigate to **IAM & Admin** → **Service Accounts**
-2. Click **Create Service Account**
-3. Fill in the details:
-   - **Name**: `chrome-webstore-publisher` (or any name you prefer)
-   - **Description**: "Service account for automated Chrome Web Store deployments"
-4. Click **Create and Continue**
-5. **Skip** granting permissions (not needed at this stage)
-6. Click **Done**
+```sh
+gcloud services enable chromewebstore.googleapis.com \
+  iamcredentials.googleapis.com sts.googleapis.com --project="${PROJECT}"
+```
 
-### 3. Create Service Account Key
+### 2. Create the service account
 
-1. Click on the newly created service account
-2. Go to the **Keys** tab
-3. Click **Add Key** → **Create new key**
-4. Select **JSON** format
-5. Click **Create**
-6. A JSON file will download automatically - **save this securely**
+Skip when the publisher already links one; reuse it instead.
 
-The JSON file looks like this:
+```sh
+gcloud iam service-accounts create speakout-webstore-deployment \
+  --project="${PROJECT}" --display-name="Chrome Web Store deployment"
+```
+
+Skip project roles; the store link alone grants access.
+
+### 3. Link the service account to the store
+
+1. Open the
+   [developer dashboard](https://chrome.google.com/webstore/devconsole)
+2. **Account** (gear icon) → **Service Accounts** → **Link Service
+   Account**
+3. Enter the service account email
+
+The dashboard `URL` contains the publisher ID:
+`https://chrome.google.com/webstore/devconsole/[PUBLISHER_ID]`
+
+### 4. Trust `GitHub Actions`
+
+Create the pool (once per project), then a provider restricted to this
+repository:
+
+```sh
+gcloud iam workload-identity-pools create github-pool \
+  --project="${PROJECT}" --location=global \
+  --display-name="GitHub Actions Pool"
+
+gcloud iam workload-identity-pools providers create-oidc readaloud \
+  --project="${PROJECT}" --location=global \
+  --workload-identity-pool=github-pool \
+  --issuer-uri="https://token.actions.githubusercontent.com" \
+  --attribute-mapping="google.subject=assertion.sub,attribute.repository=assertion.repository,attribute.repository_id=assertion.repository_id" \
+  --attribute-condition="assertion.repository_id == '${REPO_ID}'"
+
+gcloud iam service-accounts add-iam-policy-binding "${SA}" \
+  --project="${PROJECT}" --role=roles/iam.workloadIdentityUser \
+  --member="principalSet://iam.googleapis.com/projects/${PROJECT_NUMBER}/locations/global/workloadIdentityPools/github-pool/attribute.repository_id/${REPO_ID}"
+```
+
+- Matching the numeric repository ID blocks forks and look-alike
+  repositories; fork pull requests never receive an `OIDC` token.
+- `deploy.yml` and `test-auth.yml` reference the provider and service
+  account.
+
+### 5. Allow local impersonation
+
+```sh
+gcloud iam service-accounts add-iam-policy-binding "${SA}" \
+  --project="${PROJECT}" --role=roles/iam.serviceAccountTokenCreator \
+  --member="user:$(gcloud config get-value account)"
+
+gcloud auth application-default login --impersonate-service-account="${SA}"
+```
+
+The login replaces the machine-wide `ADC` file; other tools reading
+`ADC` then act as the service account too.
+
+### 6. Configure the project
+
+`secrets/service-account-config.json` (`git-crypt` encrypts it):
+
 ```json
 {
   "type": "service_account",
-  "project_id": "your-project-id",
-  "private_key_id": "...",
-  "private_key": "-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n",
-  "client_email": "chrome-webstore-publisher@your-project.iam.gserviceaccount.com",
-  "client_id": "...",
-  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-  "token_uri": "https://oauth2.googleapis.com/token",
-  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-  "client_x509_cert_url": "..."
+  "publisherId": "YOUR_PUBLISHER_ID",
+  "extensionId": "jelomlaehalbblopojchlcibdemonfef"
 }
 ```
 
-### 4. Link Service Account to Chrome Web Store
+### 7. Add `GitHub` secrets
 
-1. Go to [Chrome Web Store Developer Dashboard](https://chrome.google.com/webstore/devconsole)
-2. Click on **Account** (gear icon in top right)
-3. Scroll to **Service Accounts** section
-4. Click **Link Service Account**
-5. Enter the service account email from step 3 (ends with `@[project-id].iam.gserviceaccount.com`)
-6. Click **Link**
+**Settings** → **Secrets and variables** → **Actions**:
 
-**Important:** Currently, you can only link **one service account** per Chrome Web Store publisher account.
+- `CHROME_PUBLISHER_ID`: the publisher ID
+- `CHROME_EXTENSION_ID`: `jelomlaehalbblopojchlcibdemonfef`
 
-### 5. Get Your Publisher ID
+### 8. Verify
 
-You'll need your Publisher ID for API calls:
+- Local: `npm run test-auth`
+- CI: `gh workflow run test-auth.yml`, then `gh run watch`
 
-1. In the Chrome Web Store Developer Dashboard
-2. The URL will look like: `https://chrome.google.com/webstore/devconsole/[PUBLISHER_ID]`
-3. Copy the `PUBLISHER_ID` (long alphanumeric string)
+Both mint a token and read the store item; neither uploads nor
+publishes.
 
-### 6. Save Credentials Locally
+## Security best practices
 
-1. Rename your downloaded JSON key file to `service-account-key.json`
-2. Move it to your project's `secrets/` directory:
-   ```bash
-   mv ~/Downloads/your-project-*.json secrets/service-account-key.json
-   ```
-
-3. Create a new secrets file `secrets/service-account-config.json`:
-   ```json
-   {
-     "type": "service_account",
-     "publisherId": "YOUR_PUBLISHER_ID_HERE",
-     "extensionId": "jelomlaehalbblopojchlcibdemonfef",
-     "serviceAccountKeyPath": "./secrets/service-account-key.json"
-   }
-   ```
-
-### 7. Update GitHub Secrets (for CI/CD)
-
-Add these secrets to your GitHub repository:
-
-1. Go to **Settings** → **Secrets and variables** → **Actions**
-2. Click **New repository secret** for each:
-
-   - `CHROME_PUBLISHER_ID`: Your publisher ID from step 5
-   - `CHROME_EXTENSION_ID`: `jelomlaehalbblopojchlcibdemonfef`
-   - `SERVICE_ACCOUNT_KEY`: The entire contents of your `service-account-key.json` file
-
-## Security Best Practices
-
-1. **Never commit service account keys to Git**
-   - Add `secrets/*.json` to `.gitignore` (already done)
-
-2. **Restrict key file permissions** (Linux/Mac):
-   ```bash
-   chmod 600 secrets/service-account-key.json
-   ```
-
-3. **Rotate keys periodically**:
-   - Create a new key every 90 days
-   - Delete old keys from Google Cloud Console
-
-4. **Use separate service accounts** for different environments:
-   - One for local development
-   - One for CI/CD
-   - Different accounts for different extensions
-
-5. **Monitor usage**:
-   - Check [Google Cloud Console → IAM & Admin → Service Accounts](https://console.cloud.google.com/iam-admin/serviceaccounts)
-   - Review audit logs regularly
-
-## Verification
-
-Test that your service account is working:
-
-```bash
-npm run test-auth
-```
-
-This will authenticate with your service account and verify access without publishing.
+- Create no service account keys; federation and impersonation replace
+  them.
+- Keep the provider condition pinned to this repository.
+- Grant `roles/iam.serviceAccountTokenCreator` only to maintainers who
+  deploy locally.
+- Review service account activity in the
+  [audit logs](https://console.cloud.google.com/logs).
 
 ## Troubleshooting
 
-### "Service account not found"
-- Ensure the service account email is correct
-- Verify it's linked in Chrome Web Store Developer Dashboard
+### `Permission 'iam.serviceAccounts.getAccessToken' denied`
 
-### "Insufficient permissions"
-- Re-link the service account in the Developer Dashboard
-- Make sure Chrome Web Store API is enabled
+- Confirm step 5 grants the role to the active `gcloud` account.
+- Wait a few minutes; new `IAM` bindings propagate gradually.
 
-### "Invalid key file"
-- Verify the JSON key file is valid JSON
-- Ensure it hasn't been modified
-- Try downloading a fresh key from Google Cloud Console
+### `Could not load the default credentials`
 
-### "Publisher ID not found"
-- Double-check your Publisher ID from the Developer Dashboard URL
-- It should be a long alphanumeric string
+- Locally, run the `ADC` login from step 5.
+- In CI, confirm the workflow grants `id-token: write` and authenticates
+  before running `npm`.
 
-## Migration from OAuth
+### `rejected by the attribute condition`
 
-If you're currently using OAuth with refresh tokens:
+- Confirm the provider condition and the step 4 binding both match the
+  repository ID.
 
-1. Complete the service account setup above
-2. Test deployment with service account authentication
-3. Once verified, you can remove old OAuth credentials
-4. Update deployment scripts to use service account method
+### `403 Forbidden` from the store
 
-## API Version Note
+- Confirm the dashboard links the service account (step 3).
 
-The Chrome Web Store API has two versions:
+### `Chrome Web Store API has not been used`
 
-- **V1**: Current version (supported until October 15, 2026)
-- **V2**: New version with better service account support
-
-Our implementation uses the appropriate version based on the `chrome-webstore-upload` library. Google recommends migrating to V2 before the V1 deprecation date.
+- Enable the `API` (step 1).
 
 ## References
 
-- [Chrome Web Store Service Accounts Documentation](https://developer.chrome.com/docs/webstore/service-accounts)
+- [Chrome Web Store service accounts](https://developer.chrome.com/docs/webstore/service-accounts)
 - [Chrome Web Store API V2](https://developer.chrome.com/blog/cws-api-v2)
-- [Google Cloud Service Accounts](https://cloud.google.com/iam/docs/service-accounts)
+- [Workload Identity Federation with deployment pipelines][wif]
+- [`google-github-actions/auth`](https://github.com/google-github-actions/auth)
+
+[wif]:
+  https://cloud.google.com/iam/docs/workload-identity-federation-with-deployment-pipelines
